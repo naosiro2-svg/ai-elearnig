@@ -103,7 +103,7 @@
   .fb-btn{background:#f59e0b;color:#1a1f2e;font-size:12px;font-weight:700;border:none;border-radius:6px;padding:7px 16px;cursor:pointer;font-family:inherit;white-space:nowrap;margin-left:auto;}
   .fb-btn:hover{background:#d97706;}
 
-  .bottom-panel{height:240px;background:#fff;border-top:1px solid #e2e8f0;display:flex;flex-direction:column;flex-shrink:0;}
+  .bottom-panel{height:200px;background:#fff;border-top:1px solid #e2e8f0;display:flex;flex-direction:column;flex-shrink:0;}
   .tab-bar{display:flex;border-bottom:1px solid #e2e8f0;background:#f8fafc;flex-shrink:0;}
   .tab-btn{padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;font-family:inherit;font-weight:500;}
   .tab-btn.active{color:var(--green);border-bottom-color:var(--green-mid);background:#fff;}
@@ -152,24 +152,15 @@
 </div>
 
 <header>
-  <div class="logo-badge">長崎県補助金対象</div>
   <div class="logo-text">AIミニアプリ構築講座</div>
   <div class="logo-sub">eラーニング</div>
   <div class="header-right">
     <span class="prog-text" id="progText">0 / 7 完了</span>
     <div class="pbar-outer"><div class="pbar-fill" id="globalBar" style="width:0%"></div></div>
     <a href="gallery.html" class="gallery-link">🏆 作品展示</a>
-    <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditMode()">✏️ 編集モード</button>
     <div class="user-icon">前</div>
   </div>
 </header>
-
-<div class="edit-bar" id="editBar">
-  ✏️ 編集モード：YouTube URLを設定できます
-  <button class="save-all-btn" onclick="saveProgress()">💾 進捗を保存</button>
-  <button class="export-btn" onclick="exportUrls()">📥 URL書き出し</button>
-  <span style="margin-left:auto;font-size:11px;color:#a16207;">※URLはurls.jsで管理してください</span>
-</div>
 
 <div class="body-wrap">
   <aside>
