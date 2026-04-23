@@ -8,9 +8,9 @@
 <script src="content.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
-  :root{--green:#0f7a5a;--green-light:#e8f5f0;--green-mid:#1D9E75;--dark:#1a1f2e;--sidebar-w:240px;--header-h:52px;}
+  :root{--green:#0f7a5a;--green-light:#e8f5f0;--green-mid:#1D9E75;--dark:#1a1f2e;--sidebar-w:260px;--header-h:52px;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Noto Sans JP',sans-serif;background:#f4f6f8;color:#222;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+  body{font-family:'Noto Sans JP',sans-serif;background:#f4f6f8;color:#222;min-height:100vh;}
 
   /* ── パスワード画面 ── */
   #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f7a5a,#1a1f2e);display:flex;align-items:center;justify-content:center;z-index:999;}
@@ -21,29 +21,29 @@
   .login-sub{font-size:12px;color:#64748b;margin-bottom:24px;}
   .login-input{width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:8px;font-size:16px;font-family:inherit;text-align:center;letter-spacing:.3em;margin-bottom:12px;transition:border .2s;}
   .login-input:focus{outline:none;border-color:var(--green-mid);}
-  .login-btn{width:100%;background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;}
+  .login-btn{width:100%;background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
   .login-btn:hover{background:var(--green);}
   .login-error{font-size:12px;color:#dc2626;margin-top:8px;height:18px;}
   .login-hint{font-size:11px;color:#94a3b8;margin-top:16px;}
 
-  header{height:var(--header-h);background:var(--dark);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0;z-index:10;}
-  .logo-badge{background:var(--green-mid);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;}
+  /* ── ヘッダー（固定） ── */
+  header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--dark);display:flex;align-items:center;padding:0 20px;gap:14px;z-index:100;}
   .logo-text{color:#fff;font-size:15px;font-weight:700;}
-  .logo-sub{color:#8899aa;font-size:12px;margin-left:6px;}
+  .logo-sub{color:#8899aa;font-size:12px;margin-left:4px;}
   .header-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
-  .pbar-outer{width:120px;height:6px;background:#2d3748;border-radius:3px;}
+  .pbar-outer{width:100px;height:5px;background:#2d3748;border-radius:3px;}
   .pbar-fill{height:100%;background:var(--green-mid);border-radius:3px;transition:width .4s;}
-  .prog-text{color:#8899aa;font-size:12px;}
-  .gallery-link{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 12px;border-radius:5px;cursor:pointer;font-family:inherit;text-decoration:none;}
+  .prog-text{color:#8899aa;font-size:11px;}
+  .gallery-link{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 12px;border-radius:5px;text-decoration:none;}
   .gallery-link:hover{background:rgba(255,255,255,.2);}
-  .user-icon{width:32px;height:32px;border-radius:50%;background:var(--green-mid);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;}
-  .edit-toggle-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 12px;border-radius:5px;cursor:pointer;font-family:inherit;}
-  .edit-toggle-btn.on{background:#f59e0b;border-color:#f59e0b;color:#1a1f2e;font-weight:700;}
+  .user-icon{width:30px;height:30px;border-radius:50%;background:var(--green-mid);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;}
 
-  .body-wrap{display:flex;flex:1;overflow:hidden;}
+  /* ── レイアウト（固定サイドバー＋縦スクロールメイン） ── */
+  .layout{display:flex;margin-top:var(--header-h);}
 
-  aside{width:var(--sidebar-w);background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
-  .aside-head{padding:14px 16px 10px;border-bottom:1px solid #e2e8f0;}
+  /* ── サイドバー（固定） ── */
+  aside{width:var(--sidebar-w);position:fixed;top:var(--header-h);bottom:0;left:0;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;z-index:50;}
+  .aside-head{padding:14px 16px 10px;border-bottom:1px solid #e2e8f0;flex-shrink:0;}
   .aside-head h2{font-size:12px;color:#64748b;font-weight:500;}
   .lesson-list{overflow-y:auto;flex:1;}
   .lesson-list::-webkit-scrollbar{width:4px;}
@@ -62,82 +62,89 @@
   .lcheck{width:18px;height:18px;border-radius:50%;border:1.5px solid #cbd5e1;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:10px;}
   .lcheck.done{background:var(--green-mid);border-color:var(--green-mid);color:#fff;}
 
-  main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+  /* ── メインコンテンツ（縦スクロール） ── */
+  main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h));}
 
-  .video-selector{display:flex;background:#111827;border-bottom:1px solid #1f2937;flex-shrink:0;}
-  .vsel-btn{flex:1;padding:8px 4px;font-size:11px;font-weight:500;color:#6b7280;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;line-height:1.4;}
+  /* ── 動画セレクタ ── */
+  .video-selector{display:flex;background:#111827;border-bottom:1px solid #1f2937;position:sticky;top:0;z-index:40;}
+  .vsel-btn{flex:1;padding:10px 4px;font-size:12px;font-weight:500;color:#6b7280;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;line-height:1.4;}
   .vsel-btn:hover{color:#d1d5db;}
   .vsel-btn.active{color:#1D9E75;border-bottom-color:#1D9E75;background:rgba(29,158,117,.08);}
   .vsel-btn .vsel-sub{display:block;font-size:9px;color:#4b5563;}
   .vsel-btn.active .vsel-sub{color:#9FE1CB;}
 
-  .url-edit-row{display:none;align-items:center;gap:8px;padding:5px 12px;background:#f8fafc;border-bottom:1px solid #e2e8f0;flex-shrink:0;}
-  .edit-mode-active .url-edit-row{display:flex;}
-  .url-edit-row label{font-size:11px;color:#64748b;white-space:nowrap;}
-  .url-edit-row input{flex:1;font-size:11px;padding:3px 7px;border:1px solid #cbd5e1;border-radius:4px;font-family:inherit;}
-  .url-apply-btn{font-size:11px;background:var(--green-mid);color:#fff;border:none;border-radius:4px;padding:3px 10px;cursor:pointer;font-family:inherit;}
-
-  .video-wrap{flex:1;background:#0d1117;display:flex;flex-direction:column;min-height:0;}
-  .video-topbar{display:flex;align-items:center;padding:8px 16px;background:rgba(0,0,0,.6);gap:10px;}
+  /* ── 動画プレイヤー（16:9比率・大型） ── */
+  .video-area{background:#0d1117;}
+  .video-topbar{display:flex;align-items:center;padding:8px 20px;background:rgba(0,0,0,.5);gap:10px;}
   .vid-badge{font-size:11px;color:var(--green-mid);font-weight:700;}
   .vid-title{font-size:13px;color:#e2e8f0;font-weight:500;flex:1;}
   .vid-time{font-size:11px;color:#64748b;}
   .vid-type{font-size:10px;color:#4b5563;background:#1f2937;padding:2px 7px;border-radius:10px;}
-  .video-player{flex:1;position:relative;min-height:0;}
-  .video-player iframe{width:100%;height:100%;border:none;display:block;}
-  .video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0d1117;}
-  .play-circle{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;}
-  .play-tri{width:0;height:0;border-top:13px solid transparent;border-bottom:13px solid transparent;border-left:22px solid rgba(255,255,255,.9);margin-left:5px;}
-  .ph-title{color:#94a3b8;font-size:12px;text-align:center;line-height:1.7;}
-  .video-controls{background:rgba(0,0,0,.75);padding:8px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+
+  /* 16:9アスペクト比で動画を大きく表示 */
+  .video-player-wrap{position:relative;width:100%;padding-top:56.25%;background:#0d1117;}
+  .video-player-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+  .video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0d1117;}
+  .play-circle{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;}
+  .play-tri{width:0;height:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-left:26px solid rgba(255,255,255,.9);margin-left:6px;}
+  .ph-title{color:#94a3b8;font-size:13px;text-align:center;line-height:1.8;}
+
+  /* ── 視聴コントロールバー ── */
+  .video-controls{background:rgba(0,0,0,.8);padding:8px 20px;display:flex;align-items:center;gap:10px;}
   .progress-track{flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:2px;cursor:pointer;}
   .progress-fill{height:100%;background:var(--green-mid);border-radius:2px;transition:width .3s;}
   .vc-time{font-size:11px;color:#94a3b8;white-space:nowrap;min-width:72px;}
-  .vc-btn{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:11px;padding:2px 8px;border-radius:4px;font-family:inherit;}
-  .vc-btn:hover{color:#fff;}
+  .vc-btn{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:11px;padding:3px 10px;border-radius:4px;font-family:inherit;}
+  .vc-btn:hover{color:#fff;background:rgba(255,255,255,.1);}
+  .done-btn{background:var(--green-mid);color:#fff;border:none;border-radius:5px;padding:5px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .done-btn:hover{background:var(--green);}
 
-  .final-banner{display:none;background:linear-gradient(135deg,#0f7a5a,#1D9E75);padding:10px 18px;align-items:center;gap:14px;flex-shrink:0;}
+  /* ── 総合テストバナー ── */
+  .final-banner{display:none;background:linear-gradient(135deg,#0f7a5a,#1D9E75);padding:12px 20px;align-items:center;gap:14px;}
   .final-banner.show{display:flex;}
-  .fb-text h3{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;}
-  .fb-text p{font-size:10px;color:#a7f3d0;}
-  .fb-btn{background:#f59e0b;color:#1a1f2e;font-size:12px;font-weight:700;border:none;border-radius:6px;padding:7px 16px;cursor:pointer;font-family:inherit;white-space:nowrap;margin-left:auto;}
+  .fb-text h3{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px;}
+  .fb-text p{font-size:11px;color:#a7f3d0;}
+  .fb-btn{background:#f59e0b;color:#1a1f2e;font-size:12px;font-weight:700;border:none;border-radius:6px;padding:8px 18px;cursor:pointer;font-family:inherit;white-space:nowrap;margin-left:auto;}
   .fb-btn:hover{background:#d97706;}
 
-  .bottom-panel{height:200px;background:#fff;border-top:1px solid #e2e8f0;display:flex;flex-direction:column;flex-shrink:0;}
-  .tab-bar{display:flex;border-bottom:1px solid #e2e8f0;background:#f8fafc;flex-shrink:0;}
-  .tab-btn{padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;font-family:inherit;font-weight:500;}
+  /* ── コンテンツエリア（縦スクロール） ── */
+  .content-area{background:#fff;border-top:1px solid #e2e8f0;}
+  .tab-bar{display:flex;border-bottom:1px solid #e2e8f0;background:#f8fafc;position:sticky;top:44px;z-index:30;}
+  .tab-btn{padding:11px 18px;font-size:12px;color:#64748b;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;font-family:inherit;font-weight:500;}
   .tab-btn.active{color:var(--green);border-bottom-color:var(--green-mid);background:#fff;}
-  .tab-content{flex:1;overflow-y:auto;padding:12px 16px;}
-  .tab-content::-webkit-scrollbar{width:4px;}
+  .tab-pane{display:none;padding:20px 24px;min-height:200px;}
+  .tab-pane.active{display:block;}
 
-  .desc-intro{font-size:13px;color:#374151;line-height:1.75;margin-bottom:10px;}
-  .point-grid{display:flex;flex-wrap:wrap;gap:6px;}
-  .point-chip{font-size:11px;background:var(--green-light);color:var(--green);padding:4px 10px;border-radius:20px;font-weight:500;}
+  .desc-intro{font-size:14px;color:#374151;line-height:1.85;margin-bottom:14px;}
+  .point-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .point-chip{font-size:12px;background:var(--green-light);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:500;}
 
-  .prompt-box{background:#0f172a;border-radius:8px;padding:12px 14px;margin-bottom:10px;}
-  .prompt-label{font-size:10px;color:#64748b;margin-bottom:6px;font-weight:500;}
-  .prompt-text{font-size:12px;color:#a5b4fc;line-height:1.7;white-space:pre-wrap;}
-  .copy-btn{font-size:11px;background:#1e293b;color:#94a3b8;border:1px solid #334155;border-radius:4px;padding:3px 10px;cursor:pointer;font-family:inherit;}
+  .prompt-box{background:#0f172a;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+  .prompt-label{font-size:11px;color:#64748b;margin-bottom:8px;font-weight:500;}
+  .prompt-text{font-size:13px;color:#a5b4fc;line-height:1.75;white-space:pre-wrap;}
+  .copy-btn{font-size:11px;background:#1e293b;color:#94a3b8;border:1px solid #334155;border-radius:4px;padding:4px 12px;cursor:pointer;font-family:inherit;}
   .copy-btn:hover{background:#334155;color:#fff;}
-  .no-prompt-msg{font-size:13px;color:#94a3b8;}
+  .no-prompt-msg{font-size:13px;color:#94a3b8;padding:8px 0;}
 
-  .ex-title{font-size:13px;font-weight:700;color:#1e293b;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-  .ex-title::before{content:'';display:inline-block;width:4px;height:16px;background:var(--green-mid);border-radius:2px;flex-shrink:0;}
-  .ex-item{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 14px;margin-bottom:10px;}
-  .ex-num{font-size:10px;font-weight:700;color:var(--green);margin-bottom:5px;}
-  .ex-q{font-size:12px;color:#1e293b;line-height:1.75;margin-bottom:8px;white-space:pre-wrap;}
-  .ex-hint{font-size:11px;color:#374151;background:#fff;border:1px dashed #cbd5e1;border-radius:6px;padding:8px 12px;line-height:1.7;white-space:pre-wrap;}
-  .ex-hint-label{font-size:10px;font-weight:700;color:var(--green);display:block;margin-bottom:4px;}
+  .ex-title{font-size:14px;font-weight:700;color:#1e293b;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .ex-title::before{content:'';display:inline-block;width:4px;height:18px;background:var(--green-mid);border-radius:2px;flex-shrink:0;}
+  .ex-item{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+  .ex-num{font-size:11px;font-weight:700;color:var(--green);margin-bottom:6px;}
+  .ex-q{font-size:13px;color:#1e293b;line-height:1.8;margin-bottom:10px;white-space:pre-wrap;}
+  .ex-hint{font-size:12px;color:#374151;background:#fff;border:1px dashed #cbd5e1;border-radius:8px;padding:10px 14px;line-height:1.75;white-space:pre-wrap;}
+  .ex-hint-label{font-size:10px;font-weight:700;color:var(--green);display:block;margin-bottom:5px;}
 
-  .edit-bar{background:#fef9e7;border-bottom:2px solid #f59e0b;padding:6px 16px;display:none;align-items:center;gap:10px;font-size:12px;color:#92400e;flex-shrink:0;}
-  .edit-bar.show{display:flex;}
-  .save-all-btn{background:#f59e0b;color:#1a1f2e;border:none;border-radius:5px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .export-btn{background:#fff;color:#92400e;border:1px solid #f59e0b;border-radius:5px;padding:5px 14px;font-size:12px;cursor:pointer;font-family:inherit;}
+  /* 次の動画ナビ */
+  .next-nav{padding:16px 24px;background:#f8fafc;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;}
+  .next-nav-btn{background:var(--green-mid);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .next-nav-btn:hover{background:var(--green);}
+  .next-nav-btn.prev{background:#f1f5f9;color:#374151;}
+  .next-nav-btn.prev:hover{background:#e2e8f0;}
 </style>
 </head>
 <body>
 
-<!-- ★ パスワード画面 -->
+<!-- パスワード画面 -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">🔐</div>
@@ -151,6 +158,7 @@
   </div>
 </div>
 
+<!-- ヘッダー -->
 <header>
   <div class="logo-text">AIミニアプリ構築講座</div>
   <div class="logo-sub">eラーニング</div>
@@ -162,13 +170,17 @@
   </div>
 </header>
 
-<div class="body-wrap">
+<div class="layout">
+  <!-- サイドバー -->
   <aside>
     <div class="aside-head"><h2>eラーニング 全7動画</h2></div>
     <div class="lesson-list" id="lessonList"></div>
   </aside>
 
+  <!-- メインコンテンツ -->
   <main id="mainArea">
+
+    <!-- 動画セレクタ -->
     <div class="video-selector">
       <button class="vsel-btn active" id="vsel0" onclick="selectVideoType(0)">
         <span class="vsel-sub" id="vsub0">動画⑤-①</span>概要
@@ -181,36 +193,36 @@
       </button>
     </div>
 
-    <div class="url-edit-row" id="urlEditRow">
-      <label id="urlEditLabel">YouTube URL（概要）：</label>
-      <input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=XXXXXXXXX">
-      <button class="url-apply-btn" onclick="applyUrl()">適用</button>
-    </div>
-
-    <div class="video-wrap">
+    <!-- 動画エリア -->
+    <div class="video-area">
       <div class="video-topbar">
         <span class="vid-badge" id="vBadge">動画⑤</span>
         <span class="vid-title" id="vTitle">GEM設定の基本操作</span>
         <span class="vid-time" id="vTime">30分</span>
         <span class="vid-type" id="vTypeLabel">概要</span>
       </div>
-      <div class="video-player">
+
+      <!-- 16:9比率で大きく表示 -->
+      <div class="video-player-wrap">
         <div class="video-placeholder" id="vidPlaceholder">
           <div class="play-circle"><div class="play-tri"></div></div>
           <div class="ph-title" id="phTitle">動画を選択してください</div>
         </div>
-        <iframe id="videoFrame" style="display:none" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        <iframe id="videoFrame" style="display:none" allowfullscreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
       </div>
+
+      <!-- コントロールバー -->
       <div class="video-controls">
-        <button class="vc-btn" onclick="markDone()">✓ 視聴完了</button>
+        <button class="done-btn" onclick="markDone()">✓ 視聴完了</button>
         <div class="progress-track" onclick="seekProg(event)">
           <div class="progress-fill" id="videoProgress" style="width:0%"></div>
         </div>
         <span class="vc-time" id="vcTime">0:00 / 30:00</span>
-        <button class="vc-btn" onclick="nextLesson()">次の動画 →</button>
       </div>
     </div>
 
+    <!-- 総合テストバナー（動画⑦のみ） -->
     <div class="final-banner" id="finalBanner">
       <div class="fb-text">
         <h3>🎉 全7動画の視聴お疲れさまでした！</h3>
@@ -219,24 +231,32 @@
       <button class="fb-btn" onclick="openFinalTest()">総合確認テストへ →</button>
     </div>
 
-    <div class="bottom-panel">
+    <!-- コンテンツエリア（縦スクロール） -->
+    <div class="content-area">
       <div class="tab-bar">
         <button class="tab-btn active" onclick="showTab('desc',this)">📖 説明・ポイント</button>
         <button class="tab-btn" onclick="showTab('prompt',this)">💡 プロンプト集</button>
         <button class="tab-btn" id="exTabBtn" onclick="showTab('exercise',this)" style="display:none;">🎯 実演練習問題</button>
       </div>
-      <div class="tab-content" id="descPanel"></div>
-      <div class="tab-content" id="promptPanel" style="display:none"></div>
-      <div class="tab-content" id="exercisePanel" style="display:none"></div>
+      <div class="tab-pane active" id="descPanel"></div>
+      <div class="tab-pane" id="promptPanel"></div>
+      <div class="tab-pane" id="exercisePanel"></div>
     </div>
+
+    <!-- 前後ナビ -->
+    <div class="next-nav">
+      <button class="next-nav-btn prev" onclick="prevLesson()" id="prevBtn">← 前の動画</button>
+      <button class="next-nav-btn" onclick="nextLesson()" id="nextBtn">次の動画 →</button>
+    </div>
+
   </main>
 </div>
 
 <script>
 // ============================================================
-// パスワード設定（ここを変更する）
+// パスワード
 // ============================================================
-const PASSWORD = "nagasaki2026";  // ← パスワードをここで設定
+const PASSWORD = "nagasaki2026";
 
 function checkPw(){
   const val = document.getElementById('pwInput').value;
@@ -249,15 +269,12 @@ function checkPw(){
     setTimeout(()=>document.getElementById('pwError').textContent='', 2000);
   }
 }
-
-// セッション中はログイン状態を維持
 if(sessionStorage.getItem('loggedIn')==='1'){
   document.getElementById('loginScreen').classList.add('hidden');
 }
 
 // ============================================================
-// 動画リスト定義（YouTube URLはurls.jsから読み込む）
-// 説明・ポイント・プロンプト・練習問題はcontent.jsから読み込む
+// 動画リスト
 // ============================================================
 const lessons = [
   {num:1,badge:"動画①",name:"AIの現状と2026年トレンド",  time:"30分",hasDemo:false,done:false},
@@ -269,61 +286,27 @@ const lessons = [
   {num:7,badge:"動画⑦",name:"ビルドの基本操作（ミニアプリ入門）",time:"50分",hasDemo:true,done:false},
 ];
 
-// ============================================================
-// 状態
-// ============================================================
 let current = 4;
 let currentVType = 0;
 let simProg = 0;
-let editMode = false;
 const VT_LABELS = ["概要","具体的内容","実演"];
 const NUMS = ["①","②","③","④","⑤","⑥","⑦"];
 
-// 進捗をlocalStorageから復元
 function loadProgress(){
   try{
-    const s = localStorage.getItem('ai_el_v4_progress');
-    if(s){
-      const prog = JSON.parse(s);
-      prog.forEach((d,i)=>{ if(lessons[i]) lessons[i].done = d; });
-    }
+    const s=localStorage.getItem('ai_el_v4_progress');
+    if(s){const p=JSON.parse(s);p.forEach((d,i)=>{if(lessons[i])lessons[i].done=d;});}
   }catch(e){}
 }
-
 function saveProgress(){
-  localStorage.setItem('ai_el_v4_progress', JSON.stringify(lessons.map(l=>l.done)));
-  const b = document.querySelector('.save-all-btn');
-  b.textContent='✅ 保存しました！';
-  setTimeout(()=>b.textContent='💾 進捗を保存',2000);
-}
-
-function exportUrls(){
-  // 現在のURLSをコンソールに出力（urls.js更新用）
-  let out = '// urls.js - コピーして使用してください\nconst YOUTUBE_URLS = [\n';
-  YOUTUBE_URLS.forEach((u,i)=>{
-    out += `  ["${u[0]}", "${u[1]}", "${u[2]}"],  // 動画${NUMS[i]}\n`;
-  });
-  out += '];\n\nconst FINAL_TEST_URL = "'+FINAL_TEST_URL+'";';
-  const blob = new Blob([out],{type:'text/javascript'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'urls.js';
-  a.click();
-}
-
-function toggleEditMode(){
-  editMode=!editMode;
-  document.getElementById('editToggleBtn').textContent=editMode?'👁️ 閲覧モードに戻る':'✏️ 編集モード';
-  document.getElementById('editToggleBtn').className='edit-toggle-btn'+(editMode?' on':'');
-  document.getElementById('editBar').className='edit-bar'+(editMode?' show':'');
-  document.getElementById('mainArea').className=editMode?'edit-mode-active':'';
+  localStorage.setItem('ai_el_v4_progress',JSON.stringify(lessons.map(l=>l.done)));
 }
 
 // ============================================================
 // サイドバー
 // ============================================================
 function renderSidebar(){
-  document.getElementById('lessonList').innerHTML = lessons.map((l,i)=>`
+  document.getElementById('lessonList').innerHTML=lessons.map((l,i)=>`
     <div class="lesson-item${i===current?' active':''}" onclick="selectLesson(${i})">
       <div class="lcheck${l.done?' done':''}">${l.done?'✓':''}</div>
       <div class="linfo">
@@ -341,11 +324,9 @@ function selectVideoType(type){
   currentVType=type;
   [0,1,2].forEach(i=>document.getElementById('vsel'+i).className='vsel-btn'+(i===type?' active':''));
   document.getElementById('vTypeLabel').textContent=VT_LABELS[type];
-  document.getElementById('urlEditLabel').textContent=`YouTube URL（${VT_LABELS[type]}）：`;
-  document.getElementById('urlInput').value=YOUTUBE_URLS[current][type]||'';
   const exBtn=document.getElementById('exTabBtn');
-  exBtn.style.display=(type===2 && lessons[current].hasDemo)?'block':'none';
-  if(!(type===2 && lessons[current].hasDemo)) showTab('desc',document.querySelector('.tab-btn'));
+  exBtn.style.display=(type===2&&lessons[current].hasDemo)?'block':'none';
+  if(!(type===2&&lessons[current].hasDemo)) showTab('desc',document.querySelector('.tab-btn'));
   loadVideo();
 }
 
@@ -356,7 +337,8 @@ function loadVideo(){
     let v=url;
     if(v.includes('youtu.be/'))v=v.split('youtu.be/')[1].split('?')[0];
     else if(v.includes('v='))v=v.split('v=')[1].split('&')[0];
-    iframe.src=`https://www.youtube.com/embed/${v}?rel=0`;
+    // rel=0・modestbranding=1でYouTubeロゴ・関連動画を最小化
+    iframe.src=`https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
     iframe.style.display='block';ph.style.display='none';
   }else{
     iframe.style.display='none';iframe.src='';ph.style.display='flex';
@@ -365,17 +347,11 @@ function loadVideo(){
   }
 }
 
-function applyUrl(){
-  // 編集モード時のURL一時適用（正式にはurls.jsを更新）
-  YOUTUBE_URLS[current][currentVType]=document.getElementById('urlInput').value.trim();
-  loadVideo();
-}
-
 // ============================================================
 // 動画選択
 // ============================================================
 function selectLesson(i){
-  current=i; currentVType=0; simProg=lessons[i].done?100:0;
+  current=i;currentVType=0;simProg=lessons[i].done?100:0;
   const l=lessons[i];
   document.getElementById('vBadge').textContent=l.badge;
   document.getElementById('vTitle').textContent=l.name;
@@ -387,10 +363,12 @@ function selectLesson(i){
   });
   document.getElementById('exTabBtn').style.display='none';
   document.getElementById('finalBanner').className='final-banner'+(i===6?' show':'');
-  document.getElementById('urlInput').value=YOUTUBE_URLS[i]?.[0]||'';
-  document.getElementById('urlEditLabel').textContent='YouTube URL（概要）：';
-  loadVideo(); updateProgress(); renderSidebar(); renderAll();
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').style.visibility=i===6?'hidden':'visible';
+  loadVideo();updateProgress();renderSidebar();renderAll();
   showTab('desc',document.querySelector('.tab-btn'));
+  // ページトップへスクロール
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function updateProgress(){
@@ -409,6 +387,7 @@ function seekProg(e){
 }
 function markDone(){lessons[current].done=true;simProg=100;updateProgress();renderSidebar();saveProgress();}
 function nextLesson(){if(current<lessons.length-1)selectLesson(current+1);}
+function prevLesson(){if(current>0)selectLesson(current-1);}
 function openFinalTest(){
   if(FINAL_TEST_URL.includes('XXXXXXXXX')){alert('GoogleフォームのURLをurls.jsのFINAL_TEST_URLに設定してください。');return;}
   window.open(FINAL_TEST_URL,'_blank');
@@ -462,8 +441,8 @@ function copyP(i){
 function showTab(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
-  ['desc','prompt','exercise'].forEach(t=>
-    document.getElementById(t+'Panel').style.display=t===tab?'block':'none');
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById(tab+'Panel').classList.add('active');
 }
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
