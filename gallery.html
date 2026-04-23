@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ビルド作品展示 | AIミニアプリ構築講座</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+  :root{--green:#0f7a5a;--green-light:#e8f5f0;--green-mid:#1D9E75;--dark:#1a1f2e;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Noto Sans JP',sans-serif;background:#f4f6f8;color:#222;min-height:100vh;}
+
+  header{background:var(--dark);padding:14px 24px;display:flex;align-items:center;gap:14px;}
+  .logo-badge{background:var(--green-mid);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;}
+  .logo-text{color:#fff;font-size:15px;font-weight:700;}
+  .back-btn{margin-left:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;padding:6px 14px;border-radius:5px;cursor:pointer;font-family:inherit;text-decoration:none;}
+  .back-btn:hover{background:rgba(255,255,255,.2);}
+
+  .hero{background:linear-gradient(135deg,#0f7a5a,#1D9E75);padding:32px 24px;text-align:center;}
+  .hero h1{font-size:24px;font-weight:700;color:#fff;margin-bottom:8px;}
+  .hero p{font-size:13px;color:#a7f3d0;}
+
+  .container{max-width:1000px;margin:0 auto;padding:24px 16px;}
+
+  .section-title{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+  .section-title::before{content:'';display:inline-block;width:4px;height:20px;background:var(--green-mid);border-radius:2px;}
+
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:32px;}
+
+  .work-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;transition:box-shadow .2s;}
+  .work-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1);}
+  .card-header{background:linear-gradient(135deg,var(--dark),#2d3748);padding:16px;position:relative;}
+  .card-num{font-size:10px;font-weight:700;color:var(--green-mid);margin-bottom:4px;}
+  .card-name{font-size:14px;font-weight:700;color:#fff;line-height:1.4;}
+  .card-author{font-size:11px;color:#8899aa;margin-top:4px;}
+  .card-body{padding:14px 16px;}
+  .card-desc{font-size:12px;color:#374151;line-height:1.7;margin-bottom:12px;}
+  .card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+  .card-tag{font-size:10px;background:var(--green-light);color:var(--green);padding:3px 8px;border-radius:10px;font-weight:500;}
+  .card-actions{display:flex;gap:8px;}
+  .app-btn{flex:1;background:var(--green-mid);color:#fff;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;display:block;}
+  .app-btn:hover{background:var(--green);}
+  .prompt-btn{background:#f8fafc;color:#64748b;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+  .prompt-btn:hover{background:#f1f5f9;}
+
+  /* プロンプトモーダル */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px;}
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:12px;width:100%;max-width:560px;max-height:80vh;display:flex;flex-direction:column;}
+  .modal-header{padding:16px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;}
+  .modal-header h3{font-size:14px;font-weight:700;color:var(--dark);}
+  .modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:#94a3b8;line-height:1;}
+  .modal-body{padding:16px 20px;overflow-y:auto;flex:1;}
+  .modal-prompt{background:#0f172a;border-radius:8px;padding:14px;font-size:12px;color:#a5b4fc;line-height:1.7;white-space:pre-wrap;}
+  .modal-copy-btn{margin-top:12px;width:100%;background:var(--green-mid);color:#fff;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .modal-copy-btn:hover{background:var(--green);}
+
+  /* 空カード */
+  .empty-card{background:#fff;border:2px dashed #cbd5e1;border-radius:12px;padding:32px;text-align:center;color:#94a3b8;}
+  .empty-card p{font-size:13px;margin-top:8px;}
+
+  footer{background:var(--dark);padding:16px 24px;text-align:center;margin-top:32px;}
+  footer p{font-size:11px;color:#8899aa;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">AIミニアプリ</div>
+  <div class="logo-text">ビルド作品展示コーナー</div>
+  <a href="index.html" class="back-btn">← eラーニングに戻る</a>
+</header>
+
+<div class="hero">
+  <h1>🏆 受講者ビルド作品展示</h1>
+  <p>AIミニアプリ構築講座の受講者が実際に作成したアプリを紹介します</p>
+</div>
+
+<div class="container">
+  <div class="section-title">受講者作品一覧</div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</div>
+
+<!-- プロンプトモーダル -->
+<div class="modal-overlay hidden" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">使用プロンプト</h3>
+      <button class="modal-close" onclick="closePromptModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-prompt" id="modalPrompt"></div>
+      <button class="modal-copy-btn" onclick="copyModalPrompt()">プロンプトをコピー</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>AIミニアプリ構築講座　株式会社ストラテジーエイド</p>
+</footer>
+
+<script>
+// ============================================================
+// 作品データ（集合研修後にここに追加していく）
+// ============================================================
+const works = [
+  // 以下は記入例です。集合研修後に実際の作品情報を追加してください。
+  {
+    name: "議事録ToDo自動化ツール",
+    author: "○○株式会社　田中様",
+    desc: "会議メモを貼り付けるだけで決定事項とToDoリストを自動生成。優先度付きで出力されるので会議後の作業が大幅に効率化されました。",
+    tags: ["議事録", "ToDo", "GEM"],
+    url: "",           // アプリのURL（GEMの共有リンク等）
+    prompt: "あなたは優秀なProject Managerです。\n入力された会議メモから、決定事項とToDoリストを抽出してください。\nToDoは「誰が・いつまでに・何をする」の形式で整理し、\n優先度（高・中・低）もつけてください。\n最後にMarkdown形式の表で出力してください。\n前置きや挨拶は不要です。",
+    showPrompt: true   // trueでプロンプト公開、falseで非公開
+  },
+  {
+    name: "（作品名）",
+    author: "（会社名・お名前）",
+    desc: "（アプリの説明）",
+    tags: [],
+    url: "",
+    prompt: "",
+    showPrompt: false
+  },
+  {
+    name: "（作品名）",
+    author: "（会社名・お名前）",
+    desc: "（アプリの説明）",
+    tags: [],
+    url: "",
+    prompt: "",
+    showPrompt: false
+  },
+  {
+    name: "（作品名）",
+    author: "（会社名・お名前）",
+    desc: "（アプリの説明）",
+    tags: [],
+    url: "",
+    prompt: "",
+    showPrompt: false
+  },
+  {
+    name: "（作品名）",
+    author: "（会社名・お名前）",
+    desc: "（アプリの説明）",
+    tags: [],
+    url: "",
+    prompt: "",
+    showPrompt: false
+  },
+  {
+    name: "（作品名）",
+    author: "（会社名・お名前）",
+    desc: "（アプリの説明）",
+    tags: [],
+    url: "",
+    prompt: "",
+    showPrompt: false
+  },
+  {
+    name: "（作品名）",
+    author: "（会社名・お名前）",
+    desc: "（アプリの説明）",
+    tags: [],
+    url: "",
+    prompt: "",
+    showPrompt: false
+  },
+  {
+    name: "（作品名）",
+    author: "（会社名・お名前）",
+    desc: "（アプリの説明）",
+    tags: [],
+    url: "",
+    prompt: "",
+    showPrompt: false
+  },
+];
+
+// ============================================================
+// 描画
+// ============================================================
+function renderGallery(){
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = works.map((w, i) => {
+    const isEmpty = w.name.startsWith('（');
+    if(isEmpty){
+      return `<div class="empty-card">
+        <div style="font-size:28px;">＋</div>
+        <p>作品 ${i+1}<br>集合研修後に追加予定</p>
+      </div>`;
+    }
+    return `<div class="work-card">
+      <div class="card-header">
+        <div class="card-num">作品 ${i+1}</div>
+        <div class="card-name">${esc(w.name)}</div>
+        <div class="card-author">${esc(w.author)}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">${esc(w.desc)}</div>
+        ${w.tags.length>0?`<div class="card-tags">${w.tags.map(t=>`<span class="card-tag">${esc(t)}</span>`).join('')}</div>`:''}
+        <div class="card-actions">
+          ${w.url
+            ? `<a href="${esc(w.url)}" target="_blank" class="app-btn">🚀 アプリを開く</a>`
+            : `<span class="app-btn" style="background:#94a3b8;cursor:default;">URL準備中</span>`}
+          ${w.showPrompt && w.prompt
+            ? `<button class="prompt-btn" onclick="openPromptModal(${i})">💡 プロンプト</button>`
+            : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let currentPromptIdx = -1;
+
+function openPromptModal(i){
+  currentPromptIdx = i;
+  document.getElementById('modalTitle').textContent = works[i].name + ' - 使用プロンプト';
+  document.getElementById('modalPrompt').textContent = works[i].prompt;
+  document.getElementById('modalOverlay').classList.remove('hidden');
+}
+
+function closePromptModal(){
+  document.getElementById('modalOverlay').classList.add('hidden');
+}
+
+function closeModal(e){
+  if(e.target === document.getElementById('modalOverlay')) closePromptModal();
+}
+
+function copyModalPrompt(){
+  if(currentPromptIdx < 0) return;
+  navigator.clipboard.writeText(works[currentPromptIdx].prompt).then(()=>{
+    const btn = document.querySelector('.modal-copy-btn');
+    btn.textContent = '✅ コピーしました！';
+    setTimeout(()=>btn.textContent='プロンプトをコピー', 2000);
+  });
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+renderGallery();
+</script>
+</body>
+</html>

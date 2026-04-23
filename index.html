@@ -4,11 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AIミニアプリ構築講座 | Eラーニング</title>
+<script src="urls.js"></script>
+<script src="content.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
   :root{--green:#0f7a5a;--green-light:#e8f5f0;--green-mid:#1D9E75;--dark:#1a1f2e;--sidebar-w:240px;--header-h:52px;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Noto Sans JP',sans-serif;background:#f4f6f8;color:#222;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+  /* ── パスワード画面 ── */
+  #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f7a5a,#1a1f2e);display:flex;align-items:center;justify-content:center;z-index:999;}
+  #loginScreen.hidden{display:none;}
+  .login-box{background:#fff;border-radius:16px;padding:40px 36px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .login-logo{font-size:36px;margin-bottom:12px;}
+  .login-title{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:4px;}
+  .login-sub{font-size:12px;color:#64748b;margin-bottom:24px;}
+  .login-input{width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:8px;font-size:16px;font-family:inherit;text-align:center;letter-spacing:.3em;margin-bottom:12px;transition:border .2s;}
+  .login-input:focus{outline:none;border-color:var(--green-mid);}
+  .login-btn{width:100%;background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;}
+  .login-btn:hover{background:var(--green);}
+  .login-error{font-size:12px;color:#dc2626;margin-top:8px;height:18px;}
+  .login-hint{font-size:11px;color:#94a3b8;margin-top:16px;}
 
   header{height:var(--header-h);background:var(--dark);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0;z-index:10;}
   .logo-badge{background:var(--green-mid);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;}
@@ -18,6 +34,8 @@
   .pbar-outer{width:120px;height:6px;background:#2d3748;border-radius:3px;}
   .pbar-fill{height:100%;background:var(--green-mid);border-radius:3px;transition:width .4s;}
   .prog-text{color:#8899aa;font-size:12px;}
+  .gallery-link{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 12px;border-radius:5px;cursor:pointer;font-family:inherit;text-decoration:none;}
+  .gallery-link:hover{background:rgba(255,255,255,.2);}
   .user-icon{width:32px;height:32px;border-radius:50%;background:var(--green-mid);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;}
   .edit-toggle-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 12px;border-radius:5px;cursor:pointer;font-family:inherit;}
   .edit-toggle-btn.on{background:#f59e0b;border-color:#f59e0b;color:#1a1f2e;font-weight:700;}
@@ -46,7 +64,6 @@
 
   main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 
-  /* ★ 動画セレクタ */
   .video-selector{display:flex;background:#111827;border-bottom:1px solid #1f2937;flex-shrink:0;}
   .vsel-btn{flex:1;padding:8px 4px;font-size:11px;font-weight:500;color:#6b7280;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;line-height:1.4;}
   .vsel-btn:hover{color:#d1d5db;}
@@ -54,7 +71,6 @@
   .vsel-btn .vsel-sub{display:block;font-size:9px;color:#4b5563;}
   .vsel-btn.active .vsel-sub{color:#9FE1CB;}
 
-  /* URL編集行 */
   .url-edit-row{display:none;align-items:center;gap:8px;padding:5px 12px;background:#f8fafc;border-bottom:1px solid #e2e8f0;flex-shrink:0;}
   .edit-mode-active .url-edit-row{display:flex;}
   .url-edit-row label{font-size:11px;color:#64748b;white-space:nowrap;}
@@ -70,7 +86,7 @@
   .video-player{flex:1;position:relative;min-height:0;}
   .video-player iframe{width:100%;height:100%;border:none;display:block;}
   .video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0d1117;}
-  .play-circle{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .play-circle{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;}
   .play-tri{width:0;height:0;border-top:13px solid transparent;border-bottom:13px solid transparent;border-left:22px solid rgba(255,255,255,.9);margin-left:5px;}
   .ph-title{color:#94a3b8;font-size:12px;text-align:center;line-height:1.7;}
   .video-controls{background:rgba(0,0,0,.75);padding:8px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
@@ -80,7 +96,6 @@
   .vc-btn{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:11px;padding:2px 8px;border-radius:4px;font-family:inherit;}
   .vc-btn:hover{color:#fff;}
 
-  /* ★ 総合テストバナー */
   .final-banner{display:none;background:linear-gradient(135deg,#0f7a5a,#1D9E75);padding:10px 18px;align-items:center;gap:14px;flex-shrink:0;}
   .final-banner.show{display:flex;}
   .fb-text h3{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;}
@@ -106,7 +121,6 @@
   .copy-btn:hover{background:#334155;color:#fff;}
   .no-prompt-msg{font-size:13px;color:#94a3b8;}
 
-  /* ★ 実演練習問題 */
   .ex-title{font-size:13px;font-weight:700;color:#1e293b;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
   .ex-title::before{content:'';display:inline-block;width:4px;height:16px;background:var(--green-mid);border-radius:2px;flex-shrink:0;}
   .ex-item{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 14px;margin-bottom:10px;}
@@ -115,53 +129,46 @@
   .ex-hint{font-size:11px;color:#374151;background:#fff;border:1px dashed #cbd5e1;border-radius:6px;padding:8px 12px;line-height:1.7;white-space:pre-wrap;}
   .ex-hint-label{font-size:10px;font-weight:700;color:var(--green);display:block;margin-bottom:4px;}
 
-  .q-title{font-size:13px;font-weight:600;color:#1e293b;margin-bottom:10px;}
-  .q-opts{display:flex;flex-direction:column;gap:6px;}
-  .q-opt{font-size:12px;padding:8px 12px;border:1px solid #e2e8f0;border-radius:6px;cursor:pointer;color:#374151;background:#fff;text-align:left;font-family:inherit;}
-  .q-opt.correct{background:#f0fdf4;border-color:#86efac;color:#166534;}
-  .q-opt.wrong{background:#fef2f2;border-color:#fca5a5;color:#991b1b;}
-  .q-fb{font-size:12px;margin-top:8px;padding:8px 12px;border-radius:6px;line-height:1.6;display:none;}
-  .q-fb.ok{background:#f0fdf4;color:#166534;}
-  .q-fb.ng{background:#fef2f2;color:#991b1b;}
-
-  /* 編集モード */
   .edit-bar{background:#fef9e7;border-bottom:2px solid #f59e0b;padding:6px 16px;display:none;align-items:center;gap:10px;font-size:12px;color:#92400e;flex-shrink:0;}
   .edit-bar.show{display:flex;}
   .save-all-btn{background:#f59e0b;color:#1a1f2e;border:none;border-radius:5px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
   .export-btn{background:#fff;color:#92400e;border:1px solid #f59e0b;border-radius:5px;padding:5px 14px;font-size:12px;cursor:pointer;font-family:inherit;}
-  .editable{outline:none;}
-  .edit-mode .editable{background:#fffbeb!important;border:1px dashed #f59e0b!important;border-radius:4px;padding:4px 6px;cursor:text;}
-  .edit-mode .editable:focus{background:#fff!important;border:1px solid #f59e0b!important;}
-  .add-btn,.del-btn{display:none;font-family:inherit;cursor:pointer;}
-  .edit-mode .add-btn{display:inline-block;font-size:11px;background:#e8f5f0;color:var(--green);border:1px dashed var(--green-mid);border-radius:5px;padding:4px 12px;margin-top:6px;}
-  .edit-mode .del-btn{display:inline-block;font-size:10px;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;border-radius:4px;padding:1px 6px;margin-left:6px;}
-  .edit-field-wrap{border:1px dashed #f59e0b;border-radius:8px;padding:10px;background:#fffbeb;margin-bottom:10px;}
-  .edit-field-wrap label{font-size:11px;color:#92400e;display:block;margin-bottom:3px;margin-top:6px;}
-  .edit-field-wrap input,.edit-field-wrap textarea{width:100%;font-size:12px;padding:5px 8px;border:1px solid #e2e8f0;border-radius:4px;font-family:inherit;}
-  .edit-field-wrap textarea{resize:vertical;min-height:55px;}
-  .apply-btn{margin-top:8px;background:var(--green-mid);color:#fff;border:none;border-radius:5px;padding:5px 14px;font-size:12px;cursor:pointer;font-family:inherit;}
-  .del-item-btn{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;border-radius:5px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
 </style>
 </head>
 <body>
+
+<!-- ★ パスワード画面 -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">🔐</div>
+    <div class="login-title">AIミニアプリ構築講座</div>
+    <div class="login-sub">eラーニングサイト</div>
+    <input type="password" class="login-input" id="pwInput" placeholder="パスワードを入力"
+      onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="login-btn" onclick="checkPw()">ログイン</button>
+    <div class="login-error" id="pwError"></div>
+    <div class="login-hint">パスワードは受講案内メールをご確認ください</div>
+  </div>
+</div>
 
 <header>
   <div class="logo-badge">長崎県補助金対象</div>
   <div class="logo-text">AIミニアプリ構築講座</div>
   <div class="logo-sub">eラーニング</div>
   <div class="header-right">
-    <span class="prog-text" id="progText">2 / 7 完了</span>
-    <div class="pbar-outer"><div class="pbar-fill" id="globalBar" style="width:28%"></div></div>
+    <span class="prog-text" id="progText">0 / 7 完了</span>
+    <div class="pbar-outer"><div class="pbar-fill" id="globalBar" style="width:0%"></div></div>
+    <a href="gallery.html" class="gallery-link">🏆 作品展示</a>
     <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditMode()">✏️ 編集モード</button>
     <div class="user-icon">前</div>
   </div>
 </header>
 
 <div class="edit-bar" id="editBar">
-  ✏️ 編集モード：テキストをクリックして直接編集できます
-  <button class="save-all-btn" onclick="saveAll()">💾 すべて保存</button>
-  <button class="export-btn" onclick="exportData()">📥 データ書き出し</button>
-  <span style="margin-left:auto;font-size:11px;color:#a16207;">※保存はブラウザに記憶されます</span>
+  ✏️ 編集モード：YouTube URLを設定できます
+  <button class="save-all-btn" onclick="saveProgress()">💾 進捗を保存</button>
+  <button class="export-btn" onclick="exportUrls()">📥 URL書き出し</button>
+  <span style="margin-left:auto;font-size:11px;color:#a16207;">※URLはurls.jsで管理してください</span>
 </div>
 
 <div class="body-wrap">
@@ -171,8 +178,6 @@
   </aside>
 
   <main id="mainArea">
-
-    <!-- ★ 動画セレクタ（3本切り替え） -->
     <div class="video-selector">
       <button class="vsel-btn active" id="vsel0" onclick="selectVideoType(0)">
         <span class="vsel-sub" id="vsub0">動画⑤-①</span>概要
@@ -185,7 +190,6 @@
       </button>
     </div>
 
-    <!-- URL編集行（編集モード時） -->
     <div class="url-edit-row" id="urlEditRow">
       <label id="urlEditLabel">YouTube URL（概要）：</label>
       <input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=XXXXXXXXX">
@@ -197,7 +201,7 @@
         <span class="vid-badge" id="vBadge">動画⑤</span>
         <span class="vid-title" id="vTitle">GEM設定の基本操作</span>
         <span class="vid-time" id="vTime">30分</span>
-        <span class="vid-type" id="vTypeLabel">NotebookLM解説</span>
+        <span class="vid-type" id="vTypeLabel">概要</span>
       </div>
       <div class="video-player">
         <div class="video-placeholder" id="vidPlaceholder">
@@ -216,7 +220,6 @@
       </div>
     </div>
 
-    <!-- ★ 総合テストバナー（動画⑦のみ） -->
     <div class="final-banner" id="finalBanner">
       <div class="fb-text">
         <h3>🎉 全7動画の視聴お疲れさまでした！</h3>
@@ -240,106 +243,82 @@
 
 <script>
 // ============================================================
-// データ
+// パスワード設定（ここを変更する）
 // ============================================================
-let lessons = [
-  {
-    num:1,badge:"動画①",name:"AIの現状と2026年トレンド",time:"30分",done:true,
-    hasDemo:false,
-    youtube:["","",""],
-    desc:"生成AIの最新動向とDXの必要性、主要ツールの比較を学びます。",
-    points:["生成AIの現状と主要プレイヤー","DXが中小企業に必要な理由","GeminiとChatGPTの違い","長崎の中小企業の活用事例"],
-    prompts:[],
-    exercises:[{q:"Geminiを開いて、あなたの業種・会社規模・主な業務を入力し、「AIを活用できそうな業務を3つ提案してください」と聞いてみましょう。",hint:"ヒント：「私は○○業・従業員○名です。主な業務は○○です。AIを活用できそうな業務を3つ提案してください」"}],
-    q:{q:"ChatGPTとGeminiの最大の違いは何ですか？",opts:["A. 価格が違う","B. GeminiはGoogleサービスと連携できる","C. ChatGPTは日本語が使えない","D. Geminiは音声のみ対応"],ans:1,fb:"正解！GeminiはGoogleドライブ・Gmailなどと連携できる点が最大の強みです。"}
-  },
-  {
-    num:2,badge:"動画②",name:"プロンプト8原則＋演習",time:"40分",done:true,
-    hasDemo:true,
-    youtube:["","",""],
-    desc:"AIへの指示（プロンプト）の質を劇的に変える8つの原則を習得します。",
-    points:["役割・前提・形式の3要素","Before/After比較演習","業務別プロンプトの作り方","よくある失敗パターン"],
-    prompts:[{label:"プロンプト基本テンプレート",text:"あなたは[役割]の専門家です。\n[背景情報]\n以下について[形式]で教えてください：\n・[質問1]\n・[質問2]"}],
-    exercises:[{q:"「提案書を書いて」という悪いプロンプトを、8+1の法則を使って改善してみましょう。役割・対象・形式・文字数を指定した良いプロンプトをGeminiに入力してください。",hint:"ヒント：「あなたは営業の専門家です。○○業の社長向けに、AI活用の提案書を800字以内・課題→解決策→効果の順で作成してください」"}],
-    q:{q:"プロンプトで最初に設定すべき最重要要素は？",opts:["A. 文字数制限","B. 役割（ペルソナ）","C. 出力言語","D. 箇条書き指定"],ans:1,fb:"正解！AIに「あなたは○○の専門家です」と役割を与えることで回答の質が劇的に上がります。"}
-  },
-  {
-    num:3,badge:"動画③",name:"AIリスク・著作権・ガイドライン",time:"30分",done:false,
-    hasDemo:false,
-    youtube:["","",""],
-    desc:"AIを業務で使う際の法的リスクと実務対応を学びます。",
-    points:["個人情報のAI入力ルール","著作権とAI出力の関係","社内AIガイドラインのひな型","情報漏洩を防ぐ3つの習慣"],
-    prompts:[],
-    exercises:[{q:"Geminiを使って、自社のAI利用ガイドライン（簡易版）を作成してみましょう。業種・従業員数・主な業務を入力してプロンプトを実行してください。",hint:"ヒント：「業種：○○業、従業員○名。入力禁止情報の明確化・利用ツールの指定・出力物の確認ルールを含むAI利用ガイドラインをA4一枚で作成してください」"}],
-    q:{q:"顧客の個人情報をGeminiで処理する際の正しい対応は？",opts:["A. そのまま入力してよい","B. 匿名化してから入力する","C. 有料プランなら入力可","D. 上司許可があれば可"],ans:1,fb:"正解！氏名・住所などは必ず匿名化してからAIに入力するのが原則です。"}
-  },
-  {
-    num:4,badge:"動画④",name:"議事録・要約・業界調査の実践",time:"40分",done:false,
-    hasDemo:true,
-    youtube:["","",""],
-    desc:"AIを使って情報処理を10倍速にする3つのスキルを習得します。",
-    points:["議事録→ToDo自動化（30分→5分）","長文・PDF要約の3要素指定","Deep Researchで業界調査","URLを貼るだけのWeb要約"],
-    prompts:[
-      {label:"議事録→ToDo変換プロンプト",text:"あなたは優秀なProject Managerです。\n以下の会議メモから「決定事項」と「ToDoリスト」を抽出してください。\nToDoは「誰が・いつまでに・何をする」の形式で整理し、\n優先度（高・中・低）もつけてください。\n最後にMarkdown形式の表で出力してください。\n前置きや挨拶は不要です。"},
-      {label:"長文・PDF要約プロンプト",text:"以下の文章を経営者向け（IT知識なし）に300字以内で要約してください。\n含める要素：課題・解決策・期待効果\n前置きは不要で、すぐに要約から始めてください。"}
-    ],
-    exercises:[
-      {q:"【議事録演習】プロンプト集の「議事録→ToDo変換プロンプト」をコピーし、下の演習用会議メモを貼り付けてGeminiに送信してください。",hint:"演習用会議メモ：\n参加者：鈴木（社長）、山本（営業）、中村（総務）\n・受発注システム導入→山本が来月末に3社見積取得\n・AI研修実施→中村が今月中に研修会社へ問合せ\n・マニュアル整備→田島が来月15日までに業務一覧作成"},
-      {q:"【要約演習】プロンプト集の「長文・PDF要約プロンプト」をコピーし、任意のWebページのテキストを貼り付けて要約してみましょう。",hint:"ヒント：ニュースサイトや業界情報サイトの記事テキストをコピーして貼り付けてみてください"}
-    ],
-    q:{q:"議事録をGeminiでToDoに変換する際に必要な3要素は？",opts:["A. 役割・出力形式・優先度","B. 文字数・言語・読者","C. タイトル・日付・担当者","D. 要約・箇条書き・表"],ans:0,fb:"正解！「優秀なPM役割」＋「Markdown表出力」＋「優先度（高・中・低）」の3要素がポイントです。"}
-  },
-  {
-    num:5,badge:"動画⑤",name:"GEM設定の基本操作",time:"30分",done:false,
-    hasDemo:true,
-    youtube:["","",""],
-    desc:"Geminiに役割・指示を事前設定するGEM機能を習得します。一度設定すれば毎回プロンプトを入力する手間がなくなります。",
-    points:["GEMとは何か・なぜ便利か","4ステップでGEM作成","カスタム指示の書き方","チームで共有して組織のAI資産に"],
-    prompts:[{label:"GEM用カスタム指示テンプレート",text:"あなたは優秀なProject Managerです。\n入力された会議メモから、決定事項とToDoリストを抽出してください。\nToDoは「誰が・いつまでに・何をする」の形式で整理し、\n優先度（高・中・低）もつけてください。\n最後にMarkdown形式の表で出力してください。\n前置きや挨拶は不要です。"}],
-    exercises:[{q:"【GEM作成演習】Geminiを開き、左サイドバーの「GEMを表示」→「GEMを作成」をクリックして、「議事録マスター」というGEMを作成してください。カスタム指示にはプロンプト集の「GEM用カスタム指示テンプレート」を貼り付けます。",hint:"ステップ：\n① Geminiを開く\n② 左サイドバー「GEMを表示」→「GEMを作成」\n③ 名前に「議事録マスター」と入力\n④ カスタム指示にテンプレートを貼り付け\n⑤「保存」をクリック"}],
-    q:{q:"GEMのカスタム指示には何を入力するとよいですか？",opts:["A. 会社の住所と電話番号","B. 動画④で作成したプロンプト","C. Geminiの利用規約全文","D. 自分の名前と役職"],ans:1,fb:"正解！動画④で学んだプロンプトをそのまま貼り付けるだけで完成します。"}
-  },
-  {
-    num:6,badge:"動画⑥",name:"NotebookLMデモ紹介",time:"20分",done:false,
-    hasDemo:true,
-    youtube:["","",""],
-    desc:"自社データをAI化してQ&Aボットを作る方法をデモで紹介します。",
-    points:["NotebookLMとGeminiの違い","自社資料をアップしてQ&A","新人研修・FAQ自動化への応用","注意点とデータ管理"],
-    prompts:[],
-    exercises:[{q:"【NotebookLM演習】notebooklm.google.comを開いて新しいノートブックを作成し、任意のPDFまたはWebページURLをアップロードして、内容についてQ&Aを試してみましょう。",hint:"ヒント：会社のパンフレット・業務マニュアル・業界資料など手元にあるPDFをアップロードして「このPDFの要点を教えてください」と質問してみてください"}],
-    q:{q:"NotebookLMの最大の特徴は何ですか？",opts:["A. 画像を自動生成できる","B. 自社の資料に基づいてQ&Aができる","C. プログラムを自動作成できる","D. メールを自動送信できる"],ans:1,fb:"正解！NotebookLMは自社のPDF・資料を読み込ませてQ&Aができるツールです。"}
-  },
-  {
-    num:7,badge:"動画⑦",name:"ビルドの基本操作（ミニアプリ入門）",time:"50分",done:false,
-    hasDemo:true,
-    youtube:["","",""],
-    desc:"GeminiでAIミニアプリを構築するための基本操作と設計の考え方を学びます。集合研修での自社アプリ構築の準備をします。",
-    points:["アプリ設計の3ステップ","業務課題の明確化","簡単なアプリを実際に作る","集合研修の準備・持参物確認"],
-    prompts:[{label:"アプリ設計用プロンプト",text:"私は[業種]の[役職]です。\n現在以下の業務に課題を感じています：[課題]\n\nGeminiを使って、この課題を解決するシンプルなアプリを設計してください。\n・必要な入力項目\n・AIに何をさせるか\n・出力形式\nを具体的に提案してください。"}],
-    exercises:[
-      {q:"【演習①　アプリ設計】プロンプト集の「アプリ設計用プロンプト」を使って、あなたの業務課題を解決するAIアプリの設計をGeminiに提案させてみましょう。",hint:"ヒント：[ ]の中を自社の情報に書き換えてください。\n例：「私は製造業の総務担当です。現在以下の業務に課題を感じています：毎月の勤怠集計に2時間かかっている」"},
-      {q:"【演習②　アプリ改善】演習①で作成したアプリ設計をGeminiに見せて、「このアプリをさらに使いやすくする改善案を3つ提案してください」と追加指示してみましょう。",hint:"ヒント：前のチャットを続けて、「この設計についてもう少し具体的に教えてください」「入力フォームの例も作ってください」など追加指示で磨いていきます"}
-    ],
-    q:{q:"ミニアプリ構築で最初に行うべきことは何ですか？",opts:["A. プログラミングの勉強を始める","B. 解決したい業務課題を明確にする","C. 高性能なパソコンを購入する","D. 有料プランに加入する"],ans:1,fb:"正解！「どの業務の何を自動化したいか」を明確にすることが出発点です。"}
-  }
-];
+const PASSWORD = "nagasaki2026";  // ← パスワードをここで設定
 
-// ★ GoogleフォームのURLをここに設定
-const FINAL_TEST_URL = "https://forms.google.com/XXXXXXXXX";
+function checkPw(){
+  const val = document.getElementById('pwInput').value;
+  if(val === PASSWORD){
+    document.getElementById('loginScreen').classList.add('hidden');
+    sessionStorage.setItem('loggedIn','1');
+  } else {
+    document.getElementById('pwError').textContent = 'パスワードが違います';
+    document.getElementById('pwInput').value = '';
+    setTimeout(()=>document.getElementById('pwError').textContent='', 2000);
+  }
+}
+
+// セッション中はログイン状態を維持
+if(sessionStorage.getItem('loggedIn')==='1'){
+  document.getElementById('loginScreen').classList.add('hidden');
+}
+
+// ============================================================
+// 動画リスト定義（YouTube URLはurls.jsから読み込む）
+// 説明・ポイント・プロンプト・練習問題はcontent.jsから読み込む
+// ============================================================
+const lessons = [
+  {num:1,badge:"動画①",name:"AIの現状と2026年トレンド",  time:"30分",hasDemo:false,done:false},
+  {num:2,badge:"動画②",name:"プロンプト8原則＋演習",      time:"40分",hasDemo:true, done:false},
+  {num:3,badge:"動画③",name:"AIリスク・著作権・ガイドライン",time:"30分",hasDemo:false,done:false},
+  {num:4,badge:"動画④",name:"議事録・要約・業界調査の実践",time:"40分",hasDemo:true, done:false},
+  {num:5,badge:"動画⑤",name:"GEM設定の基本操作",          time:"30分",hasDemo:true, done:false},
+  {num:6,badge:"動画⑥",name:"NotebookLMデモ紹介",         time:"20分",hasDemo:true, done:false},
+  {num:7,badge:"動画⑦",name:"ビルドの基本操作（ミニアプリ入門）",time:"50分",hasDemo:true,done:false},
+];
 
 // ============================================================
 // 状態
 // ============================================================
 let current = 4;
 let currentVType = 0;
-let quizAnswered = false;
 let simProg = 0;
 let editMode = false;
 const VT_LABELS = ["概要","具体的内容","実演"];
+const NUMS = ["①","②","③","④","⑤","⑥","⑦"];
 
-function loadSaved(){try{const s=localStorage.getItem('ai_el_v3');if(s)lessons=JSON.parse(s);}catch(e){}}
-function saveAll(){localStorage.setItem('ai_el_v3',JSON.stringify(lessons));const b=document.querySelector('.save-all-btn');b.textContent='✅ 保存しました！';setTimeout(()=>b.textContent='💾 すべて保存',2000);}
-function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(lessons,null,2)],{type:'application/json'}));a.download='elearning_v3.json';a.click();}
+// 進捗をlocalStorageから復元
+function loadProgress(){
+  try{
+    const s = localStorage.getItem('ai_el_v4_progress');
+    if(s){
+      const prog = JSON.parse(s);
+      prog.forEach((d,i)=>{ if(lessons[i]) lessons[i].done = d; });
+    }
+  }catch(e){}
+}
+
+function saveProgress(){
+  localStorage.setItem('ai_el_v4_progress', JSON.stringify(lessons.map(l=>l.done)));
+  const b = document.querySelector('.save-all-btn');
+  b.textContent='✅ 保存しました！';
+  setTimeout(()=>b.textContent='💾 進捗を保存',2000);
+}
+
+function exportUrls(){
+  // 現在のURLSをコンソールに出力（urls.js更新用）
+  let out = '// urls.js - コピーして使用してください\nconst YOUTUBE_URLS = [\n';
+  YOUTUBE_URLS.forEach((u,i)=>{
+    out += `  ["${u[0]}", "${u[1]}", "${u[2]}"],  // 動画${NUMS[i]}\n`;
+  });
+  out += '];\n\nconst FINAL_TEST_URL = "'+FINAL_TEST_URL+'";';
+  const blob = new Blob([out],{type:'text/javascript'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'urls.js';
+  a.click();
+}
 
 function toggleEditMode(){
   editMode=!editMode;
@@ -347,36 +326,40 @@ function toggleEditMode(){
   document.getElementById('editToggleBtn').className='edit-toggle-btn'+(editMode?' on':'');
   document.getElementById('editBar').className='edit-bar'+(editMode?' show':'');
   document.getElementById('mainArea').className=editMode?'edit-mode-active':'';
-  document.body.className=editMode?'edit-mode':'';
-  renderAll();
 }
 
+// ============================================================
+// サイドバー
+// ============================================================
 function renderSidebar(){
-  document.getElementById('lessonList').innerHTML=lessons.map((l,i)=>`
+  document.getElementById('lessonList').innerHTML = lessons.map((l,i)=>`
     <div class="lesson-item${i===current?' active':''}" onclick="selectLesson(${i})">
       <div class="lcheck${l.done?' done':''}">${l.done?'✓':''}</div>
-      <div class="linfo"><div class="lname">${l.name}</div>
+      <div class="linfo">
+        <div class="lname">${l.name}</div>
         <div class="lmeta"><span class="ltime">${l.time}</span>${l.done?'<span class="done-tag">視聴済</span>':''}</div>
       </div>
       <div class="lnum">${l.badge}</div>
     </div>`).join('');
 }
 
+// ============================================================
+// 動画セレクタ
+// ============================================================
 function selectVideoType(type){
   currentVType=type;
   [0,1,2].forEach(i=>document.getElementById('vsel'+i).className='vsel-btn'+(i===type?' active':''));
   document.getElementById('vTypeLabel').textContent=VT_LABELS[type];
   document.getElementById('urlEditLabel').textContent=`YouTube URL（${VT_LABELS[type]}）：`;
-  document.getElementById('urlInput').value=lessons[current].youtube[type]||'';
-  // 実演タブ：実演タブ選択時かつhasDemo:trueの場合のみ表示
+  document.getElementById('urlInput').value=YOUTUBE_URLS[current][type]||'';
   const exBtn=document.getElementById('exTabBtn');
-  exBtn.style.display=(type===2 && lessons[current].hasDemo!==false)?'block':'none';
-  if(!(type===2 && lessons[current].hasDemo!==false)) showTab('desc',document.querySelector('.tab-btn'));
+  exBtn.style.display=(type===2 && lessons[current].hasDemo)?'block':'none';
+  if(!(type===2 && lessons[current].hasDemo)) showTab('desc',document.querySelector('.tab-btn'));
   loadVideo();
 }
 
 function loadVideo(){
-  const url=(lessons[current].youtube||['','',''])[currentVType]||'';
+  const url=(YOUTUBE_URLS[current]||['','',''])[currentVType]||'';
   const iframe=document.getElementById('videoFrame'),ph=document.getElementById('vidPlaceholder');
   if(url){
     let v=url;
@@ -386,32 +369,36 @@ function loadVideo(){
     iframe.style.display='block';ph.style.display='none';
   }else{
     iframe.style.display='none';iframe.src='';ph.style.display='flex';
-    document.getElementById('phTitle').textContent=`${lessons[current].badge} ${lessons[current].name}\n【${VT_LABELS[currentVType]}】\nYouTube URLを設定すると再生できます`;
+    document.getElementById('phTitle').textContent=
+      `${lessons[current].badge} ${lessons[current].name}\n【${VT_LABELS[currentVType]}】\nYouTube URLをurls.jsに設定すると再生できます`;
   }
 }
 
 function applyUrl(){
-  if(!lessons[current].youtube)lessons[current].youtube=['','',''];
-  lessons[current].youtube[currentVType]=document.getElementById('urlInput').value.trim();
+  // 編集モード時のURL一時適用（正式にはurls.jsを更新）
+  YOUTUBE_URLS[current][currentVType]=document.getElementById('urlInput').value.trim();
   loadVideo();
 }
 
+// ============================================================
+// 動画選択
+// ============================================================
 function selectLesson(i){
-  current=i;quizAnswered=false;simProg=lessons[i].done?100:0;currentVType=0;
+  current=i; currentVType=0; simProg=lessons[i].done?100:0;
   const l=lessons[i];
   document.getElementById('vBadge').textContent=l.badge;
   document.getElementById('vTitle').textContent=l.name;
   document.getElementById('vTime').textContent=l.time;
   document.getElementById('vTypeLabel').textContent=VT_LABELS[0];
-  [0,1,2].forEach(j=>document.getElementById('vsel'+j).className='vsel-btn'+(j===0?' active':''));
-  // セレクタのサブラベル
-  const nums=['①','②','③','④','⑤','⑥','⑦'];
-  [0,1,2].forEach(j=>document.getElementById('vsub'+j).textContent=`動画${nums[i]||''}-${j+1}`);
+  [0,1,2].forEach(j=>{
+    document.getElementById('vsel'+j).className='vsel-btn'+(j===0?' active':'');
+    document.getElementById('vsub'+j).textContent=`動画${NUMS[i]}-${j+1}`;
+  });
   document.getElementById('exTabBtn').style.display='none';
   document.getElementById('finalBanner').className='final-banner'+(i===6?' show':'');
-  document.getElementById('urlInput').value=l.youtube?.[0]||'';
+  document.getElementById('urlInput').value=YOUTUBE_URLS[i]?.[0]||'';
   document.getElementById('urlEditLabel').textContent='YouTube URL（概要）：';
-  loadVideo();updateProgress();renderSidebar();renderAll();
+  loadVideo(); updateProgress(); renderSidebar(); renderAll();
   showTab('desc',document.querySelector('.tab-btn'));
 }
 
@@ -424,93 +411,74 @@ function updateProgress(){
   document.getElementById('globalBar').style.width=(done/7*100)+'%';
 }
 
-function seekProg(e){const r=e.currentTarget.getBoundingClientRect();simProg=Math.max(0,Math.min(100,Math.round((e.clientX-r.left)/r.width*100)));updateProgress();}
-function markDone(){lessons[current].done=true;simProg=100;updateProgress();renderSidebar();}
-function nextLesson(){if(current<lessons.length-1)selectLesson(current+1);}
-function openFinalTest(){if(FINAL_TEST_URL.includes('XXXXXXXXX')){alert('GoogleフォームのURLをHTMLのFINAL_TEST_URLに設定してください。');return;}window.open(FINAL_TEST_URL,'_blank');}
-
-function renderAll(){renderDesc();renderPrompts();renderExercises();renderQuiz();}
-
-// --- 説明 ---
-function renderDesc(){
-  const l=lessons[current];
-  if(editMode){
-    document.getElementById('descPanel').innerHTML=`
-      <div style="margin-bottom:8px;"><div style="font-size:11px;color:#92400e;margin-bottom:4px;">📝 説明文</div>
-        <div class="editable desc-intro" contenteditable="true" onblur="lessons[${current}].desc=this.innerText">${l.desc}</div></div>
-      <div><div style="font-size:11px;color:#92400e;margin-bottom:6px;">📌 ポイント</div>
-        <div class="point-grid">${l.points.map((p,pi)=>`<span class="point-chip" contenteditable="true" onblur="lessons[${current}].points[${pi}]=this.innerText">${p}<button class="del-btn" onclick="delPoint(${pi})">×</button></span>`).join('')}</div>
-        <button class="add-btn" onclick="addPoint()">＋ ポイントを追加</button></div>`;
-  }else{
-    document.getElementById('descPanel').innerHTML=`<div class="desc-intro">${l.desc}</div><div class="point-grid">${l.points.map(p=>`<span class="point-chip">✓ ${p}</span>`).join('')}</div>`;
-  }
+function seekProg(e){
+  const r=e.currentTarget.getBoundingClientRect();
+  simProg=Math.max(0,Math.min(100,Math.round((e.clientX-r.left)/r.width*100)));
+  updateProgress();
 }
-function addPoint(){lessons[current].points.push('新しいポイント');renderDesc();}
-function delPoint(pi){lessons[current].points.splice(pi,1);renderDesc();}
+function markDone(){lessons[current].done=true;simProg=100;updateProgress();renderSidebar();saveProgress();}
+function nextLesson(){if(current<lessons.length-1)selectLesson(current+1);}
+function openFinalTest(){
+  if(FINAL_TEST_URL.includes('XXXXXXXXX')){alert('GoogleフォームのURLをurls.jsのFINAL_TEST_URLに設定してください。');return;}
+  window.open(FINAL_TEST_URL,'_blank');
+}
 
-// --- プロンプト ---
+// ============================================================
+// コンテンツ描画（content.jsのデータを使用）
+// ============================================================
+function renderAll(){renderDesc();renderPrompts();renderExercises();}
+
+function renderDesc(){
+  const c=CONTENT[current];
+  document.getElementById('descPanel').innerHTML=`
+    <div class="desc-intro">${esc(c.desc)}</div>
+    <div class="point-grid">${c.points.map(p=>`<span class="point-chip">✓ ${esc(p)}</span>`).join('')}</div>`;
+}
+
 function renderPrompts(){
-  const l=lessons[current],panel=document.getElementById('promptPanel');
-  if(editMode){
-    let h=l.prompts.length===0?'<div class="no-prompt-msg">プロンプトはまだありません。</div>':'';
-    l.prompts.forEach((p,pi)=>{h+=`<div class="edit-field-wrap">
-      <label>ラベル名</label><input type="text" value="${esc(p.label)}" onchange="lessons[${current}].prompts[${pi}].label=this.value">
-      <label>プロンプト本文</label><textarea rows="5" onchange="lessons[${current}].prompts[${pi}].text=this.value">${esc(p.text)}</textarea>
-      <div style="display:flex;gap:8px;margin-top:8px;"><button class="apply-btn" onclick="renderPrompts()">✓ 反映</button>
-      <button class="del-item-btn" onclick="delPrompt(${pi})">削除</button></div></div>`;});
-    h+=`<button class="add-btn" style="display:inline-block;" onclick="addPrompt()">＋ プロンプトを追加</button>`;
-    panel.innerHTML=h;
-  }else{
-    if(!l.prompts||l.prompts.length===0){panel.innerHTML='<div class="no-prompt-msg">この動画のプロンプトは準備中です。</div>';return;}
-    panel.innerHTML=l.prompts.map((p,pi)=>`<div class="prompt-box">
+  const c=CONTENT[current],panel=document.getElementById('promptPanel');
+  if(!c.prompts||c.prompts.length===0){
+    panel.innerHTML='<div class="no-prompt-msg">この動画のプロンプトは準備中です。</div>';return;
+  }
+  panel.innerHTML=c.prompts.map((p,pi)=>`
+    <div class="prompt-box">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
         <div class="prompt-label">${esc(p.label)}</div>
-        <button class="copy-btn" onclick="copyP(${pi})">コピー</button></div>
-      <div class="prompt-text">${esc(p.text)}</div></div>`).join('');
-  }
+        <button class="copy-btn" onclick="copyP(${pi})">コピー</button>
+      </div>
+      <div class="prompt-text">${esc(p.text)}</div>
+    </div>`).join('');
 }
-function addPrompt(){lessons[current].prompts.push({label:'新しいプロンプト',text:'プロンプトを入力'});renderPrompts();}
-function delPrompt(pi){if(!confirm('削除しますか？'))return;lessons[current].prompts.splice(pi,1);renderPrompts();}
-function copyP(i){navigator.clipboard.writeText(lessons[current].prompts[i].text).then(()=>{const b=document.querySelectorAll('.copy-btn');if(b[i]){b[i].textContent='コピー済！';setTimeout(()=>b[i].textContent='コピー',1500);}});}
 
-// --- ★ 実演練習問題 ---
 function renderExercises(){
-  const l=lessons[current],exs=l.exercises||[],panel=document.getElementById('exercisePanel');
-  if(editMode){
-    let h=`<div style="font-size:11px;color:#92400e;margin-bottom:8px;">🎯 実演練習問題を編集</div>`;
-    exs.forEach((ex,ei)=>{h+=`<div class="edit-field-wrap">
-      <label>問題文</label><textarea rows="3" onchange="lessons[${current}].exercises[${ei}].q=this.value">${esc(ex.q)}</textarea>
-      <label>ヒント</label><textarea rows="3" onchange="lessons[${current}].exercises[${ei}].hint=this.value">${esc(ex.hint)}</textarea>
-      <div style="display:flex;gap:8px;margin-top:8px;"><button class="apply-btn" onclick="renderExercises()">✓ 反映</button>
-      <button class="del-item-btn" onclick="delEx(${ei})">削除</button></div></div>`;});
-    h+=`<button class="add-btn" style="display:inline-block;" onclick="addEx()">＋ 問題を追加</button>`;
-    panel.innerHTML=h;
-  }else{
-    if(exs.length===0){panel.innerHTML='<div class="no-prompt-msg">この動画の練習問題は準備中です。</div>';return;}
-    panel.innerHTML=`<div class="ex-title">実演練習問題 — Geminiで実際に操作してみましょう</div>`+
-      exs.map((ex,ei)=>`<div class="ex-item">
-        <div class="ex-num">問題 ${ei+1}</div>
-        <div class="ex-q">${esc(ex.q)}</div>
-        <div class="ex-hint"><span class="ex-hint-label">💡 ヒント</span>${esc(ex.hint)}</div>
-      </div>`).join('');
-  }
+  const c=CONTENT[current],exs=c.exercises||[],panel=document.getElementById('exercisePanel');
+  if(exs.length===0){panel.innerHTML='<div class="no-prompt-msg">この動画の練習問題は準備中です。</div>';return;}
+  panel.innerHTML=`<div class="ex-title">実演練習問題 — Geminiで実際に操作してみましょう</div>`+
+    exs.map((ex,ei)=>`<div class="ex-item">
+      <div class="ex-num">問題 ${ei+1}</div>
+      <div class="ex-q">${esc(ex.q)}</div>
+      <div class="ex-hint"><span class="ex-hint-label">💡 ヒント</span>${esc(ex.hint)}</div>
+    </div>`).join('');
 }
-function addEx(){if(!lessons[current].exercises)lessons[current].exercises=[];lessons[current].exercises.push({q:'問題文を入力してください',hint:'ヒントを入力してください'});renderExercises();}
-function delEx(ei){if(!confirm('削除しますか？'))return;lessons[current].exercises.splice(ei,1);renderExercises();}
 
+function copyP(i){
+  navigator.clipboard.writeText(CONTENT[current].prompts[i].text).then(()=>{
+    const b=document.querySelectorAll('.copy-btn');
+    if(b[i]){b[i].textContent='コピー済！';setTimeout(()=>b[i].textContent='コピー',1500);}
+  });
+}
 
 function showTab(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
-  ['desc','prompt','exercise'].forEach(t=>document.getElementById(t+'Panel').style.display=t===tab?'block':'none');
+  ['desc','prompt','exercise'].forEach(t=>
+    document.getElementById(t+'Panel').style.display=t===tab?'block':'none');
 }
 
-function renderAll(){renderDesc();renderPrompts();renderExercises();}
-
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 // 起動
-loadSaved();
+loadProgress();
 selectLesson(4);
 </script>
 </body>
