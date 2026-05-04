@@ -12,6 +12,11 @@
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Noto Sans JP',sans-serif;background:#f4f6f8;color:#222;min-height:100vh;}
 
+  /* コピー・右クリック禁止 */
+  body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
+  /* ただしプロンプトはコピーボタンで取得可能にするため選択許可 */
+  .prompt-text{-webkit-user-select:text;-moz-user-select:text;user-select:text;}
+
   /* ── パスワード画面 ── */
   #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f7a5a,#1a1f2e);display:flex;align-items:center;justify-content:center;z-index:999;}
   #loginScreen.hidden{display:none;}
@@ -236,7 +241,7 @@
       <div class="tab-bar">
         <button class="tab-btn active" onclick="showTab('desc',this)">📖 説明・ポイント</button>
         <button class="tab-btn" onclick="showTab('prompt',this)">💡 プロンプト集</button>
-        <button class="tab-btn" id="exTabBtn" onclick="showTab('exercise',this)" style="display:none;">🎯 実演練習問題</button>
+        <button class="tab-btn" id="exTabBtn" onclick="showTab('exercise',this)" style="display:none;">🎯 演習問題</button>
       </div>
       <div class="tab-pane active" id="descPanel"></div>
       <div class="tab-pane" id="promptPanel"></div>
@@ -408,7 +413,7 @@ function renderDesc(){
 function renderPrompts(){
   const c=CONTENT[current],panel=document.getElementById('promptPanel');
   if(!c.prompts||c.prompts.length===0){
-    panel.innerHTML='<div class="no-prompt-msg">この動画のプロンプトは準備中です。</div>';return;
+    panel.innerHTML='<div class="no-prompt-msg">この動画ではプロンプトはありません。</div>';return;
   }
   panel.innerHTML=c.prompts.map((p,pi)=>`
     <div class="prompt-box">
@@ -423,7 +428,7 @@ function renderPrompts(){
 function renderExercises(){
   const c=CONTENT[current],exs=c.exercises||[],panel=document.getElementById('exercisePanel');
   if(exs.length===0){panel.innerHTML='<div class="no-prompt-msg">この動画の練習問題は準備中です。</div>';return;}
-  panel.innerHTML=`<div class="ex-title">実演練習問題 — Geminiで実際に操作してみましょう</div>`+
+  panel.innerHTML=`<div class="ex-title">演習問題 — Geminiで実際に操作してみましょう</div>`+
     exs.map((ex,ei)=>`<div class="ex-item">
       <div class="ex-num">問題 ${ei+1}</div>
       <div class="ex-q">${esc(ex.q)}</div>
@@ -446,6 +451,9 @@ function showTab(tab,btn){
 }
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// 右クリック禁止
+document.addEventListener('contextmenu', e => e.preventDefault());
 
 // 起動
 loadProgress();
