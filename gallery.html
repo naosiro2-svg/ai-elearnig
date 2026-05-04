@@ -10,6 +10,10 @@
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Noto Sans JP',sans-serif;background:#f4f6f8;color:#222;min-height:100vh;}
 
+  /* コピー・右クリック禁止 */
+  body{-webkit-user-select:none;-moz-user-select:none;user-select:none;}
+  .modal-prompt{-webkit-user-select:text;-moz-user-select:text;user-select:text;}
+
   header{background:var(--dark);padding:14px 24px;display:flex;align-items:center;gap:14px;}
   .logo-badge{background:var(--green-mid);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;}
   .logo-text{color:#fff;font-size:15px;font-weight:700;}
@@ -242,6 +246,7 @@ function copyModalPrompt(){
 
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+document.addEventListener('contextmenu', e => e.preventDefault());
 renderGallery();
 </script>
 </body>
