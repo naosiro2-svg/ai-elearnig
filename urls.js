@@ -6,12 +6,12 @@
 
 const YOUTUBE_URLS = [
   ["", "", ""],  // 動画① [概要, 具体的内容, 実演]
-  ["https://youtu.be/SfUdpyVwHvY", "", ""],  // 動画②
+  ["https://youtu.be/SfUdpyVwHvY", "", "https://youtu.be/aqMCX7Ez8KM"],  // 動画②
   ["https://youtu.be/nU5BW-IayQI", "https://youtu.be/6DqJeXa6sew", ""],  // 動画③
   ["", "https://youtu.be/gkr2IuXNhN0", ""],  // 動画④
   ["https://youtu.be/zO0385LzC9c", "https://youtu.be/xrtODLI-_cA", "https://youtu.be/QG2lwKB-tE0"],  // 動画⑤
   ["https://youtu.be/Y3UIv0OUDfE", "", "https://youtu.be/LZvkrlupusg"],  // 動画⑥
-  ["https://youtu.be/WQq7mYEZh6Y", "", ""],  // 動画⑦
+  ["https://youtu.be/WQq7mYEZh6Y", "", "https://youtu.be/K9RT4e0hbcE"],  // 動画⑦
 ];
 
 // 総合確認テスト GoogleフォームURL
