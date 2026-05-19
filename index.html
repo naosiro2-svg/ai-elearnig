@@ -347,8 +347,7 @@ function loadVideo(){
     iframe.style.display='block';ph.style.display='none';
   }else{
     iframe.style.display='none';iframe.src='';ph.style.display='flex';
-    document.getElementById('phTitle').textContent=
-      `${lessons[current].badge} ${lessons[current].name}\n【${VT_LABELS[currentVType]}】\nYouTube URLをurls.jsに設定すると再生できます`;
+    document.getElementById('phTitle').textContent='この動画はありません';
   }
 }
 
