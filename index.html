@@ -86,8 +86,9 @@
   .vid-time{font-size:11px;color:#64748b;}
   .vid-type{font-size:10px;color:#4b5563;background:#1f2937;padding:2px 7px;border-radius:10px;}
 
-  /* 16:9アスペクト比で動画を大きく表示 */
+  /* YouTubeボタン操作防止オーバーレイ */
   .video-player-wrap{position:relative;width:100%;padding-top:56.25%;background:#0d1117;}
+  .video-overlay{position:absolute;top:0;left:0;right:0;bottom:10%;z-index:10;cursor:default;}
   .video-player-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
   .video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0d1117;}
   .play-circle{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;}
@@ -209,6 +210,8 @@
 
       <!-- 16:9比率で大きく表示 -->
       <div class="video-player-wrap">
+      <!-- YouTubeボタン操作防止オーバーレイ -->
+      <div class="video-overlay" id="videoOverlay"></div>
         <div class="video-placeholder" id="vidPlaceholder">
           <div class="play-circle"><div class="play-tri"></div></div>
           <div class="ph-title" id="phTitle">動画を選択してください</div>
