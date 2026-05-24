@@ -107,79 +107,48 @@
 // ============================================================
 // 作品データ（集合研修後にここに追加していく）
 // ============================================================
+const DRIVE_URL = "https://drive.google.com/drive/folders/1NY9y27uoqLWS3T0e6-gXqdwQ593LZz9d";
+
 const works = [
-  // 以下は記入例です。集合研修後に実際の作品情報を追加してください。
   {
-    name: "議事録ToDo自動化ツール",
-    author: "○○株式会社　田中様",
-    desc: "会議メモを貼り付けるだけで決定事項とToDoリストを自動生成。優先度付きで出力されるので会議後の作業が大幅に効率化されました。",
-    tags: ["議事録", "ToDo", "GEM"],
-    url: "",           // アプリのURL（GEMの共有リンク等）
-    prompt: "あなたは優秀なProject Managerです。\n入力された会議メモから、決定事項とToDoリストを抽出してください。\nToDoは「誰が・いつまでに・何をする」の形式で整理し、\n優先度（高・中・低）もつけてください。\n最後にMarkdown形式の表で出力してください。\n前置きや挨拶は不要です。",
-    showPrompt: true   // trueでプロンプト公開、falseで非公開
-  },
-  {
-    name: "（作品名）",
-    author: "（会社名・お名前）",
-    desc: "（アプリの説明）",
-    tags: [],
-    url: "",
+    name: "営業研修アプリ公開版",
+    author: "株式会社ストラテジーエイド",
+    desc: "営業スキルの向上を支援するAI対話型ロールプレイ練習ツールです。商材や顧客タイプを設定して、リアルな商談練習と具体的なフィードバックを受けられます。",
+    tags: ["Build", "営業研修", "ロールプレイ", "AI対話"],
+    url: "https://service-1006509308450.us-west1.run.app",
+    driveFolder: false,
     prompt: "",
     showPrompt: false
   },
   {
-    name: "（作品名）",
-    author: "（会社名・お名前）",
-    desc: "（アプリの説明）",
-    tags: [],
-    url: "",
+    name: "経理伝票抽出くん",
+    author: "株式会社ストラテジーエイド",
+    desc: "紙またはPDFの領収書・請求書を読み込んで、会計システムに渡せるCSVデータを自動作成します。手入力の手間を大幅に削減できます。",
+    tags: ["Build", "経理", "OCR", "CSV出力"],
+    url: "https://remix-smart-invoice-extractor-969769004178.us-west1.run.app/",
+    driveFolder: true,
     prompt: "",
     showPrompt: false
   },
   {
-    name: "（作品名）",
-    author: "（会社名・お名前）",
-    desc: "（アプリの説明）",
-    tags: [],
-    url: "",
+    name: "Document to Word OCR",
+    author: "株式会社ストラテジーエイド",
+    desc: "紙またはPDFの各種書類を読み込んで、Word形式に変換するOCRツールです。手書き書類のデジタル化や書類整理の効率化に活用できます。",
+    tags: ["Build", "OCR", "Word変換", "書類デジタル化"],
+    url: "https://document-to-word-ocr-969769004178.us-west1.run.app",
+    driveFolder: true,
     prompt: "",
     showPrompt: false
   },
   {
-    name: "（作品名）",
-    author: "（会社名・お名前）",
-    desc: "（アプリの説明）",
-    tags: [],
-    url: "",
-    prompt: "",
-    showPrompt: false
-  },
-  {
-    name: "（作品名）",
-    author: "（会社名・お名前）",
-    desc: "（アプリの説明）",
-    tags: [],
-    url: "",
-    prompt: "",
-    showPrompt: false
-  },
-  {
-    name: "（作品名）",
-    author: "（会社名・お名前）",
-    desc: "（アプリの説明）",
-    tags: [],
-    url: "",
-    prompt: "",
-    showPrompt: false
-  },
-  {
-    name: "（作品名）",
-    author: "（会社名・お名前）",
-    desc: "（アプリの説明）",
-    tags: [],
-    url: "",
-    prompt: "",
-    showPrompt: false
+    name: "議事録作成アシスタント",
+    author: "株式会社ストラテジーエイド",
+    desc: "動画録画ファイルや音声録音ファイルから、詳細な議事録と決定事項を抽出した要約版を自動生成します。Word形式での書き出しも可能です。",
+    tags: ["Build", "議事録", "音声認識", "Word出力"],
+    url: "https://ai.studio/apps/2bd87ae6-2f31-465a-9b5e-fcb6eceda658",
+    driveFolder: true,
+    prompt: "＃前提条件\n役割：あなたはプロの事務局スタッフです。\n目的：アップロードされた動画の内容から、欠席者でも会議の内容が完璧に理解できる議事録を作成してください。\n\n＃実行指示\n・会議の議事録として2つ作ってください\n　一つは詳細議事録\n　もう一つは簡易議事録です\n・簡易議事録：会議の議題、決定事項、保留事項を抽出してください。\n・発言者ごとの主要な意見をまとめてください。\n・次回までに誰が何をすべきか（ToDoリスト）を作成してください。\n\n＃出力\n作製した議事録はWord文書として保存できるようにする\n\n＃出力形式\n詳細議事録 ／ 簡易議事録\n【議題】\n【決定事項】（箇条書き）\n【各発言者の要点】\n【ToDoリスト】（担当者・期限を明記）",
+    showPrompt: true
   },
 ];
 
@@ -205,6 +174,7 @@ function renderGallery(){
       <div class="card-body">
         <div class="card-desc">${esc(w.desc)}</div>
         ${w.tags.length>0?`<div class="card-tags">${w.tags.map(t=>`<span class="card-tag">${esc(t)}</span>`).join('')}</div>`:''}
+        ${w.driveFolder?`<a href="${DRIVE_URL}" target="_blank" style="display:block;font-size:11px;color:#1D9E75;margin-bottom:8px;text-decoration:none;">📁 デモ用データはこちら（共有フォルダ）→</a>`:''}
         <div class="card-actions">
           ${w.url
             ? `<a href="${esc(w.url)}" target="_blank" class="app-btn">🚀 アプリを開く</a>`
