@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>集合研修 演習ガイド｜AIミニアプリ構築講座</title>
+<style>
+:root {
+  --g1: #1B5E3B;
+  --g2: #2D7D52;
+  --g3: #E8F5EE;
+  --g4: #f0faf5;
+  --ga: #A8D5B5;
+  --ora: #F4A742;
+  --ora2: #fff8ed;
+  --bl: #1a6fa8;
+  --bl2: #e8f4fc;
+  --pu: #6c3d91;
+  --pu2: #f3edf8;
+  --rd: #c0392b;
+  --rd2: #fdecea;
+  --tk: #1a2e23;
+  --tm: #3d5a46;
+  --tg: #6b7c72;
+  --wh: #ffffff;
+  --sh: 0 2px 16px rgba(27,94,59,0.10);
+  --sh2: 0 6px 28px rgba(27,94,59,0.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:#eef4f0;color:var(--tk);min-height:100vh}
+
+/* ── HEADER ── */
+.site-header{background:var(--g1);color:#fff;padding:0;position:sticky;top:0;z-index:200;box-shadow:0 3px 12px rgba(0,0,0,.25)}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+.header-top h1{font-size:16px;font-weight:800;letter-spacing:.02em}
+.header-top .sub{font-size:11px;color:var(--ga);margin-top:2px}
+.back-link{font-size:12px;color:var(--ga);text-decoration:none;border:1px solid var(--ga);border-radius:99px;padding:4px 12px;white-space:nowrap}
+.back-link:hover{background:var(--ga);color:var(--g1)}
+
+/* DAY TABS */
+.day-tabs{display:flex;background:rgba(0,0,0,.2);padding:0 20px}
+.day-tab{flex:1;padding:10px 0;text-align:center;font-size:13px;font-weight:800;color:rgba(255,255,255,.55);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;letter-spacing:.03em}
+.day-tab.active{color:#fff;border-bottom-color:var(--ora)}
+.day-tab:hover:not(.active){color:rgba(255,255,255,.8)}
+
+/* ── LAYOUT ── */
+.container{max-width:900px;margin:0 auto;padding:24px 16px 100px}
+
+/* DAY PAGES */
+.day-page{display:none}
+.day-page.active{display:block}
+
+/* DAY HERO */
+.day-hero{background:var(--wh);border-radius:16px;padding:24px 28px;margin-bottom:24px;box-shadow:var(--sh);display:flex;align-items:flex-start;gap:20px;border-left:6px solid var(--g1)}
+.day-badge{background:var(--g1);color:#fff;border-radius:12px;padding:10px 18px;font-size:22px;font-weight:900;white-space:nowrap;line-height:1.2;text-align:center}
+.day-badge small{display:block;font-size:10px;font-weight:400;color:var(--ga);letter-spacing:.05em}
+.day-info h2{font-size:19px;font-weight:800;color:var(--g1);margin-bottom:6px}
+.day-info p{font-size:13px;color:var(--tm);line-height:1.8}
+.day-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.dtag{background:var(--g3);color:var(--g2);font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;border:1px solid var(--ga)}
+
+/* SESSION */
+.session{background:var(--wh);border-radius:16px;margin-bottom:20px;box-shadow:var(--sh);overflow:hidden}
+.session-head{display:flex;align-items:center;gap:14px;padding:16px 22px;cursor:pointer;user-select:none}
+.session-head:hover{background:var(--g4)}
+.snum{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
+.smeta{flex:1}
+.smeta h3{font-size:15px;font-weight:800;color:var(--tk)}
+.smeta p{font-size:12px;color:var(--tg);margin-top:2px}
+.stoggle{font-size:18px;color:var(--tg);transition:transform .25s}
+.session.open .stoggle{transform:rotate(180deg)}
+.session-body{display:none;padding:0 22px 22px}
+.session.open .session-body{display:block}
+
+/* STEP BLOCK */
+.step-block{margin-bottom:20px}
+.step-label{font-size:11px;font-weight:800;color:var(--g2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.step-label::before{content:'';display:block;width:3px;height:14px;background:var(--g2);border-radius:99px}
+
+/* BOXES */
+.box{border-radius:10px;padding:14px 16px;margin-bottom:12px;font-size:14px;line-height:1.85}
+.box-scenario{background:var(--bl2);border-left:4px solid var(--bl);color:#0f3d5e}
+.box-hint{background:var(--ora2);border-left:4px solid var(--ora);color:#6b4000}
+.box-check{background:var(--g3);border-left:4px solid var(--g2);color:var(--tm)}
+.box-warn{background:var(--rd2);border-left:4px solid var(--rd);color:#6b1c14}
+.box-purple{background:var(--pu2);border-left:4px solid var(--pu);color:#3d1f55}
+.box-title{font-size:11px;font-weight:800;letter-spacing:.06em;display:block;margin-bottom:6px;opacity:.75}
+
+/* PROMPT BOX */
+.prompt-wrap{background:#0f2218;border-radius:12px;overflow:hidden;margin-bottom:12px}
+.prompt-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#0a1810}
+.prompt-header span{font-size:11px;font-weight:700;color:var(--ora);letter-spacing:.05em}
+.copy-btn{background:var(--g2);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
+.copy-btn:hover{background:var(--ora)}
+.copy-btn.copied{background:#27ae60}
+.prompt-body{padding:14px 16px;font-family:'Courier New',monospace;font-size:13px;color:#c8e6d4;line-height:1.9;white-space:pre-wrap;word-break:break-all}
+
+/* STEPS LIST */
+.steps{list-style:none;margin-bottom:12px}
+.steps li{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--g3);font-size:14px;line-height:1.7;align-items:flex-start}
+.steps li:last-child{border-bottom:none}
+.sn{width:24px;height:24px;background:var(--g1);color:#fff;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+
+/* CHECKLIST */
+.cl{list-style:none}
+.cl li{display:flex;gap:8px;padding:5px 0;font-size:13px;line-height:1.6;color:var(--tm);align-items:flex-start}
+.cl li::before{content:"□";color:var(--g1);font-size:15px;flex-shrink:0;line-height:1.4}
+
+/* WORK SHEET */
+.worksheet{border:2px dashed var(--ga);border-radius:12px;padding:18px;margin-bottom:12px;background:#fafffe}
+.worksheet h4{font-size:13px;font-weight:800;color:var(--g1);margin-bottom:12px}
+.ws-row{margin-bottom:10px}
+.ws-row label{font-size:11px;font-weight:700;color:var(--tg);display:block;margin-bottom:4px;letter-spacing:.03em}
+.ws-row .field{background:#fff;border:1.5px solid var(--ga);border-radius:8px;padding:10px 12px;font-size:13px;color:#aaa;min-height:38px;line-height:1.6}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px}
+th{background:var(--g1);color:#fff;padding:8px 12px;text-align:left;font-size:12px;font-weight:700}
+td{padding:8px 12px;border-bottom:1px solid var(--g3);vertical-align:top;line-height:1.6}
+tr:nth-child(even) td{background:var(--g4)}
+
+/* GROUP CARD */
+.group-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.group-card{background:var(--g4);border-radius:10px;padding:14px;border:1.5px solid var(--ga)}
+.group-card .gc-title{font-size:11px;font-weight:800;color:var(--g2);margin-bottom:6px;letter-spacing:.05em}
+.group-card .gc-body{font-size:13px;color:var(--tk);line-height:1.7}
+
+/* SAMPLE OUTPUT */
+.sample-wrap{background:var(--wh);border:1.5px solid var(--ga);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.sample-head{background:var(--g3);padding:8px 14px;font-size:11px;font-weight:800;color:var(--g2);display:flex;align-items:center;justify-content:space-between}
+.sample-body{padding:14px;font-size:13px;color:var(--tk);line-height:1.85;white-space:pre-wrap}
+
+/* ANSWER TOGGLE */
+.answer-toggle{background:none;border:2px solid var(--g2);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:var(--g2);cursor:pointer;margin-bottom:8px;width:100%;text-align:left;display:flex;align-items:center;gap:8px;transition:all .2s}
+.answer-toggle:hover{background:var(--g3)}
+.answer-toggle .at-icon{transition:transform .2s}
+.answer-toggle.open .at-icon{transform:rotate(180deg)}
+.answer-content{display:none;border:1.5px solid var(--ga);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.answer-content.open{display:block}
+
+/* TIME BADGE */
+.time-badge{background:var(--ora2);color:var(--ora);border:1px solid var(--ora);border-radius:99px;font-size:11px;font-weight:700;padding:2px 10px;white-space:nowrap}
+
+/* DIVIDER */
+.section-divider{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--ga),transparent);margin:20px 0}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .day-hero{flex-direction:column;gap:12px}
+  .group-grid{grid-template-columns:1fr}
+  .header-top h1{font-size:14px}
+  .prompt-body{font-size:12px}
+}
+
+/* PRINT */
+@media print{
+  .day-tabs,.back-link,.copy-btn,.answer-toggle{display:none!important}
+  .day-page{display:block!important}
+  .session-body{display:block!important}
+  .answer-content{display:block!important}
+  .session{page-break-inside:avoid}
+}
+
+/* ANIM */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.day-page.active{animation:fadeUp .3s ease}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <div>
+      <h1>🎯 集合研修 演習ガイド</h1>
+      <div class="sub">AIミニアプリ構築講座 ｜ 株式会社ストラテジーエイド</div>
+    </div>
+    <a href="index.html" class="back-link">← サイトへ</a>
+  </div>
+  <div class="day-tabs">
+    <div class="day-tab active" onclick="switchDay('day1',this)">📅 1日目（3時間）<br><span style="font-size:10px;font-weight:400">復習・実践応用</span></div>
+    <div class="day-tab" onclick="switchDay('day2',this)">📅 2日目（3時間）<br><span style="font-size:10px;font-weight:400">ミニアプリ構築・発表</span></div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════
+  DAY 1
+══════════════════════════════════════════ -->
+<div class="day-page active" id="day1">
+
+  <div class="day-hero">
+    <div class="day-badge">DAY<br>1<small>3時間</small></div>
+    <div class="day-info">
+      <h2>eラーニング復習・実践応用</h2>
+      <p>動画で学んだ内容を、<strong>自社の実際のデータ</strong>を使って体験します。<br>
+      グループで助け合いながら進めましょう。わからなければ隣の人に聞いてOKです。</p>
+      <div class="day-tags">
+        <span class="dtag">動画② プロンプト</span>
+        <span class="dtag">動画④ 議事録→スライド</span>
+        <span class="dtag">動画⑤ GEM作成</span>
+        <span class="dtag">動画⑥ NotebookLM</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- S1: プロンプト実践 -->
+  <div class="session open">
+    <div class="session-head" onclick="toggleSession(this)">
+      <div class="snum" style="background:var(--bl)">S1</div>
+      <div class="smeta">
+        <h3>プロンプト実践（動画②の応用）</h3>
+        <p>自社の実データで「使えるプロンプト」を体験する</p>
+      </div>
+      <span class="time-badge">⏱ 40分</span>
+      <span class="stoggle">▼</span>
+    </div>
+    <div class="session-body">
+
+      <div class="box box-scenario">
+        <span class="box-title">📌 このセッションのゴール</span>
+        「プロンプトの書き方次第で出力が大きく変わる」ことを自社の業務で実感する。<br>
+        eラーニングで学んだ8原則を、自分の言葉でグループに説明できるようになる。
+      </div>
+
+      <!-- 演習1-1 -->
+      <div class="step-block">
+        <div class="step-label">演習 1-1　Before / After プロンプト比較（15分）</div>
+        <p style="font-size:14px;color:var(--tm);margin-bottom:10px">同じ業務内容でも、プロンプトの書き方で出力がどう変わるか体験します。</p>
+
+        <div class="box box-hint">
+          <span class="box-title">💡 使うデータ</span>
+          自社の<strong>実際の業務テキスト</strong>（メール・お知らせ文・商品説明など）を1つ用意してください。<br>
+          ない方は講師が配布するサンプルデータを使用してください。
+        </div>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>❌ BAD プロンプト（まずこれで試す）</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">いい感じに書き直して。
+
+（ここに自社のテキストを貼り付ける）</div>
+        </div>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>✅ GOOD プロンプト（次にこれで試す）</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">あなたは【役割：例「地域密着の飲食店オーナー向けの文章の専門家」】です。
+以下のテキストを【対象読者：例「60代の地元のお客様」】向けに書き直してください。
+
+【条件】
+・文体：丁寧で温かみのある日本語
+・文字数：200字以内
+・強調したいポイント：【例「地元食材・手作り・アットホームな雰囲気」】
+・前置きや挨拶は不要です。すぐに結果を出してください。
+
+【元のテキスト】
+（ここに自社のテキストを貼り付ける）</div>
+        </div>
+
+        <div class="box box-check">
+          <span class="box-title">✅ グループで確認すること</span>
+          <ul class="cl">
+            <li>BAD と GOOD で出力はどう違いましたか？</li>
+            <li>【役割】【対象読者】【条件】のどれが一番効いた？</li>
+            <li>自社の業務なら何を【役割】に設定したいですか？</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 演習1-2 -->
+      <div class="step-block">
+        <div class="step-label">演習 1-2　自社向けプロンプトを自分で書く（20分）</div>
+        <p style="font-size:14px;color:var(--tm);margin-bottom:10px">GOOD プロンプトのテンプレートを使って、自社の業務に合わせたプロンプトを作ります。</p>
+
+        <div class="worksheet">
+          <h4>📝 プロンプト設計シート（記入して使う）</h4>
+          <div class="ws-row">
+            <label>① 役割（あなたは〇〇の専門家です）</label>
+            <div class="field">例：長崎の建設業向けの書類作成の専門家</div>
+          </div>
+          <div class="ws-row">
+            <label>② 対象読者・送付先</label>
+            <div class="field">例：元請け会社の現場監督</div>
+          </div>
+          <div class="ws-row">
+            <label>③ 出力形式（どんな形で欲しいか）</label>
+            <div class="field">例：箇条書き3点・A4一枚・メール形式</div>
+          </div>
+          <div class="ws-row">
+            <label>④ 強調したいポイント・禁止事項</label>
+            <div class="field">例：安全性・納期厳守を強調。専門用語は使わない。</div>
+          </div>
+        </div>
+
+        <div class="box box-hint">
+          <span class="box-title">🔧 うまく書けない場合はGeminiに相談</span>
+          「私は長崎県内の○○業の担当者です。○○という業務のプロンプトを書きたいのですが、テンプレートを作ってください。」と入力するとプロンプトを代わりに作ってくれます。
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 演習1-3 グループ共有 -->
+      <div class="step-block">
+        <div class="step-label">演習 1-3　グループ共有（5分）</div>
+        <div class="box box-purple">
+          <span class="box-title">🤝 グループでシェアしよう</span>
+          作ったプロンプトと出力結果を隣の人に見せてください。<br>
+          「このプロンプトの工夫はどこか」を1人30秒でグループに紹介しましょう。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- S2: 議事録→スライド -->
+  <div class="session">
+    <div class="session-head" onclick="toggleSession(this)">
+      <div class="snum" style="background:var(--g1)">S2</div>
+      <div class="smeta">
+        <h3>議事録 → 要約 → 調査 → Googleスライド（動画④の応用）</h3>
+        <p>会議メモから報告スライドまで一気通貫で作る</p>
+      </div>
+      <span class="time-badge">⏱ 45分</span>
+      <span class="stoggle">▼</span>
+    </div>
+    <div class="session-body">
+
+      <div class="box box-scenario">
+        <span class="box-title">📌 このセッションのゴール</span>
+        自社の会議メモ（またはサンプル）を使って、<strong>議事録の要約 → 関連調査 → Googleスライドの下書き</strong>まで、Gemini1本で完結できることを体験する。
+      </div>
+
+      <!-- STEP1 要約 -->
+      <div class="step-block">
+        <div class="step-label">STEP 1　議事録を要約する（10分）</div>
+
+        <div class="box box-hint">
+          <span class="box-title">💡 使うデータ</span>
+          持参した<strong>自社の会議メモ・議事録</strong>を使ってください。ない方は下記のサンプルを使用。
+        </div>
+
+        <button class="answer-toggle" onclick="toggleAnswer(this)">
+          <span>📄 サンプル議事録を表示する</span><span class="at-icon">▼</span>
+        </button>
+        <div class="answer-content">
+          <div class="sample-body">【会議メモ】2026年7月10日（木）14:00〜15:00
+参加者：田中（店長）、山田（副店長）、佐藤・鈴木（スタッフ）
+
+■今月の売上について
+先月比で売上が8%減少。客数は変わっていないが客単価が下がっている。
+→原因として「ランチメニューが3年変わっていない」という意見が出た。
+→山田から「競合のB店が新メニューを週替わりで出している」という情報あり。
+
+■夏のイベントについて
+お盆期間（8/10〜8/16）に特別コースを出してはどうか（田中提案）。
+価格帯は3,500円〜5,000円を想定。地元食材を使ったコースが差別化になる。
+佐藤：「SNSで映える料理にしないと集客が難しい」と指摘。
+
+■次回会議：7月17日（木）14:00</div>
+        </div>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>📋 STEP1 プロンプト：議事録の要約</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">以下の会議メモを要約してください。
+
+【出力形式】
+・全体の要約：3文以内
+・主な議題：箇条書き（各1〜2行）
+・次回までに確認が必要な課題：箇条書き
+・次回会議の日時
+
+前置きや挨拶は不要です。すぐに結果を出してください。
+
+【会議メモ】
+（ここに会議メモを貼り付ける）</div>
+        </div>
+      </div>
+
+      <!-- STEP2 調査 -->
+      <div class="step-block">
+        <div class="step-label">STEP 2　議題に関連する調査をする（15分）</div>
+        <p style="font-size:14px;color:var(--tm);margin-bottom:10px">会議で出た課題・議題についてGeminiに調べてもらいます。</p>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>📋 STEP2 プロンプト：関連調査</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">私は長崎県内の【業種：例「飲食店」】の経営者・担当者です。
+先ほどの会議で「【議題：例「ランチメニューのマンネリ化・客単価低下」】」が課題として挙がりました。
+
+以下の観点で調査・整理してください。
+
+1. この課題の一般的な原因と対策（中小企業向け・実践的なもの）
+2. 同業他社の成功事例（具体例を2〜3つ）
+3. 今すぐ取り組める改善アクション（コストをかけずにできること）
+
+前置きや挨拶は不要です。箇条書きで出力してください。</div>
+        </div>
+
+        <div class="box box-hint">
+          <span class="box-title">💡 自社の議題に合わせて書き換える</span>
+          【業種】と【議題】の部分を自社の内容に変えるだけです。<br>
+          「建設業」「スタッフの採用難」「介護業」「利用者の家族対応」など何でも対応できます。
+        </div>
+      </div>
+
+      <!-- STEP3 スライド -->
+      <div class="step-block">
+        <div class="step-label">STEP 3　Googleスライドの構成を作りGeminiに下書きさせる（20分）</div>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>📋 STEP3 プロンプト：スライド構成の生成</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">先ほどの会議の要約と調査結果をもとに、社内報告用のGoogleスライドの構成と各スライドの文章を作ってください。
+
+【条件】
+・スライド枚数：5〜6枚
+・対象：社内スタッフへの共有（専門知識不要）
+・各スライドに「タイトル」と「本文（箇条書き3点以内）」を出力する
+・最後のスライドは「次のアクション（誰が・何を・いつまでに）」にする
+
+【出力形式】
+スライド1：（タイトル）
+・（本文1）
+・（本文2）
+・（本文3）
+
+スライド2：…（以下同様）
+
+前置きや挨拶は不要です。すぐに出力してください。</div>
+        </div>
+
+        <ul class="steps">
+          <li><span class="sn">1</span>Geminiが出力したスライド構成をコピー</li>
+          <li><span class="sn">2</span>Googleスライド（slides.google.com）を新規作成</li>
+          <li><span class="sn">3</span>各スライドにGeminiの出力内容を貼り付けて整形</li>
+          <li><span class="sn">4</span>5分で完成したスライドをグループで見せ合う</li>
+        </ul>
+
+        <div class="box box-check">
+          <span class="box-title">✅ 確認ポイント</span>
+          <ul class="cl">
+            <li>会議から30分以内でスライドの骨格が完成しましたか？</li>
+            <li>調査結果が自社の状況に当てはまる内容でしたか？</li>
+            <li>「次のアクション」スライドは実際に使えそうですか？</li>
+          </ul>
+        </div>
+
+        <!-- 模範解答 -->
+        <button class="answer-toggle" onclick="toggleAnswer(this)">
+          <span>💡 模範解答（スライド構成の例）を見る</span><span class="at-icon">▼</span>
+        </button>
+        <div class="answer-content">
+          <div class="sample-head">模範解答：飲食店の場合のスライド構成例</div>
+          <div class="sample-body">スライド1：2026年7月 月次報告
+・先月比売上 -8%（客数は横ばい・客単価が低下）
+・主な原因：ランチメニューのマンネリ化
+・本日の議題：夏のイベント施策と改善策の検討
+
+スライド2：課題の整理
+・客単価低下の主因は「ランチの飽き」（スタッフの声）
+・競合B店は週替わりメニューで集客に成功
+・SNS映えしない料理はリピーター獲得に不利
+
+スライド3：他店の成功事例
+・地元食材を使った「季節限定メニュー」が単価20%アップに貢献（福岡の事例）
+・スタッフがSNS投稿役を担当→フォロワー増加で集客コスト削減
+・週1回の「本日のおすすめ黒板」でリピーター増加
+
+スライド4：お盆特別コース企画案
+・期間：8/10〜8/16
+・価格：3,500円〜5,000円（地元食材使用）
+・差別化ポイント：SNS映え・長崎らしさ・限定感
+
+スライド5：次のアクション
+・田中（店長）：7/17までにメニュー候補3案を作成
+・佐藤：SNS投稿用の写真撮影方法を調べる
+・山田：競合B店のメニューを7/15までにリサーチ</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- S3: GEM作成 -->
+  <div class="session">
+    <div class="session-head" onclick="toggleSession(this)">
+      <div class="snum" style="background:var(--pu)">S3</div>
+      <div class="smeta">
+        <h3>新しい業務のGEMを作る（動画⑤の応用）</h3>
+        <p>eラーニングで作ったGEMとは別の業務を自動化する</p>
+      </div>
+      <span class="time-badge">⏱ 40分</span>
+      <span class="stoggle">▼</span>
+    </div>
+    <div class="session-body">
+
+      <div class="box box-scenario">
+        <span class="box-title">📌 このセッションのゴール</span>
+        eラーニングで作った「議事録マスター」以外の業務のGEMを1つ完成させ、<br>グループメンバーと共有する。
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 1　どの業務をGEM化するか決める（10分）</div>
+        <p style="font-size:14px;color:var(--tm);margin-bottom:10px">下記の候補から選ぶか、自社独自のGEMを考えてください。</p>
+
+        <table>
+          <tr><th>GEM名（例）</th><th>入力するもの</th><th>出力されるもの</th><th>向いている業種</th></tr>
+          <tr><td><strong>クレーム返信文</strong></td><td>クレーム内容のメモ</td><td>丁寧な返信文案（3パターン）</td><td>飲食・宿泊・小売・サービス</td></tr>
+          <tr><td><strong>求人票ライター</strong></td><td>雇用条件の箇条書き</td><td>応募者の心に刺さる求人票</td><td>全業種</td></tr>
+          <tr><td><strong>作業完了報告書</strong></td><td>当日作業のメモ書き</td><td>取引先に送れる完了報告書</td><td>建設・製造・設備</td></tr>
+          <tr><td><strong>SNS投稿文メーカー</strong></td><td>伝えたい内容の箇条書き</td><td>Instagram・X用の投稿文</td><td>飲食・小売・観光</td></tr>
+          <tr><td><strong>補助金申請サポ</strong></td><td>事業内容・強みの箇条書き</td><td>革新性・優位性のアピール文</td><td>全業種</td></tr>
+          <tr><td><strong>自社オリジナル</strong><br><span style="font-size:11px;color:var(--tg)">（自由に考える）</span></td><td>毎回入力している内容</td><td>毎回欲しい出力</td><td>自社に合わせる</td></tr>
+        </table>
+
+        <div class="box box-hint">
+          <span class="box-title">💡 GEM化に向いている業務の見分け方</span>
+          「毎週・毎日、同じようなプロンプトを入力している作業」があればGEM化のチャンスです。<br>
+          「毎回○分かかっている作業は何か？」をグループで話し合ってみてください。
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 2　カスタム指示（プロンプト）を書く（15分）</div>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>📋 GEMカスタム指示テンプレート</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">あなたは【役割：例「長崎県内の飲食店向けの接客対応のプロ」】です。
+
+【入力される内容】
+（例：お客様からのクレーム内容のメモ）
+
+【やること】
+（例：クレームの内容を分析し、丁寧で誠実な返信文案を3パターン作成する）
+
+【出力形式】
+（例：返信文案①②③をそれぞれ200字以内で出力。最後に「選ぶ際のポイント」を1行で追記）
+
+【禁止事項】
+（例：言い訳・責任転嫁の表現は使わない。過剰な謝罪は避ける）
+
+前置きや挨拶は不要です。すぐに結果を出してください。</div>
+        </div>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>📋 プロンプトが書けない場合：Geminiに作ってもらう</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">私は長崎県内の【業種】の【役職：例「経営者・担当者」】です。
+「【GEM化したい業務名：例「クレーム返信文の作成」】」を自動化するGEMを作りたいです。
+
+以下を入力すれば、以下が出力されるようなGEMのカスタム指示文を書いてください。
+
+入力：【入力するもの：例「クレーム内容のメモ」】
+出力：【出力してほしいもの：例「丁寧な返信文案3パターン」】
+
+カスタム指示文だけを出力してください。説明は不要です。</div>
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 3　GEMを作成・動作確認・共有（15分）</div>
+        <ul class="steps">
+          <li><span class="sn">1</span>Gemini左側サイドバー「GEMを表示」→「GEMを作成」</li>
+          <li><span class="sn">2</span>名前（例：「クレーム返信文メーカー」）を入力</li>
+          <li><span class="sn">3</span>カスタム指示欄に作成したプロンプトを貼り付け</li>
+          <li><span class="sn">4</span>「保存」→ 実際のデータで動作確認</li>
+          <li><span class="sn">5</span>設定画面の「共有」ボタン → リンクをグループのチャットに送る</li>
+        </ul>
+
+        <div class="box box-check">
+          <span class="box-title">✅ GEM完成の確認基準</span>
+          <ul class="cl">
+            <li>実際のデータを貼り付けて、すぐ使える出力が得られるか</li>
+            <li>出力が毎回同じ形式（フォーマット）で出るか</li>
+            <li>グループメンバーにリンクを共有できたか</li>
+          </ul>
+        </div>
+
+        <button class="answer-toggle" onclick="toggleAnswer(this)">
+          <span>💡 模範解答：クレーム返信文GEMのカスタム指示例</span><span class="at-icon">▼</span>
+        </button>
+        <div class="answer-content">
+          <div class="sample-head">模範解答：クレーム返信文メーカーのカスタム指示</div>
+          <div class="sample-body">あなたは接客・顧客対応のプロです。
+入力されたクレーム内容をもとに、丁寧で誠実な返信文案を3パターン作成してください。
+
+【パターンの違い】
+・パターンA：謝罪を前面に出した誠実型
+・パターンB：原因説明と改善約束を中心にした説明型
+・パターンC：感謝から入る関係維持型
+
+【出力形式】
+各パターン200字以内で出力。
+最後に「選ぶ際のポイント（1行）」を追記。
+
+【禁止事項】
+・言い訳・責任転嫁の表現は使わない
+・過剰な謝罪（何度も「申し訳ございません」を繰り返す）は避ける
+・法的リスクのある約束（返金・補償の確約）はしない
+
+前置きや挨拶は不要です。すぐに結果を出してください。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- S4: NotebookLM -->
+  <div class="session">
+    <div class="session-head" onclick="toggleSession(this)">
+      <div class="snum" style="background:var(--ora)" style="color:#fff">S4</div>
+      <div class="smeta">
+        <h3>NotebookLMで自社データをAI化（動画⑥の応用）</h3>
+        <p>持参した自社資料を読み込んでQ&Aボットを作る</p>
+      </div>
+      <span class="time-badge">⏱ 35分</span>
+      <span class="stoggle">▼</span>
+    </div>
+    <div class="session-body">
+
+      <div class="box box-scenario">
+        <span class="box-title">📌 このセッションのゴール</span>
+        持参した自社の資料（マニュアル・規定・カタログ等）をNotebookLMに読み込み、<br>
+        「社内のよくある質問」に自動回答できるQ&Aボットを完成させる。
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 1　資料をアップロードする（10分）</div>
+        <ul class="steps">
+          <li><span class="sn">1</span>notebooklm.google.com にアクセス</li>
+          <li><span class="sn">2</span>「新しいノートブック」を作成</li>
+          <li><span class="sn">3</span>持参した資料（PDF・Word・テキスト）をアップロード</li>
+          <li><span class="sn">4</span>資料がない方は講師が用意したサンプルデータ（共有フォルダ内）を使用</li>
+        </ul>
+        <div class="box box-warn">
+          <span class="box-title">⚠️ アップロードしてはいけないもの</span>
+          顧客の個人情報・未公開の財務情報・社外秘の契約書はアップロードしないでください。<br>
+          社内のマニュアル・手順書・製品カタログ・FAQ集はOKです。
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 2　Q&Aで使ってみる（15分）</div>
+        <p style="font-size:14px;color:var(--tm);margin-bottom:10px">下記の質問パターンを試してみましょう。自社の資料に合わせて書き換えてOKです。</p>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>📋 試してみる質問（順番に入力）</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">【質問1】この資料の内容を3つのポイントで要約してください。
+
+【質問2】新入社員が最初に覚えるべきことは何ですか？
+
+【質問3】よくある質問（FAQ）を10個作ってください。
+
+【質問4】（自社の実際の疑問を入力してみる）
+例：「有給申請の手続きを教えてください」
+例：「○○製品の対応サイズを教えてください」
+例：「クレームが来たときの初動対応は？」</div>
+        </div>
+
+        <div class="box box-check">
+          <span class="box-title">✅ 確認ポイント</span>
+          <ul class="cl">
+            <li>アップロードした資料の内容に基づいた回答が得られているか</li>
+            <li>回答の根拠となる資料の箇所が引用されているか</li>
+            <li>「この機能があれば社内のどんな問題が解決するか」をグループで話してみる</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 3　グループで活用アイデアを共有（10分）</div>
+        <div class="group-grid">
+          <div class="group-card">
+            <div class="gc-title">💬 グループで話し合うこと</div>
+            <div class="gc-body">・自社のどの資料をNotebookLMに入れると一番役立つ？<br>・社内のどんな質問が減りそう？<br>・新人研修にどう使えそう？</div>
+          </div>
+          <div class="group-card">
+            <div class="gc-title">📝 発見したことをメモ</div>
+            <div class="gc-body">・うまくいった点：<br><br>・改善したい点：<br><br>・自社での活用アイデア：</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /day1 -->
+
+
+<!-- ══════════════════════════════════════════
+  DAY 2
+══════════════════════════════════════════ -->
+<div class="day-page" id="day2">
+
+  <div class="day-hero">
+    <div class="day-badge">DAY<br>2<small>3時間</small></div>
+    <div class="day-info">
+      <h2>ミニアプリ構築・グループ発表</h2>
+      <p>Google AI Studioを使って<strong>自社の業務課題を解決するミニアプリ</strong>を各自が作ります。<br>
+      2週間前に考えてきたアイデアを形にする日です。グループで助け合いながら進め、<br>優秀作品をグループ代表として発表します。</p>
+      <div class="day-tags">
+        <span class="dtag">ツール：Google AI Studio</span>
+        <span class="dtag">aistudio.google.com</span>
+        <span class="dtag">グループ相互サポート</span>
+        <span class="dtag">代表発表</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- S1: アイデア決め -->
+  <div class="session open">
+    <div class="session-head" onclick="toggleSession(this)">
+      <div class="snum" style="background:var(--bl)">S1</div>
+      <div class="smeta">
+        <h3>アプリのアイデアを固める</h3>
+        <p>2週間で考えてきた自社課題をグループで整理・ブラッシュアップ</p>
+      </div>
+      <span class="time-badge">⏱ 20分</span>
+      <span class="stoggle">▼</span>
+    </div>
+    <div class="session-body">
+
+      <div class="box box-hint">
+        <span class="box-title">💡 2日目までに考えてきてほしかったこと（確認）</span>
+        ① 自社で「毎回時間がかかる・面倒な」業務は何か<br>
+        ② その業務をアプリにするなら「何を入力して何が出力されれば理想か」<br>
+        ③ アプリ名（仮）
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 1　企画シートを記入する（10分）</div>
+        <div class="worksheet">
+          <h4>📋 ミニアプリ企画シート</h4>
+          <div class="ws-row">
+            <label>① 解決したい業務課題（具体的に）</label>
+            <div class="field">例：お客様からのクレーム電話後、内容をまとめて上司に報告するのに毎回20分かかる</div>
+          </div>
+          <div class="ws-row">
+            <label>② 誰が・どんな場面で使うか</label>
+            <div class="field">例：受付スタッフが電話を切った直後に、スマホで入力する</div>
+          </div>
+          <div class="ws-row">
+            <label>③ 入力するもの</label>
+            <div class="field">例：クレーム内容のメモ（話した内容を箇条書きで）</div>
+          </div>
+          <div class="ws-row">
+            <label>④ 出力されてほしいもの</label>
+            <div class="field">例：①クレームの要点 ②推奨する初動対応 ③上司への報告文</div>
+          </div>
+          <div class="ws-row">
+            <label>⑤ アプリ名（仮）</label>
+            <div class="field">例：クレーム報告アシスタント</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 2　グループでブラッシュアップ（10分）</div>
+        <div class="box box-purple">
+          <span class="box-title">🤝 グループメンバーに企画を説明して意見をもらう</span>
+          「どんな業務の課題を・誰が・どう使うか」を1人1〜2分で説明。<br>
+          聞いている人は「それ、本当に毎日使いますか？」「入力が面倒すぎませんか？」という視点でフィードバック。
+        </div>
+        <div class="box box-hint">
+          <span class="box-title">✅ 使えるアプリの3条件</span>
+          <ul class="cl">
+            <li>入力が簡単（30秒以内で入力できる）</li>
+            <li>出力がそのまま使える成果物になる</li>
+            <li>週に1回以上使う場面がある</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- S2: AI Studio操作 -->
+  <div class="session">
+    <div class="session-head" onclick="toggleSession(this)">
+      <div class="snum" style="background:var(--g1)">S2</div>
+      <div class="smeta">
+        <h3>Google AI Studioでアプリを作る</h3>
+        <p>aistudio.google.com を使って自社ミニアプリを構築する</p>
+      </div>
+      <span class="time-badge">⏱ 80分</span>
+      <span class="stoggle">▼</span>
+    </div>
+    <div class="session-body">
+
+      <div class="box box-scenario">
+        <span class="box-title">📌 Google AI Studio とは</span>
+        Googleが提供するAIアプリ開発ツール（無料・Googleアカウントで使用可）。<br>
+        「システムインストラクション」に指示を書くだけで、業務専用のAIチャットアプリが完成します。<br>
+        作ったアプリはURLで社内に共有できます。
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 1　Google AI Studioにアクセスする（5分）</div>
+        <ul class="steps">
+          <li><span class="sn">1</span><strong>aistudio.google.com</strong> にアクセス（Googleアカウントでログイン）</li>
+          <li><span class="sn">2</span>左側メニューから「新しいプロンプトを作成」→「チャットプロンプト」を選択</li>
+          <li><span class="sn">3</span>画面左上の「システムインストラクション」欄を確認する</li>
+        </ul>
+        <div class="box box-hint">
+          <span class="box-title">💡 AI Studioの画面構成</span>
+          左側：システムインストラクション（AIへの指示を書く欄）<br>
+          右側：チャット画面（実際にアプリを使う画面）<br>
+          上部：モデル選択・設定（今回はデフォルトのままでOK）
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 2　システムインストラクションを書く（20分）</div>
+        <p style="font-size:14px;color:var(--tm);margin-bottom:10px">「システムインストラクション」がアプリの頭脳になります。ここに指示を書くだけです。</p>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>📋 システムインストラクション テンプレート（カスタマイズして使う）</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">あなたは【役割：例「長崎県内の飲食店の接客サポートAI」】です。
+
+【このアプリの目的】
+（例：お客様からのクレーム内容を整理し、スタッフが適切に初動対応できるようサポートする）
+
+【ユーザーが入力するもの】
+（例：クレームの電話で話した内容のメモ）
+
+【あなたがやること】
+1.（例：クレームの要点を3行以内でまとめる）
+2.（例：推奨する初動対応を具体的に2〜3つ提示する）
+3.（例：上司への報告メッセージ文（LINEで送れる形式）を作成する）
+
+【出力形式】
+（例：各項目に見出しをつけて、箇条書きで出力する）
+
+【禁止事項・注意点】
+（例：法的な判断・返金の約束はしない。謝罪の言葉は必ず含める）
+
+日本語で回答してください。前置きや挨拶は不要です。</div>
+        </div>
+
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>📋 アイデアが出ない場合：Geminiに考えてもらう</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">私は長崎県内の【業種】の【役職】です。
+Google AI Studioで「【アプリ名・やりたいこと】」を作りたいです。
+
+入力：【入力するもの】
+出力：【出力してほしいもの】
+
+このアプリのシステムインストラクション（AI への指示文）を書いてください。
+日本語で、そのままAI Studioに貼り付けられる形式で出力してください。</div>
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 3　テストして改善する（30分）</div>
+        <ul class="steps">
+          <li><span class="sn">1</span>右側チャット画面にサンプルデータを入力して動作確認</li>
+          <li><span class="sn">2</span>出力が期待と違う場合 → システムインストラクションを修正して再テスト</li>
+          <li><span class="sn">3</span>グループメンバーに使ってもらい、フィードバックをもらう</li>
+          <li><span class="sn">4</span>フィードバックを反映して改善</li>
+        </ul>
+
+        <div class="box box-hint">
+          <span class="box-title">💡 改善要求の出し方（システムインストラクションに追記する）</span>
+          「出力が長すぎる」→「出力は合計300字以内にしてください」を追記<br>
+          「要点がわかりにくい」→「最初に1行のサマリーを必ず入れてください」を追記<br>
+          「形式が毎回違う」→「必ず以下の形式で出力してください：①〜 ②〜 ③〜」を追記
+        </div>
+
+        <div class="box box-check">
+          <span class="box-title">✅ アプリ完成の基準（3つ全部クリアで完成）</span>
+          <ul class="cl">
+            <li>実際のデータを入力して、そのまま使える出力が得られる</li>
+            <li>グループメンバーが使ってみて「これは便利」と言ってくれた</li>
+            <li>AIを使ったことがない人でも迷わず使えそうな操作感</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 4　URLを発行してグループに共有する（10分）</div>
+        <ul class="steps">
+          <li><span class="sn">1</span>画面右上の「共有」または「デプロイ」ボタンをクリック</li>
+          <li><span class="sn">2</span>発行されたURLをコピー</li>
+          <li><span class="sn">3</span>グループのチャット（LINE等）にURLを送る</li>
+          <li><span class="sn">4</span>グループメンバーが各自のスマホでURLを開いて動作確認</li>
+        </ul>
+
+        <div class="box box-hint">
+          <span class="box-title">💡 URLが発行できない場合</span>
+          AI Studioの共有機能はバージョンにより操作が異なる場合があります。<br>
+          うまくいかない場合は講師に確認してください。スクリーンショットで代用も可能です。
+        </div>
+
+        <!-- 業務手順書 -->
+        <div class="step-label" style="margin-top:16px">STEP 5（任意）　業務手順書をGeminiに作らせる（15分）</div>
+        <div class="prompt-wrap">
+          <div class="prompt-header">
+            <span>📋 業務手順書 生成プロンプト</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">コピー</button>
+          </div>
+          <div class="prompt-body">今作ったミニアプリの業務手順書を作ってください。
+
+対象：スマートフォンに不慣れなスタッフ（AIを初めて使う人）
+形式：番号付きのステップバイステップ
+内容に含めること：
+  1. アプリを開く方法（URLを開く手順）
+  2. 何を入力すればよいか（具体的な入力例を1つ含める）
+  3. ボタンを押した後の操作
+  4. 出力された結果の使い方・活用方法
+  5. うまくいかないときの対処法（よくある失敗例）
+
+文体：やさしい丁寧語。専門用語は使わない。
+分量：A4用紙1枚（800〜1000字）</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- S3: グループ選考 -->
+  <div class="session">
+    <div class="session-head" onclick="toggleSession(this)">
+      <div class="snum" style="background:var(--pu)">S3</div>
+      <div class="smeta">
+        <h3>グループ内選考・発表準備</h3>
+        <p>グループの代表アプリを決めて発表の準備をする</p>
+      </div>
+      <span class="time-badge">⏱ 20分</span>
+      <span class="stoggle">▼</span>
+    </div>
+    <div class="session-body">
+
+      <div class="step-block">
+        <div class="step-label">STEP 1　グループ内で全員のアプリをデモ（10分）</div>
+        <p style="font-size:14px;color:var(--tm);margin-bottom:10px">グループ全員が1〜2分で自分のアプリをメンバーにデモします。</p>
+        <div class="box box-check">
+          <span class="box-title">✅ デモで見るポイント（選考基準）</span>
+          <ul class="cl">
+            <li>実際の業務で使える「リアルさ」があるか</li>
+            <li>入力が簡単で誰でもすぐ使えそうか</li>
+            <li>出力がそのまま業務で使える成果物になっているか</li>
+            <li>アプリがあることで、時間・手間がどれだけ削減されるか</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 2　グループ代表アプリを1つ選ぶ（5分）</div>
+        <div class="box box-purple">
+          <span class="box-title">🤝 選考のルール</span>
+          グループで話し合い、上記の選考基準で最も優秀なアプリを1つ選んでください。<br>
+          選ばれなかったアプリも全員の努力の成果です。発表後の懇親タイムで紹介しましょう。
+        </div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">STEP 3　発表の準備（5分）</div>
+        <div class="worksheet">
+          <h4>🎤 発表シート（記入して発表に備える）</h4>
+          <div class="ws-row">
+            <label>① 会社・業種・課題（15秒）</label>
+            <div class="field">例：長崎市内の飲食店。クレーム対応報告書に毎回20分かかる課題があった。</div>
+          </div>
+          <div class="ws-row">
+            <label>② アプリの説明と実演（2分）</label>
+            <div class="field">実際にアプリを開いて、サンプルデータを入力してデモする。</div>
+          </div>
+          <div class="ws-row">
+            <label>③ 期待する効果（30秒）</label>
+            <div class="field">例：月に約10時間の削減。全スタッフに展開予定。</div>
+          </div>
+          <div class="ws-row">
+            <label>④ 今後やりたいこと・感想（30秒）</label>
+            <div class="field">例：次は求人票自動作成アプリを作りたい。プログラミング不要でここまでできるとは思わなかった。</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- S4: 発表 -->
+  <div class="session">
+    <div class="session-head" onclick="toggleSession(this)">
+      <div class="snum" style="background:var(--rd)">S4</div>
+      <div class="smeta">
+        <h3>グループ代表発表・講師フィードバック</h3>
+        <p>各グループの優秀アプリを発表。講師から経営視点のアドバイス</p>
+      </div>
+      <span class="time-badge">⏱ 40分</span>
+      <span class="stoggle">▼</span>
+    </div>
+    <div class="session-body">
+
+      <div class="box box-scenario">
+        <span class="box-title">📌 発表の進め方</span>
+        各グループ<strong>1アプリ・約7〜8分</strong>で発表します。<br>
+        発表後、講師から「このアプリをさらに発展させるアイデア」「経営戦略の視点からのアドバイス」をお伝えします。
+      </div>
+
+      <div class="step-block">
+        <div class="step-label">発表チェックリスト（発表前に確認）</div>
+        <ul class="cl" style="font-size:14px">
+          <li>アプリのURL（またはAI Studioの画面）をすぐ開ける状態にしている</li>
+          <li>デモ用のサンプル入力テキストを手元に用意している</li>
+          <li>発表内容（①〜④）を頭に入れている</li>
+          <li>業務手順書がある場合は見せる準備ができている</li>
+        </ul>
+      </div>
+
+      <hr class="section-divider">
+
+      <div class="step-block">
+        <div class="step-label">研修後の3つのアクション（持ち帰り）</div>
+        <div class="group-grid">
+          <div class="group-card">
+            <div class="gc-title">📅 翌週までに</div>
+            <div class="gc-body">今日作ったアプリをスタッフ1名に実際に使ってもらう。感想を聞く。</div>
+          </div>
+          <div class="group-card">
+            <div class="gc-title">📅 1ヶ月以内に</div>
+            <div class="gc-body">業務手順書を整えてチーム全員に展開。「第2のアプリ」のアイデアを1つ考える。</div>
+          </div>
+          <div class="group-card">
+            <div class="gc-title">📅 3ヶ月後の目標</div>
+            <div class="gc-body">GEM・NotebookLM・AI Studioのいずれかで、月◯時間の業務削減を実現する。</div>
+          </div>
+          <div class="group-card">
+            <div class="gc-title">🤝 困ったときは</div>
+            <div class="gc-body">事務局へいつでも相談OK。みなさんの活用事例・成功談をぜひ教えてください！</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /day2 -->
+
+</div><!-- /container -->
+
+<script>
+function switchDay(id, tab) {
+  document.querySelectorAll('.day-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tab.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function toggleSession(head) {
+  const session = head.closest('.session');
+  session.classList.toggle('open');
+}
+
+function toggleAnswer(btn) {
+  btn.classList.toggle('open');
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+}
+
+function copyPrompt(btn) {
+  const body = btn.closest('.prompt-wrap').querySelector('.prompt-body');
+  navigator.clipboard.writeText(body.innerText).then(() => {
+    btn.textContent = '✅ コピー済';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'コピー';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// 全セッション最初から開く設定（デフォルトは1つだけ開く）
+// 必要なら下記をコメントアウトして全開にできる
+// document.querySelectorAll('.session').forEach(s => s.classList.add('open'));
+</script>
+</body>
+</html>
+HTMLEOF
