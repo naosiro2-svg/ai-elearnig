@@ -71,12 +71,13 @@
   main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h));}
 
   /* ── 動画セレクタ ── */
-  .video-selector{display:flex;background:#111827;border-bottom:1px solid #1f2937;position:sticky;top:0;z-index:40;}
-  .vsel-btn{flex:1;padding:10px 4px;font-size:12px;font-weight:500;color:#6b7280;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;line-height:1.4;}
-  .vsel-btn:hover{color:#d1d5db;}
-  .vsel-btn.active{color:#1D9E75;border-bottom-color:#1D9E75;background:rgba(29,158,117,.08);}
-  .vsel-btn .vsel-sub{display:block;font-size:9px;color:#4b5563;}
+  .video-selector{display:flex;background:#111827;border-bottom:2px solid #1f2937;position:sticky;top:0;z-index:40;}
+  .vsel-btn{flex:1;padding:14px 8px;font-size:14px;font-weight:700;color:#6b7280;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:inherit;line-height:1.5;transition:all .2s;}
+  .vsel-btn:hover{color:#d1d5db;background:rgba(255,255,255,.05);}
+  .vsel-btn.active{color:#1D9E75;border-bottom-color:#1D9E75;background:rgba(29,158,117,.1);}
+  .vsel-btn .vsel-sub{display:block;font-size:10px;color:#4b5563;font-weight:400;margin-bottom:2px;}
   .vsel-btn.active .vsel-sub{color:#9FE1CB;}
+  .vsel-btn .vsel-icon{display:block;font-size:18px;margin-bottom:3px;}
 
   /* ── 動画プレイヤー（16:9比率・大型） ── */
   .video-area{background:#0d1117;}
@@ -147,6 +148,9 @@
   .ex-q{font-size:13px;color:#1e293b;line-height:1.8;margin-bottom:10px;white-space:pre-wrap;}
   .ex-hint{font-size:12px;color:#374151;background:#fff;border:1px dashed #cbd5e1;border-radius:8px;padding:10px 14px;line-height:1.75;white-space:pre-wrap;}
   .ex-hint-label{font-size:10px;font-weight:700;color:var(--green);display:block;margin-bottom:5px;}
+  /* 演習データ案内バナー */
+  .ex-drive-banner{background:#e8f5f0;border:1px solid #86efac;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--green);display:flex;align-items:center;gap:8px;}
+  .ex-drive-banner a{color:var(--green);font-weight:700;text-decoration:underline;}
 
   /* 次の動画ナビ */
   .next-nav{padding:16px 24px;background:#f8fafc;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;}
@@ -154,9 +158,137 @@
   .next-nav-btn:hover{background:var(--green);}
   .next-nav-btn.prev{background:#f1f5f9;color:#374151;}
   .next-nav-btn.prev:hover{background:#e2e8f0;}
+
+  /* ── 使い方モーダル ── */
+  .howto-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:500;padding:16px;}
+  .howto-overlay.hidden{display:none;}
+  .howto-modal{background:#fff;border-radius:16px;width:100%;max-width:640px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .howto-header{background:var(--dark);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .howto-header h2{color:#fff;font-size:15px;font-weight:700;}
+  .howto-close{background:none;border:none;color:#94a3b8;font-size:22px;cursor:pointer;line-height:1;padding:0 4px;}
+  .howto-close:hover{color:#fff;}
+  .howto-body{overflow-y:auto;padding:20px 24px;flex:1;}
+  .howto-body::-webkit-scrollbar{width:4px;}
+  .howto-body::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px;}
+
+  .howto-section{margin-bottom:20px;}
+  .howto-section h3{font-size:13px;font-weight:700;color:var(--green);border-left:3px solid var(--green-mid);padding-left:8px;margin-bottom:10px;}
+  .howto-step{display:flex;gap:12px;margin-bottom:10px;align-items:flex-start;}
+  .howto-num{width:24px;height:24px;border-radius:50%;background:var(--green-mid);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .howto-text{font-size:12px;color:#374151;line-height:1.7;}
+  .howto-text strong{color:var(--dark);}
+  .howto-text .tag{display:inline-block;background:var(--green-light);color:var(--green);font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;margin:0 2px;}
+
+  .howto-flow{display:flex;align-items:center;gap:6px;margin:10px 0;flex-wrap:wrap;}
+  .howto-flow-item{background:var(--dark);color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:6px;text-align:center;line-height:1.4;}
+  .howto-flow-arrow{color:var(--green-mid);font-size:16px;font-weight:700;}
+
+  .howto-note{background:#fef9e7;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;line-height:1.6;margin-top:10px;}
+  .howto-drive{background:var(--green-light);border:1px solid #86efac;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green);line-height:1.6;margin-top:8px;}
+  .howto-drive a{color:var(--green);font-weight:700;}
+
+  .howto-footer{padding:14px 20px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:#f8fafc;}
+  .howto-dont-show{display:flex;align-items:center;gap:6px;font-size:12px;color:#64748b;cursor:pointer;}
+  .howto-dont-show input{cursor:pointer;}
+  .howto-start-btn{background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .howto-start-btn:hover{background:var(--green);}
+  .howto-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 12px;border-radius:5px;cursor:pointer;font-family:inherit;text-decoration:none;margin-left:4px;}
+  .howto-btn:hover{background:rgba(255,255,255,.2);}
 </style>
 </head>
 <body>
+
+<!-- 使い方モーダル -->
+<div class="howto-overlay hidden" id="howtoOverlay">
+  <div class="howto-modal">
+    <div class="howto-header">
+      <h2>📖 このサイトの使い方</h2>
+      <button class="howto-close" onclick="closeHowto()">×</button>
+    </div>
+    <div class="howto-body">
+
+      <div class="howto-section">
+        <h3>🔧 受講前の準備</h3>
+        <div class="howto-step">
+          <div class="howto-num">1</div>
+          <div class="howto-text">本講座では原則<strong>Google Gemini（無料版）</strong>を使用します。一部の機能は有料版のみ対応のものがあります。</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-num">2</div>
+          <div class="howto-text">動画視聴を始める前に<strong>Geminiにログインできること</strong>を必ず確認してください。（gemini.google.com）</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-num">3</div>
+          <div class="howto-text">演習問題の回答時に<strong>音声入力でも回答できること</strong>を確認してください。2種類あります。どちらか一方でも使えればOKです。両方使えるとよりスムーズです。</div>
+        </div>
+      </div>
+
+      <div class="howto-section">
+        <h3>📺 eラーニングの構成と進め方</h3>
+        <div class="howto-flow">
+          <div class="howto-flow-item">🎧 概要<br><span style="font-size:9px;opacity:.8;">全体像を把握</span></div>
+          <div class="howto-flow-arrow">→</div>
+          <div class="howto-flow-item">📖 具体的内容<br><span style="font-size:9px;opacity:.8;">詳しく学ぶ</span></div>
+          <div class="howto-flow-arrow">→</div>
+          <div class="howto-flow-item">🎬 実演<br><span style="font-size:9px;opacity:.8;">操作を見る</span></div>
+          <div class="howto-flow-arrow">→</div>
+          <div class="howto-flow-item">🎯 演習問題<br><span style="font-size:9px;opacity:.8;">必ずやること</span></div>
+        </div>
+        <div class="howto-text" style="margin-top:10px;background:#f8fafc;border-radius:6px;padding:8px 12px;font-size:11px;color:#64748b;">
+          ⚠️ <strong>動画①と動画③には実演がありません。また動画④には概要がありません。</strong>
+        </div>
+        <div class="howto-step" style="margin-top:10px;">
+          <div class="howto-num">1</div>
+          <div class="howto-text">全7章（動画①〜⑦）を原則<strong>概要→具体的内容→実演</strong>の順に視聴してください。</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-num">2</div>
+          <div class="howto-text">各章の実演タブを選ぶと<span class="tag">🎯 演習問題</span>が表示されます。<strong>演習問題は必ず実施してください。</strong></div>
+        </div>
+      </div>
+
+      <div class="howto-section">
+        <h3>📁 演習用データの場所</h3>
+        <div class="howto-drive">
+          📂 演習問題で使うサンプルデータ（会議メモ・就業規則・業界資料等）は以下の共有フォルダにあります。<br>
+          <a href="https://drive.google.com/drive/folders/1NY9y27uoqLWS3T0e6-gXqdwQ593LZz9d" target="_blank">
+            🔗 研修用共有フォルダを開く →
+          </a><br>
+          <span style="font-size:11px;margin-top:4px;display:block;">「02演習用PDF資料」フォルダにサンプルデータが入っています。</span>
+        </div>
+      </div>
+
+      <div class="howto-section">
+        <h3>🏆 総合確認テストと修了証・集合研修</h3>
+        <div class="howto-step">
+          <div class="howto-num">1</div>
+          <div class="howto-text">全7本の動画視聴後に<strong>総合確認テスト</strong>があります。合格すれば<strong>修了証が発行</strong>されます。</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-num">2</div>
+          <div class="howto-text">全動画視聴後、<strong>集合研修（リアル実践研修）</strong>があります。集合研修前に<strong>自社の業務課題</strong>と<strong>作成したいアプリのアイデアを2〜3つ</strong>考えておいてください。</div>
+        </div>
+      </div>
+
+      <div class="howto-section">
+        <h3>⚠️ 受講上の注意事項</h3>
+        <div class="howto-note">
+          ・このeラーニングは<strong>受講者専用</strong>です。他の方へのパスワードの共有は<strong>絶対にやめてください</strong>。<br>
+          ・講座内のミニアプリは<strong>受講期間中のみ</strong>使用できます。終了後も使用を希望する場合は事務局にご連絡ください。<br>
+          ・研修中に不具合があれば<strong>事務局までご連絡</strong>ください。
+        </div>
+      </div>
+
+    </div>
+    <div class="howto-footer">
+      <label class="howto-dont-show">
+        <input type="checkbox" id="dontShowAgain" onchange="saveDontShow()">
+        次回から表示しない
+      </label>
+      <button class="howto-start-btn" onclick="closeHowto()">はじめる →</button>
+    </div>
+  </div>
+</div>
 
 <!-- パスワード画面 -->
 <div id="loginScreen">
@@ -179,7 +311,8 @@
   <div class="header-right">
     <span class="prog-text" id="progText">0 / 7 完了</span>
     <div class="pbar-outer"><div class="pbar-fill" id="globalBar" style="width:0%"></div></div>
-    <a href="gallery.html" class="gallery-link">🏆 作品展示</a>
+    <button class="howto-btn" onclick="openHowto()">📖 使い方</button>
+    <a href="gallery.html" class="gallery-link">🚀 ミニアプリ展示</a>
     <div class="user-icon">前</div>
   </div>
 </header>
@@ -197,12 +330,15 @@
     <!-- 動画セレクタ -->
     <div class="video-selector">
       <button class="vsel-btn active" id="vsel0" onclick="selectVideoType(0)">
+        <span class="vsel-icon">🎧</span>
         <span class="vsel-sub" id="vsub0">動画⑤-①</span>概要
       </button>
       <button class="vsel-btn" id="vsel1" onclick="selectVideoType(1)">
+        <span class="vsel-icon">📖</span>
         <span class="vsel-sub" id="vsub1">動画⑤-②</span>具体的内容
       </button>
       <button class="vsel-btn" id="vsel2" onclick="selectVideoType(2)">
+        <span class="vsel-icon">🎬</span>
         <span class="vsel-sub" id="vsub2">動画⑤-③</span>実演
       </button>
     </div>
@@ -282,6 +418,9 @@ function checkPw(){
   if(val === PASSWORD){
     document.getElementById('loginScreen').classList.add('hidden');
     sessionStorage.setItem('loggedIn','1');
+    if(localStorage.getItem('howto_skip') !== '1'){
+      setTimeout(openHowto, 600);
+    }
   } else {
     document.getElementById('pwError').textContent = 'パスワードが違います';
     document.getElementById('pwInput').value = '';
@@ -441,7 +580,15 @@ function renderPrompts(){
 function renderExercises(){
   const c=CONTENT[current],exs=c.exercises||[],panel=document.getElementById('exercisePanel');
   if(exs.length===0){panel.innerHTML='<div class="no-prompt-msg">この動画の練習問題は準備中です。</div>';return;}
-  panel.innerHTML=`<div class="ex-title">演習問題 — Geminiで実際に操作してみましょう</div>`+
+  panel.innerHTML=`
+    <div class="ex-drive-banner">
+      📁 演習で使うサンプルデータは
+      <a href="https://drive.google.com/drive/folders/1NY9y27uoqLWS3T0e6-gXqdwQ593LZz9d" target="_blank">
+        研修用共有フォルダ（02演習用PDF資料）
+      </a>
+      にあります
+    </div>
+    <div class="ex-title">演習問題 — Geminiで実際に操作してみましょう</div>`+
     exs.map((ex,ei)=>`<div class="ex-item">
       <div class="ex-num">問題 ${ei+1}</div>
       <div class="ex-q">${esc(ex.q)}</div>
@@ -465,12 +612,40 @@ function showTab(tab,btn){
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
+// ============================================================
+// 使い方モーダル
+// ============================================================
+function openHowto(){
+  document.getElementById('howtoOverlay').classList.remove('hidden');
+}
+function closeHowto(){
+  document.getElementById('howtoOverlay').classList.add('hidden');
+}
+function saveDontShow(){
+  const checked = document.getElementById('dontShowAgain').checked;
+  localStorage.setItem('howto_skip', checked ? '1' : '0');
+}
+// オーバーレイ外クリックで閉じる
+document.getElementById('howtoOverlay').addEventListener('click', function(e){
+  if(e.target === this) closeHowto();
+});
+
 // 右クリック禁止
 document.addEventListener('contextmenu', e => e.preventDefault());
 
 // 起動
 loadProgress();
 selectLesson(4);
+
+// ログイン後に使い方モーダルを自動表示
+function showHowtoIfNeeded(){
+  if(localStorage.getItem('howto_skip') !== '1'){
+    setTimeout(openHowto, 500);
+  }
+}
+// パスワード認証成功後にも呼び出す
+const _origCheckPw = checkPw;
+// 既にcheckPw定義済みのため、ログイン後の表示はcheckPw内で対応
 </script>
 </body>
 </html>
