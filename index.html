@@ -7,254 +7,227 @@
 <script src="urls.js"></script>
 <script src="content.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
-  :root{--green:#0f7a5a;--green-light:#e8f5f0;--green-mid:#1D9E75;--dark:#1a1f2e;--sidebar-w:260px;--header-h:52px;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Noto Sans JP',sans-serif;background:#f4f6f8;color:#222;min-height:100vh;}
-
-  /* コピー・右クリック禁止 */
-  body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
-  /* ただしプロンプトはコピーボタンで取得可能にするため選択許可 */
-  .prompt-text{-webkit-user-select:text;-moz-user-select:text;user-select:text;}
-
-  /* ── パスワード画面 ── */
-  #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f7a5a,#1a1f2e);display:flex;align-items:center;justify-content:center;z-index:999;}
-  #loginScreen.hidden{display:none;}
-  .login-box{background:#fff;border-radius:16px;padding:40px 36px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);}
-  .login-logo{font-size:36px;margin-bottom:12px;}
-  .login-title{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:4px;}
-  .login-sub{font-size:12px;color:#64748b;margin-bottom:24px;}
-  .login-input{width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:8px;font-size:16px;font-family:inherit;text-align:center;letter-spacing:.3em;margin-bottom:12px;transition:border .2s;}
-  .login-input:focus{outline:none;border-color:var(--green-mid);}
-  .login-btn{width:100%;background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .login-btn:hover{background:var(--green);}
-  .login-error{font-size:12px;color:#dc2626;margin-top:8px;height:18px;}
-  .login-hint{font-size:11px;color:#94a3b8;margin-top:16px;}
-
-  /* ── ヘッダー（固定） ── */
-  header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--dark);display:flex;align-items:center;padding:0 20px;gap:14px;z-index:100;}
-  .logo-text{color:#fff;font-size:15px;font-weight:700;}
-  .logo-sub{color:#8899aa;font-size:12px;margin-left:4px;}
-  .header-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
-  .pbar-outer{width:100px;height:5px;background:#2d3748;border-radius:3px;}
-  .pbar-fill{height:100%;background:var(--green-mid);border-radius:3px;transition:width .4s;}
-  .prog-text{color:#8899aa;font-size:11px;}
-  .gallery-link{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 12px;border-radius:5px;text-decoration:none;}
-  .gallery-link:hover{background:rgba(255,255,255,.2);}
-  .user-icon{width:30px;height:30px;border-radius:50%;background:var(--green-mid);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;}
-
-  /* ── レイアウト（固定サイドバー＋縦スクロールメイン） ── */
-  .layout{display:flex;margin-top:var(--header-h);}
-
-  /* ── サイドバー（固定） ── */
-  aside{width:var(--sidebar-w);position:fixed;top:var(--header-h);bottom:0;left:0;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;z-index:50;}
-  .aside-head{padding:14px 16px 10px;border-bottom:1px solid #e2e8f0;flex-shrink:0;}
-  .aside-head h2{font-size:12px;color:#64748b;font-weight:500;}
-  .lesson-list{overflow-y:auto;flex:1;}
-  .lesson-list::-webkit-scrollbar{width:4px;}
-  .lesson-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px;}
-  .lesson-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #f1f5f9;transition:background .15s;}
-  .lesson-item:hover{background:#f8fafc;}
-  .lesson-item.active{background:var(--green-light);border-left:3px solid var(--green-mid);padding-left:13px;}
-  .lnum{font-size:10px;font-weight:700;color:#94a3b8;padding-top:2px;min-width:28px;}
-  .lesson-item.active .lnum{color:var(--green);}
-  .linfo{flex:1;min-width:0;}
-  .lname{font-size:12px;font-weight:500;color:#1e293b;line-height:1.4;}
-  .lesson-item.active .lname{color:var(--green);}
-  .lmeta{display:flex;align-items:center;gap:6px;margin-top:4px;}
-  .ltime{font-size:11px;color:#94a3b8;}
-  .done-tag{font-size:10px;background:#dcfce7;color:#16a34a;padding:1px 6px;border-radius:10px;font-weight:500;}
-  .lcheck{width:18px;height:18px;border-radius:50%;border:1.5px solid #cbd5e1;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:10px;}
-  .lcheck.done{background:var(--green-mid);border-color:var(--green-mid);color:#fff;}
-
-  /* ── メインコンテンツ（縦スクロール） ── */
-  main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h));}
-
-  /* ── 動画セレクタ ── */
-  .video-selector{display:flex;background:#111827;border-bottom:2px solid #1f2937;position:sticky;top:0;z-index:40;}
-  .vsel-btn{flex:1;padding:14px 8px;font-size:14px;font-weight:700;color:#6b7280;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:inherit;line-height:1.5;transition:all .2s;}
-  .vsel-btn:hover{color:#d1d5db;background:rgba(255,255,255,.05);}
-  .vsel-btn.active{color:#1D9E75;border-bottom-color:#1D9E75;background:rgba(29,158,117,.1);}
-  .vsel-btn .vsel-sub{display:block;font-size:10px;color:#4b5563;font-weight:400;margin-bottom:2px;}
-  .vsel-btn.active .vsel-sub{color:#9FE1CB;}
-  .vsel-btn .vsel-icon{display:block;font-size:18px;margin-bottom:3px;}
-
-  /* ── 動画プレイヤー（16:9比率・大型） ── */
-  .video-area{background:#0d1117;}
-  .video-topbar{display:flex;align-items:center;padding:8px 20px;background:rgba(0,0,0,.5);gap:10px;}
-  .vid-badge{font-size:11px;color:var(--green-mid);font-weight:700;}
-  .vid-title{font-size:13px;color:#e2e8f0;font-weight:500;flex:1;}
-  .vid-time{font-size:11px;color:#64748b;}
-  .vid-type{font-size:10px;color:#4b5563;background:#1f2937;padding:2px 7px;border-radius:10px;}
-
-  /* YouTubeボタン操作防止オーバーレイ（4分割） */
-  .video-player-wrap{position:relative;width:100%;padding-top:56.25%;background:#0d1117;}
-  .video-player-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
-  /* 上部オーバーレイ：タイトル・設定ボタンを隠す */
-  .ov-top{position:absolute;top:0;left:0;right:0;height:18%;z-index:10;}
-  /* 左オーバーレイ：共有ボタンを隠す */
-  .ov-left{position:absolute;top:18%;left:0;width:20%;bottom:15%;z-index:10;}
-  /* 右オーバーレイ：「見るYouTube」ボタンを隠す */
-  .ov-right{position:absolute;top:18%;right:0;width:25%;bottom:15%;z-index:10;}
-  /* 下部オーバーレイ：再生バー下のYouTubeロゴを隠す */
-  .ov-bottom{position:absolute;bottom:0;left:0;right:0;height:8%;z-index:10;}
-  /* 中央は空けて再生・停止ボタンを操作可能にする */
-  .video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0d1117;}
-  .play-circle{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;}
-  .play-tri{width:0;height:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-left:26px solid rgba(255,255,255,.9);margin-left:6px;}
-  .ph-title{color:#94a3b8;font-size:13px;text-align:center;line-height:1.8;}
-
-  /* ── 視聴コントロールバー ── */
-  .video-controls{background:rgba(0,0,0,.8);padding:8px 20px;display:flex;align-items:center;gap:10px;}
-  .progress-track{flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:2px;cursor:pointer;}
-  .progress-fill{height:100%;background:var(--green-mid);border-radius:2px;transition:width .3s;}
-  .vc-time{font-size:11px;color:#94a3b8;white-space:nowrap;min-width:72px;}
-  .vc-btn{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:11px;padding:3px 10px;border-radius:4px;font-family:inherit;}
-  .vc-btn:hover{color:#fff;background:rgba(255,255,255,.1);}
-  .done-btn{background:var(--green-mid);color:#fff;border:none;border-radius:5px;padding:5px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .done-btn:hover{background:var(--green);}
-
-  /* ── 総合テストバナー ── */
-  .final-banner{display:none;background:linear-gradient(135deg,#0f7a5a,#1D9E75);padding:12px 20px;align-items:center;gap:14px;}
-  .final-banner.show{display:flex;}
-  .fb-text h3{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px;}
-  .fb-text p{font-size:11px;color:#a7f3d0;}
-  .fb-btn{background:#f59e0b;color:#1a1f2e;font-size:12px;font-weight:700;border:none;border-radius:6px;padding:8px 18px;cursor:pointer;font-family:inherit;white-space:nowrap;margin-left:auto;}
-  .fb-btn:hover{background:#d97706;}
-
-  /* ── コンテンツエリア（縦スクロール） ── */
-  .content-area{background:#fff;border-top:1px solid #e2e8f0;}
-  .tab-bar{display:flex;border-bottom:1px solid #e2e8f0;background:#f8fafc;position:sticky;top:44px;z-index:30;}
-  .tab-btn{padding:11px 18px;font-size:12px;color:#64748b;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;font-family:inherit;font-weight:500;}
-  .tab-btn.active{color:var(--green);border-bottom-color:var(--green-mid);background:#fff;}
-  .tab-pane{display:none;padding:20px 24px;min-height:200px;}
-  .tab-pane.active{display:block;}
-
-  .desc-intro{font-size:14px;color:#374151;line-height:1.85;margin-bottom:14px;}
-  .point-grid{display:flex;flex-wrap:wrap;gap:8px;}
-  .point-chip{font-size:12px;background:var(--green-light);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:500;}
-
-  .prompt-box{background:#0f172a;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
-  .prompt-label{font-size:11px;color:#64748b;margin-bottom:8px;font-weight:500;}
-  .prompt-text{font-size:13px;color:#a5b4fc;line-height:1.75;white-space:pre-wrap;}
-  .copy-btn{font-size:11px;background:#1e293b;color:#94a3b8;border:1px solid #334155;border-radius:4px;padding:4px 12px;cursor:pointer;font-family:inherit;}
-  .copy-btn:hover{background:#334155;color:#fff;}
-  .no-prompt-msg{font-size:13px;color:#94a3b8;padding:8px 0;}
-
-  .ex-title{font-size:14px;font-weight:700;color:#1e293b;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-  .ex-title::before{content:'';display:inline-block;width:4px;height:18px;background:var(--green-mid);border-radius:2px;flex-shrink:0;}
-  .ex-item{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
-  .ex-num{font-size:11px;font-weight:700;color:var(--green);margin-bottom:6px;}
-  .ex-q{font-size:13px;color:#1e293b;line-height:1.8;margin-bottom:10px;white-space:pre-wrap;}
-  .ex-hint{font-size:12px;color:#374151;background:#fff;border:1px dashed #cbd5e1;border-radius:8px;padding:10px 14px;line-height:1.75;white-space:pre-wrap;}
-  .ex-hint-label{font-size:10px;font-weight:700;color:var(--green);display:block;margin-bottom:5px;}
-  /* 演習データ案内バナー */
-  .ex-drive-banner{background:#e8f5f0;border:1px solid #86efac;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--green);display:flex;align-items:center;gap:8px;}
-  .ex-drive-banner a{color:var(--green);font-weight:700;text-decoration:underline;}
-
-  /* 次の動画ナビ */
-  .next-nav{padding:16px 24px;background:#f8fafc;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;}
-  .next-nav-btn{background:var(--green-mid);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .next-nav-btn:hover{background:var(--green);}
-  .next-nav-btn.prev{background:#f1f5f9;color:#374151;}
-  .next-nav-btn.prev:hover{background:#e2e8f0;}
-
-  /* ── 使い方モーダル ── */
-  .howto-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:500;padding:16px;}
-  .howto-overlay.hidden{display:none;}
-  .howto-modal{background:#fff;border-radius:16px;width:100%;max-width:640px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);}
-  .howto-header{background:var(--dark);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-  .howto-header h2{color:#fff;font-size:15px;font-weight:700;}
-  .howto-close{background:none;border:none;color:#94a3b8;font-size:22px;cursor:pointer;line-height:1;padding:0 4px;}
-  .howto-close:hover{color:#fff;}
-  .howto-body{overflow-y:auto;padding:20px 24px;flex:1;}
-  .howto-body::-webkit-scrollbar{width:4px;}
-  .howto-body::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px;}
-
-  .howto-section{margin-bottom:20px;}
-  .howto-section h3{font-size:13px;font-weight:700;color:var(--green);border-left:3px solid var(--green-mid);padding-left:8px;margin-bottom:10px;}
-  .howto-step{display:flex;gap:12px;margin-bottom:10px;align-items:flex-start;}
-  .howto-num{width:24px;height:24px;border-radius:50%;background:var(--green-mid);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-  .howto-text{font-size:12px;color:#374151;line-height:1.7;}
-  .howto-text strong{color:var(--dark);}
-  .howto-text .tag{display:inline-block;background:var(--green-light);color:var(--green);font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;margin:0 2px;}
-
-  .howto-flow{display:flex;align-items:center;gap:6px;margin:10px 0;flex-wrap:wrap;}
-  .howto-flow-item{background:var(--dark);color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:6px;text-align:center;line-height:1.4;}
-  .howto-flow-arrow{color:var(--green-mid);font-size:16px;font-weight:700;}
-
-  .howto-note{background:#fef9e7;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;line-height:1.6;margin-top:10px;}
-  .howto-drive{background:var(--green-light);border:1px solid #86efac;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green);line-height:1.6;margin-top:8px;}
-  .howto-drive a{color:var(--green);font-weight:700;}
-
-  .howto-footer{padding:14px 20px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:#f8fafc;}
-  .howto-dont-show{display:flex;align-items:center;gap:6px;font-size:12px;color:#64748b;cursor:pointer;}
-  .howto-dont-show input{cursor:pointer;}
-  .howto-start-btn{background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .howto-start-btn:hover{background:var(--green);}
-  .howto-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 12px;border-radius:5px;cursor:pointer;font-family:inherit;text-decoration:none;margin-left:4px;}
-  .howto-btn:hover{background:rgba(255,255,255,.2);}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+:root{--green:#0f7a5a;--green-light:#e8f5f0;--green-mid:#1D9E75;--dark:#1a1f2e;--sidebar-w:260px;--header-h:52px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',sans-serif;background:#f4f6f8;color:#222;min-height:100vh;}
+body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
+.prompt-text{-webkit-user-select:text;-moz-user-select:text;user-select:text;}
+/* ── パスワード画面 ── */
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f7a5a,#1a1f2e);display:flex;align-items:center;justify-content:center;z-index:999;}
+#loginScreen.hidden{display:none;}
+.login-box{background:#fff;border-radius:16px;padding:40px 36px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.login-logo{font-size:36px;margin-bottom:12px;}
+.login-title{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:4px;}
+.login-sub{font-size:12px;color:#64748b;margin-bottom:24px;}
+.login-input{width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:8px;font-size:16px;font-family:inherit;text-align:center;letter-spacing:.3em;margin-bottom:12px;transition:border .2s;}
+.login-input:focus{outline:none;border-color:var(--green-mid);}
+.login-btn{width:100%;background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.login-btn:hover{background:var(--green);}
+.login-error{font-size:12px;color:#dc2626;margin-top:8px;height:18px;}
+.login-hint{font-size:11px;color:#94a3b8;margin-top:16px;}
+/* ── ヘッダー ── */
+header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--dark);display:flex;align-items:center;padding:0 20px;gap:14px;z-index:100;}
+.logo-text{color:#fff;font-size:15px;font-weight:700;}
+.logo-sub{color:#8899aa;font-size:12px;margin-left:4px;}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.pbar-outer{width:100px;height:5px;background:#2d3748;border-radius:3px;}
+.pbar-fill{height:100%;background:var(--green-mid);border-radius:3px;transition:width .4s;}
+.prog-text{color:#8899aa;font-size:11px;}
+.gallery-link{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 12px;border-radius:5px;text-decoration:none;}
+.gallery-link:hover{background:rgba(255,255,255,.2);}
+.user-icon{width:30px;height:30px;border-radius:50%;background:var(--green-mid);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;}
+/* ── レイアウト ── */
+.layout{display:flex;margin-top:var(--header-h);}
+aside{width:var(--sidebar-w);position:fixed;top:var(--header-h);bottom:0;left:0;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;z-index:50;}
+.aside-head{padding:14px 16px 10px;border-bottom:1px solid #e2e8f0;flex-shrink:0;}
+.aside-head h2{font-size:12px;color:#64748b;font-weight:500;}
+.lesson-list{overflow-y:auto;flex:1;}
+.lesson-list::-webkit-scrollbar{width:4px;}
+.lesson-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px;}
+.lesson-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #f1f5f9;transition:background .15s;}
+.lesson-item:hover{background:#f8fafc;}
+.lesson-item.active{background:var(--green-light);border-left:3px solid var(--green-mid);padding-left:13px;}
+.lnum{font-size:10px;font-weight:700;color:#94a3b8;padding-top:2px;min-width:28px;}
+.lesson-item.active .lnum{color:var(--green);}
+.linfo{flex:1;min-width:0;}
+.lname{font-size:12px;font-weight:500;color:#1e293b;line-height:1.4;}
+.lesson-item.active .lname{color:var(--green);}
+.lmeta{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.ltime{font-size:11px;color:#94a3b8;}
+.done-tag{font-size:10px;background:#dcfce7;color:#16a34a;padding:1px 6px;border-radius:10px;font-weight:500;}
+.lcheck{width:18px;height:18px;border-radius:50%;border:1.5px solid #cbd5e1;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.lcheck.done{background:var(--green-mid);border-color:var(--green-mid);color:#fff;}
+main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h));}
+/* ── 動画セレクタ ── */
+.video-selector{display:flex;background:#111827;border-bottom:2px solid #1f2937;position:sticky;top:0;z-index:40;}
+.vsel-btn{flex:1;padding:14px 8px;font-size:14px;font-weight:700;color:#6b7280;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:inherit;line-height:1.5;transition:all .2s;}
+.vsel-btn:hover{color:#d1d5db;background:rgba(255,255,255,.05);}
+.vsel-btn.active{color:#1D9E75;border-bottom-color:#1D9E75;background:rgba(29,158,117,.1);}
+.vsel-btn .vsel-sub{display:block;font-size:10px;color:#4b5563;font-weight:400;margin-bottom:2px;}
+.vsel-btn.active .vsel-sub{color:#9FE1CB;}
+.vsel-btn .vsel-icon{display:block;font-size:18px;margin-bottom:3px;}
+/* ── 動画プレイヤー ── */
+.video-area{background:#0d1117;}
+.video-topbar{display:flex;align-items:center;padding:8px 20px;background:rgba(0,0,0,.5);gap:10px;}
+.vid-badge{font-size:11px;color:var(--green-mid);font-weight:700;}
+.vid-title{font-size:13px;color:#e2e8f0;font-weight:500;flex:1;}
+.vid-time{font-size:11px;color:#64748b;}
+.vid-type{font-size:10px;color:#4b5563;background:#1f2937;padding:2px 7px;border-radius:10px;}
+.video-player-wrap{position:relative;width:100%;padding-top:56.25%;background:#0d1117;}
+.video-player-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.ov-top{position:absolute;top:0;left:0;right:0;height:18%;z-index:10;}
+.ov-left{position:absolute;top:18%;left:0;width:20%;bottom:15%;z-index:10;}
+.ov-right{position:absolute;top:18%;right:0;width:25%;bottom:15%;z-index:10;}
+.ov-bottom{position:absolute;bottom:0;left:0;right:0;height:8%;z-index:10;}
+.video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0d1117;}
+.play-circle{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;}
+.play-tri{width:0;height:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-left:26px solid rgba(255,255,255,.9);margin-left:6px;}
+.ph-title{color:#94a3b8;font-size:13px;text-align:center;line-height:1.8;}
+/* ── コントロールバー ── */
+.video-controls{background:rgba(0,0,0,.8);padding:8px 20px;display:flex;align-items:center;gap:10px;}
+.progress-track{flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:2px;cursor:pointer;}
+.progress-fill{height:100%;background:var(--green-mid);border-radius:2px;transition:width .3s;}
+.vc-time{font-size:11px;color:#94a3b8;white-space:nowrap;min-width:72px;}
+.vc-btn{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:11px;padding:3px 10px;border-radius:4px;font-family:inherit;}
+.vc-btn:hover{color:#fff;background:rgba(255,255,255,.1);}
+.done-btn{background:var(--green-mid);color:#fff;border:none;border-radius:5px;padding:5px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+.done-btn:hover{background:var(--green);}
+/* ── 総合テストバナー ── */
+.final-banner{display:none;background:linear-gradient(135deg,#0f7a5a,#1D9E75);padding:12px 20px;align-items:center;gap:14px;}
+.final-banner.show{display:flex;}
+.fb-text h3{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px;}
+.fb-text p{font-size:11px;color:#a7f3d0;}
+.fb-btn{background:#f59e0b;color:#1a1f2e;font-size:12px;font-weight:700;border:none;border-radius:6px;padding:8px 18px;cursor:pointer;font-family:inherit;white-space:nowrap;margin-left:auto;text-decoration:none;display:inline-block;}
+.fb-btn:hover{background:#d97706;}
+/* ── コンテンツエリア ── */
+.content-area{background:#fff;border-top:1px solid #e2e8f0;}
+.tab-bar{display:flex;border-bottom:1px solid #e2e8f0;background:#f8fafc;position:sticky;top:44px;z-index:30;}
+.tab-btn{padding:11px 18px;font-size:12px;color:#64748b;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;font-family:inherit;font-weight:500;}
+.tab-btn.active{color:var(--green);border-bottom-color:var(--green-mid);background:#fff;}
+.tab-pane{display:none;padding:20px 24px;min-height:200px;}
+.tab-pane.active{display:block;}
+.desc-intro{font-size:14px;color:#374151;line-height:1.85;margin-bottom:14px;}
+.point-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.point-chip{font-size:12px;background:var(--green-light);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:500;}
+.prompt-box{background:#0f172a;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.prompt-label{font-size:11px;color:#64748b;margin-bottom:8px;font-weight:500;}
+.prompt-text{font-size:13px;color:#a5b4fc;line-height:1.75;white-space:pre-wrap;}
+.copy-btn{font-size:11px;background:#1e293b;color:#94a3b8;border:1px solid #334155;border-radius:4px;padding:4px 12px;cursor:pointer;font-family:inherit;}
+.copy-btn:hover{background:#334155;color:#fff;}
+.no-prompt-msg{font-size:13px;color:#94a3b8;padding:8px 0;}
+.ex-title{font-size:14px;font-weight:700;color:#1e293b;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.ex-title::before{content:'';display:inline-block;width:4px;height:18px;background:var(--green-mid);border-radius:2px;flex-shrink:0;}
+.ex-item{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.ex-num{font-size:11px;font-weight:700;color:var(--green);margin-bottom:6px;}
+/* ── 演習問題本文・コピーボタン ── */
+.ex-q-wrap{position:relative;margin-bottom:10px;}
+.ex-q{font-size:13px;color:#1e293b;line-height:1.8;white-space:pre-wrap;-webkit-user-select:text;user-select:text;}
+.ex-hint-wrap{position:relative;}
+.ex-hint{font-size:12px;color:#374151;background:#fff;border:1px dashed #cbd5e1;border-radius:8px;padding:10px 14px;line-height:1.75;white-space:pre-wrap;-webkit-user-select:text;user-select:text;}
+.ex-hint-label{font-size:10px;font-weight:700;color:var(--green);display:block;margin-bottom:5px;}
+.ex-copy-btn{font-size:11px;background:#e8f5f0;color:var(--green);border:1px solid var(--green-mid);border-radius:4px;padding:3px 10px;cursor:pointer;font-family:inherit;float:right;margin-bottom:4px;}
+.ex-copy-btn:hover{background:var(--green-mid);color:#fff;}
+/* 演習データ案内バナー */
+.ex-drive-banner{background:#e8f5f0;border:1px solid #86efac;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--green);display:flex;align-items:center;gap:8px;}
+.ex-drive-banner a{color:var(--green);font-weight:700;text-decoration:underline;}
+/* 次の動画ナビ */
+.next-nav{padding:16px 24px;background:#f8fafc;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;}
+.next-nav-btn{background:var(--green-mid);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.next-nav-btn:hover{background:var(--green);}
+.next-nav-btn.prev{background:#f1f5f9;color:#374151;}
+.next-nav-btn.prev:hover{background:#e2e8f0;}
+/* ── 講座の進め方モーダル ── */
+.howto-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:500;padding:16px;}
+.howto-overlay.hidden{display:none;}
+.howto-modal{background:#fff;border-radius:16px;width:100%;max-width:660px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.howto-header{background:var(--dark);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.howto-header h2{color:#fff;font-size:17px;font-weight:700;}
+.howto-close{background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;line-height:1;padding:0 4px;}
+.howto-close:hover{color:#fff;}
+.howto-body{overflow-y:auto;padding:24px 28px;flex:1;}
+.howto-body::-webkit-scrollbar{width:4px;}
+.howto-body::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px;}
+.howto-section{margin-bottom:24px;}
+.howto-section h3{font-size:15px;font-weight:700;color:var(--green);border-left:4px solid var(--green-mid);padding-left:10px;margin-bottom:12px;}
+.howto-step{display:flex;gap:14px;margin-bottom:12px;align-items:flex-start;}
+.howto-num{width:28px;height:28px;border-radius:50%;background:var(--green-mid);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.howto-text{font-size:14px;color:#374151;line-height:1.8;}
+.howto-text strong{color:var(--dark);}
+.howto-text .tag{display:inline-block;background:var(--green-light);color:var(--green);font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin:0 2px;}
+.howto-flow{display:flex;align-items:center;gap:8px;margin:12px 0;flex-wrap:wrap;}
+.howto-flow-item{background:var(--dark);color:#fff;font-size:12px;font-weight:700;padding:8px 14px;border-radius:8px;text-align:center;line-height:1.5;}
+.howto-flow-arrow{color:var(--green-mid);font-size:18px;font-weight:700;}
+.howto-note{background:#fef9e7;border:1px solid #f59e0b;border-radius:8px;padding:12px 16px;font-size:13px;color:#92400e;line-height:1.7;margin-top:10px;}
+.howto-drive{background:var(--green-light);border:1px solid #86efac;border-radius:8px;padding:12px 16px;font-size:13px;color:var(--green);line-height:1.7;margin-top:8px;}
+.howto-drive a{color:var(--green);font-weight:700;}
+.howto-footer{padding:16px 24px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:#f8fafc;}
+.howto-dont-show{display:flex;align-items:center;gap:6px;font-size:13px;color:#64748b;cursor:pointer;}
+.howto-dont-show input{cursor:pointer;}
+.howto-start-btn{background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.howto-start-btn:hover{background:var(--green);}
+.howto-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;padding:5px 14px;border-radius:5px;cursor:pointer;font-family:inherit;text-decoration:none;margin-left:4px;}
+.howto-btn:hover{background:rgba(255,255,255,.2);}
 </style>
 </head>
 <body>
 
-<!-- 使い方モーダル -->
+<!-- 講座の進め方モーダル -->
 <div class="howto-overlay hidden" id="howtoOverlay">
   <div class="howto-modal">
     <div class="howto-header">
-      <h2>📖 このサイトの使い方</h2>
+      <h2>📋 講座の進め方</h2>
       <button class="howto-close" onclick="closeHowto()">×</button>
     </div>
     <div class="howto-body">
-
       <div class="howto-section">
-        <h3>🔧 受講前の準備</h3>
+        <h3>🔧 受講前の準備（必ずご確認ください）</h3>
         <div class="howto-step">
           <div class="howto-num">1</div>
-          <div class="howto-text">本講座では原則<strong>Google Gemini（無料版）</strong>を使用します。一部の機能は有料版のみ対応のものがあります。</div>
+          <div class="howto-text">本講座では<strong>Google Gemini（無料版）</strong>を使用します。<br>まず <strong>gemini.google.com</strong> を開いて、Googleアカウントでログインできることを確認してください。</div>
         </div>
         <div class="howto-step">
           <div class="howto-num">2</div>
-          <div class="howto-text">動画視聴を始める前に<strong>Geminiにログインできること</strong>を必ず確認してください。（gemini.google.com）</div>
+          <div class="howto-text">演習問題では<strong>音声入力</strong>を使います。以下の2種類のどちらか一方でも使えれば大丈夫です。<br>
+          ・<strong>Windowsキー＋H</strong>（Windows標準の音声入力）<br>
+          ・<strong>Voice In</strong>（Chrome拡張機能・無料）</div>
+        </div>
+      </div>
+
+      <div class="howto-section">
+        <h3>📺 各動画の視聴手順</h3>
+        <div class="howto-flow">
+          <div class="howto-flow-item">🎧 概要<br><span style="font-size:10px;opacity:.8;">全体像を把握</span></div>
+          <div class="howto-flow-arrow">→</div>
+          <div class="howto-flow-item">📖 具体的内容<br><span style="font-size:10px;opacity:.8;">詳しく学ぶ</span></div>
+          <div class="howto-flow-arrow">→</div>
+          <div class="howto-flow-item">🎬 実演<br><span style="font-size:10px;opacity:.8;">操作を見る</span></div>
+          <div class="howto-flow-arrow">→</div>
+          <div class="howto-flow-item">🎯 演習問題<br><span style="font-size:10px;opacity:.8;">必ず取り組む</span></div>
+        </div>
+        <div class="howto-step" style="margin-top:14px;">
+          <div class="howto-num">1</div>
+          <div class="howto-text">左のサイドバーから動画を選んで<strong>①→②→③の順</strong>に視聴してください。</div>
+        </div>
+        <div class="howto-step">
+          <div class="howto-num">2</div>
+          <div class="howto-text">「🎬 実演」タブを選ぶと<span class="tag">🎯 演習問題</span>タブが現れます。<br><strong>演習問題は必ず実際にGeminiで操作しながら取り組んでください。</strong></div>
         </div>
         <div class="howto-step">
           <div class="howto-num">3</div>
-          <div class="howto-text">演習問題の回答時に<strong>音声入力でも回答できること</strong>を確認してください。2種類あります。どちらか一方でも使えればOKです。両方使えるとよりスムーズです。</div>
+          <div class="howto-text">動画を見終わったら「<strong>✓ 視聴完了</strong>」ボタンを押してください。左サイドバーの進捗が更新されます。</div>
         </div>
+        <div class="howto-note">⚠️ <strong>動画①と動画③には「実演」がありません。動画④には「概要」がありません。</strong><br>それ以外の構成は同じです。</div>
       </div>
 
       <div class="howto-section">
-        <h3>📺 eラーニングの構成と進め方</h3>
-        <div class="howto-flow">
-          <div class="howto-flow-item">🎧 概要<br><span style="font-size:9px;opacity:.8;">全体像を把握</span></div>
-          <div class="howto-flow-arrow">→</div>
-          <div class="howto-flow-item">📖 具体的内容<br><span style="font-size:9px;opacity:.8;">詳しく学ぶ</span></div>
-          <div class="howto-flow-arrow">→</div>
-          <div class="howto-flow-item">🎬 実演<br><span style="font-size:9px;opacity:.8;">操作を見る</span></div>
-          <div class="howto-flow-arrow">→</div>
-          <div class="howto-flow-item">🎯 演習問題<br><span style="font-size:9px;opacity:.8;">必ずやること</span></div>
-        </div>
-        <div class="howto-text" style="margin-top:10px;background:#f8fafc;border-radius:6px;padding:8px 12px;font-size:11px;color:#64748b;">
-          ⚠️ <strong>動画①と動画③には実演がありません。また動画④には概要がありません。</strong>
-        </div>
-        <div class="howto-step" style="margin-top:10px;">
-          <div class="howto-num">1</div>
-          <div class="howto-text">全7章（動画①〜⑦）を原則<strong>概要→具体的内容→実演</strong>の順に視聴してください。</div>
-        </div>
-        <div class="howto-step">
-          <div class="howto-num">2</div>
-          <div class="howto-text">各章の実演タブを選ぶと<span class="tag">🎯 演習問題</span>が表示されます。<strong>演習問題は必ず実施してください。</strong></div>
-        </div>
-      </div>
-
-      <div class="howto-section">
-        <h3>📁 演習用データの場所</h3>
+        <h3>📁 演習で使うサンプルデータの場所</h3>
         <div class="howto-drive">
           📂 演習問題で使うサンプルデータ（会議メモ・就業規則・業界資料等）は以下の共有フォルダにあります。<br>
           <a href="https://drive.google.com/drive/folders/1NY9y27uoqLWS3T0e6-gXqdwQ593LZz9d" target="_blank">
             🔗 研修用共有フォルダを開く →
           </a><br>
-          <span style="font-size:11px;margin-top:4px;display:block;">「02演習用PDF資料」フォルダにサンプルデータが入っています。</span>
+          <span style="font-size:12px;margin-top:6px;display:block;">「02演習用PDF資料」フォルダの中にサンプルデータが入っています。</span>
         </div>
       </div>
 
@@ -262,11 +235,11 @@
         <h3>🏆 総合確認テストと修了証・集合研修</h3>
         <div class="howto-step">
           <div class="howto-num">1</div>
-          <div class="howto-text">全7本の動画視聴後に<strong>総合確認テスト</strong>があります。合格すれば<strong>修了証が発行</strong>されます。</div>
+          <div class="howto-text">全7本の動画を視聴後、<strong>総合確認テスト（21問）</strong>を受けてください。<br>70点以上で合格すると<strong>修了証が発行</strong>されます。印刷して集合研修当日にお持ちください。</div>
         </div>
         <div class="howto-step">
           <div class="howto-num">2</div>
-          <div class="howto-text">全動画視聴後、<strong>集合研修（リアル実践研修）</strong>があります。集合研修前に<strong>自社の業務課題</strong>と<strong>作成したいアプリのアイデアを2〜3つ</strong>考えておいてください。</div>
+          <div class="howto-text">集合研修は<strong>2回</strong>あります（1日目・2日目）。<br>集合研修前に<strong>「自社でAIを使って解決したい業務課題」を2〜3つ</strong>考えておいてください。</div>
         </div>
       </div>
 
@@ -278,7 +251,6 @@
           ・研修中に不具合があれば<strong>事務局までご連絡</strong>ください。
         </div>
       </div>
-
     </div>
     <div class="howto-footer">
       <label class="howto-dont-show">
@@ -311,23 +283,19 @@
   <div class="header-right">
     <span class="prog-text" id="progText">0 / 7 完了</span>
     <div class="pbar-outer"><div class="pbar-fill" id="globalBar" style="width:0%"></div></div>
-    <button class="howto-btn" onclick="openHowto()">📖 使い方</button>
+    <button class="howto-btn" onclick="openHowto()">📋 講座の進め方</button>
     <a href="gallery.html" class="gallery-link">🚀 ミニアプリ展示</a>
     <div class="user-icon">前</div>
   </div>
 </header>
 
 <div class="layout">
-  <!-- サイドバー -->
   <aside>
     <div class="aside-head"><h2>eラーニング 全7動画</h2></div>
     <div class="lesson-list" id="lessonList"></div>
   </aside>
 
-  <!-- メインコンテンツ -->
   <main id="mainArea">
-
-    <!-- 動画セレクタ -->
     <div class="video-selector">
       <button class="vsel-btn active" id="vsel0" onclick="selectVideoType(0)">
         <span class="vsel-icon">🎧</span>
@@ -343,7 +311,6 @@
       </button>
     </div>
 
-    <!-- 動画エリア -->
     <div class="video-area">
       <div class="video-topbar">
         <span class="vid-badge" id="vBadge">動画⑤</span>
@@ -351,14 +318,11 @@
         <span class="vid-time" id="vTime">30分</span>
         <span class="vid-type" id="vTypeLabel">概要</span>
       </div>
-
-      <!-- 16:9比率で大きく表示 -->
       <div class="video-player-wrap">
-      <!-- YouTubeボタン操作防止オーバーレイ（4分割） -->
-      <div class="ov-top"></div>
-      <div class="ov-left"></div>
-      <div class="ov-right"></div>
-      <div class="ov-bottom"></div>
+        <div class="ov-top"></div>
+        <div class="ov-left"></div>
+        <div class="ov-right"></div>
+        <div class="ov-bottom"></div>
         <div class="video-placeholder" id="vidPlaceholder">
           <div class="play-circle"><div class="play-tri"></div></div>
           <div class="ph-title" id="phTitle">動画を選択してください</div>
@@ -366,8 +330,6 @@
         <iframe id="videoFrame" style="display:none" allowfullscreen
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
       </div>
-
-      <!-- コントロールバー -->
       <div class="video-controls">
         <button class="done-btn" onclick="markDone()">✓ 視聴完了</button>
         <div class="progress-track" onclick="seekProg(event)">
@@ -377,16 +339,15 @@
       </div>
     </div>
 
-    <!-- 総合テストバナー（動画⑦のみ） -->
+    <!-- 総合テストバナー -->
     <div class="final-banner" id="finalBanner">
       <div class="fb-text">
         <h3>🎉 全7動画の視聴お疲れさまでした！</h3>
         <p>総合確認テストで理解度を確認しましょう（所要時間：約10分）</p>
       </div>
-      <a href="quiz.html" class="fb-btn" style="text-decoration:none;display:inline-block;">総合確認テストへ →</a>
+      <a href="quiz.html" class="fb-btn">総合確認テストへ →</a>
     </div>
 
-    <!-- コンテンツエリア（縦スクロール） -->
     <div class="content-area">
       <div class="tab-bar">
         <button class="tab-btn active" onclick="showTab('desc',this)">📖 説明・ポイント</button>
@@ -398,21 +359,15 @@
       <div class="tab-pane" id="exercisePanel"></div>
     </div>
 
-    <!-- 前後ナビ -->
     <div class="next-nav">
       <button class="next-nav-btn prev" onclick="prevLesson()" id="prevBtn">← 前の動画</button>
       <button class="next-nav-btn" onclick="nextLesson()" id="nextBtn">次の動画 →</button>
     </div>
-
   </main>
 </div>
 
 <script>
-// ============================================================
-// パスワード
-// ============================================================
 const PASSWORD = "nagasaki2026";
-
 function checkPw(){
   const val = document.getElementById('pwInput').value;
   if(val === PASSWORD){
@@ -431,19 +386,15 @@ if(sessionStorage.getItem('loggedIn')==='1'){
   document.getElementById('loginScreen').classList.add('hidden');
 }
 
-// ============================================================
-// 動画リスト
-// ============================================================
 const lessons = [
-  {num:1,badge:"動画①",name:"AIの現状と2026年トレンド",  time:"30分",hasDemo:false,done:false},
-  {num:2,badge:"動画②",name:"プロンプト8原則＋演習",      time:"40分",hasDemo:true, done:false},
-  {num:3,badge:"動画③",name:"AIリスク・著作権・ガイドライン",time:"30分",hasDemo:false,done:false},
+  {num:1,badge:"動画①",name:"AIの現状と2026年トレンド", time:"30分",hasDemo:false,done:false},
+  {num:2,badge:"動画②",name:"プロンプト8原則＋演習", time:"40分",hasDemo:true, done:false},
+  {num:3,badge:"動画③",name:"AIリスク・著作権・ガイドライン",time:"30分",hasDemo:true, done:false},
   {num:4,badge:"動画④",name:"議事録・要約・業界調査の実践",time:"40分",hasDemo:true, done:false},
-  {num:5,badge:"動画⑤",name:"GEM設定の基本操作",          time:"30分",hasDemo:true, done:false},
-  {num:6,badge:"動画⑥",name:"NotebookLMデモ紹介",         time:"20分",hasDemo:true, done:false},
+  {num:5,badge:"動画⑤",name:"GEM設定の基本操作", time:"30分",hasDemo:true, done:false},
+  {num:6,badge:"動画⑥",name:"NotebookLMデモ紹介", time:"20分",hasDemo:true, done:false},
   {num:7,badge:"動画⑦",name:"ビルドの基本操作（ミニアプリ入門）",time:"50分",hasDemo:true,done:false},
 ];
-
 let current = 4;
 let currentVType = 0;
 let simProg = 0;
@@ -460,9 +411,6 @@ function saveProgress(){
   localStorage.setItem('ai_el_v4_progress',JSON.stringify(lessons.map(l=>l.done)));
 }
 
-// ============================================================
-// サイドバー
-// ============================================================
 function renderSidebar(){
   document.getElementById('lessonList').innerHTML=lessons.map((l,i)=>`
     <div class="lesson-item${i===current?' active':''}" onclick="selectLesson(${i})">
@@ -475,9 +423,6 @@ function renderSidebar(){
     </div>`).join('');
 }
 
-// ============================================================
-// 動画セレクタ
-// ============================================================
 function selectVideoType(type){
   currentVType=type;
   [0,1,2].forEach(i=>document.getElementById('vsel'+i).className='vsel-btn'+(i===type?' active':''));
@@ -495,7 +440,6 @@ function loadVideo(){
     let v=url;
     if(v.includes('youtu.be/'))v=v.split('youtu.be/')[1].split('?')[0];
     else if(v.includes('v='))v=v.split('v=')[1].split('&')[0];
-    // rel=0・modestbranding=1でYouTubeロゴ・関連動画を最小化
     iframe.src=`https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`;
     iframe.style.display='block';ph.style.display='none';
   }else{
@@ -504,9 +448,6 @@ function loadVideo(){
   }
 }
 
-// ============================================================
-// 動画選択
-// ============================================================
 function selectLesson(i){
   current=i;currentVType=0;simProg=lessons[i].done?100:0;
   const l=lessons[i];
@@ -524,7 +465,6 @@ function selectLesson(i){
   document.getElementById('nextBtn').style.visibility=i===6?'hidden':'visible';
   loadVideo();updateProgress();renderSidebar();renderAll();
   showTab('desc',document.querySelector('.tab-btn'));
-  // ページトップへスクロール
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -536,7 +476,6 @@ function updateProgress(){
   document.getElementById('progText').textContent=`${done} / 7 完了`;
   document.getElementById('globalBar').style.width=(done/7*100)+'%';
 }
-
 function seekProg(e){
   const r=e.currentTarget.getBoundingClientRect();
   simProg=Math.max(0,Math.min(100,Math.round((e.clientX-r.left)/r.width*100)));
@@ -545,14 +484,7 @@ function seekProg(e){
 function markDone(){lessons[current].done=true;simProg=100;updateProgress();renderSidebar();saveProgress();}
 function nextLesson(){if(current<lessons.length-1)selectLesson(current+1);}
 function prevLesson(){if(current>0)selectLesson(current-1);}
-function openFinalTest(){
-  if(FINAL_TEST_URL.includes('XXXXXXXXX')){alert('GoogleフォームのURLをurls.jsのFINAL_TEST_URLに設定してください。');return;}
-  window.open(FINAL_TEST_URL,'_blank');
-}
 
-// ============================================================
-// コンテンツ描画（content.jsのデータを使用）
-// ============================================================
 function renderAll(){renderDesc();renderPrompts();renderExercises();}
 
 function renderDesc(){
@@ -589,11 +521,32 @@ function renderExercises(){
       にあります
     </div>
     <div class="ex-title">演習問題 — Geminiで実際に操作してみましょう</div>`+
-    exs.map((ex,ei)=>`<div class="ex-item">
-      <div class="ex-num">問題 ${ei+1}</div>
+  exs.map((ex,ei)=>`<div class="ex-item">
+    <div class="ex-num">問題 ${ei+1}</div>
+    <div class="ex-q-wrap">
+      <button class="ex-copy-btn" onclick="copyEx(this,'q')">📋 問題文をコピー</button>
       <div class="ex-q">${esc(ex.q)}</div>
+    </div>
+    <div class="ex-hint-wrap">
+      <button class="ex-copy-btn" onclick="copyEx(this,'hint')">📋 ヒントをコピー</button>
       <div class="ex-hint"><span class="ex-hint-label">💡 ヒント</span>${esc(ex.hint)}</div>
-    </div>`).join('');
+    </div>
+  </div>`).join('');
+}
+
+function copyEx(btn, type){
+  const wrap = btn.parentElement;
+  const el = wrap.querySelector(type==='q' ? '.ex-q' : '.ex-hint');
+  // ヒントラベルを除いた純粋なテキストを取得
+  let text = el.innerText;
+  if(type==='hint') text = text.replace(/^💡 ヒント\n?/,'');
+  navigator.clipboard.writeText(text).then(()=>{
+    const orig = btn.textContent;
+    btn.textContent = '✅ コピー済';
+    btn.style.background = 'var(--green-mid)';
+    btn.style.color = '#fff';
+    setTimeout(()=>{ btn.textContent=orig; btn.style.background=''; btn.style.color=''; }, 2000);
+  });
 }
 
 function copyP(i){
@@ -612,40 +565,19 @@ function showTab(tab,btn){
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-// ============================================================
-// 使い方モーダル
-// ============================================================
-function openHowto(){
-  document.getElementById('howtoOverlay').classList.remove('hidden');
-}
-function closeHowto(){
-  document.getElementById('howtoOverlay').classList.add('hidden');
-}
+function openHowto(){ document.getElementById('howtoOverlay').classList.remove('hidden'); }
+function closeHowto(){ document.getElementById('howtoOverlay').classList.add('hidden'); }
 function saveDontShow(){
   const checked = document.getElementById('dontShowAgain').checked;
   localStorage.setItem('howto_skip', checked ? '1' : '0');
 }
-// オーバーレイ外クリックで閉じる
 document.getElementById('howtoOverlay').addEventListener('click', function(e){
   if(e.target === this) closeHowto();
 });
-
-// 右クリック禁止
 document.addEventListener('contextmenu', e => e.preventDefault());
 
-// 起動
 loadProgress();
 selectLesson(4);
-
-// ログイン後に使い方モーダルを自動表示
-function showHowtoIfNeeded(){
-  if(localStorage.getItem('howto_skip') !== '1'){
-    setTimeout(openHowto, 500);
-  }
-}
-// パスワード認証成功後にも呼び出す
-const _origCheckPw = checkPw;
-// 既にcheckPw定義済みのため、ログイン後の表示はcheckPw内で対応
 </script>
 </body>
 </html>
