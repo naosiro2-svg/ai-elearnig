@@ -365,41 +365,50 @@ function copyPrompt() {
 
 function renderApps() {
   const grid = document.getElementById('appGrid');
-  grid.innerHTML = APPS.map((app, idx) => `
-    <div class="app-card">
-      <div class="card-header">
-        <div class="card-num">作品 ${app.num}</div>
-        <div class="card-title">${app.title}</div>
-        <div class="card-company">${app.company}</div>
-      </div>
-      <div class="card-body">
-        <div class="card-desc">${app.desc.replace(/\n/g, '<br>')}</div>
-        <div class="tag-wrap">${app.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-        \${app.demoUrl ? `
-          <div style="margin-bottom:14px;">
-            <a class="demo-link" href="\${app.demoUrl}" target="_blank">📁 デモ用データはこちら（共有フォルダ）→</a>
-            <div style="margin-top:8px;display:flex;align-items:center;gap:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:10px 12px;">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=\${encodeURIComponent(app.demoUrl)}" 
-                   alt="QRコード" width="80" height="80" style="border-radius:4px;flex-shrink:0;">
-              <div style="font-size:11px;color:#166534;line-height:1.7;">
-                <strong>📱 スマホでQRを読み取ると<br>共有フォルダが開きます</strong><br>
-                <span style="color:#4ade80;">デモ用データをダウンロードしてください</span>
-              </div>
-            </div>
-          </div>` : ''}
-      </div>
-      <div class="card-footer" style="display:flex;gap:8px;">
-        ${app.appUrl
-          ? `<a class="open-btn" href="${app.appUrl}" target="_blank" style="flex:1;">🚀 アプリを開く</a>`
-          : `<span class="open-btn disabled" style="flex:1;">🔧 準備中</span>`
-        }
-        ${app.prompt
-          ? `<button class="open-btn" onclick="openPrompt(${idx})" style="flex:0 0 auto;width:auto;padding:13px 14px;background:#1e293b;">💡</button>`
-          : ''
-        }
-      </div>
-    </div>
-  `).join('');
+  let html = '';
+  APPS.forEach(function(app, idx) {
+    const tags = app.tags.map(function(t){ return '<span class="tag">' + t + '</span>'; }).join('');
+    const desc = app.desc.replace(/\n/g, '<br>');
+
+    let demoHtml = '';
+    if (app.demoUrl) {
+      const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=' + encodeURIComponent(app.demoUrl);
+      demoHtml = '<div style="margin-bottom:14px;">'
+        + '<a class="demo-link" href="' + app.demoUrl + '" target="_blank">📁 デモ用データはこちら（共有フォルダ）→</a>'
+        + '<div style="margin-top:8px;display:flex;align-items:center;gap:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:10px 12px;">'
+        + '<img src="' + qrUrl + '" alt="QRコード" width="80" height="80" style="border-radius:4px;flex-shrink:0;">'
+        + '<div style="font-size:11px;color:#166534;line-height:1.7;">'
+        + '<strong>📱 スマホでQRを読み取ると<br>共有フォルダが開きます</strong><br>'
+        + '<span style="color:#15803d;">デモ用データをダウンロードしてください</span>'
+        + '</div></div></div>';
+    }
+
+    const btnHtml = app.appUrl
+      ? '<a class="open-btn" href="' + app.appUrl + '" target="_blank" style="flex:1;">🚀 アプリを開く</a>'
+      : '<span class="open-btn disabled" style="flex:1;">🔧 準備中</span>';
+
+    const promptBtnHtml = app.prompt
+      ? '<button class="open-btn" onclick="openPrompt(' + idx + ')" style="flex:0 0 auto;width:auto;padding:13px 14px;background:#1e293b;" title="プロンプトを見る">💡</button>'
+      : '';
+
+    html += '<div class="app-card">'
+      + '<div class="card-header">'
+      + '<div class="card-num">作品 ' + app.num + '</div>'
+      + '<div class="card-title">' + app.title + '</div>'
+      + '<div class="card-company">' + app.company + '</div>'
+      + '</div>'
+      + '<div class="card-body">'
+      + '<div class="card-desc">' + desc + '</div>'
+      + '<div class="tag-wrap">' + tags + '</div>'
+      + demoHtml
+      + '</div>'
+      + '<div class="card-footer" style="display:flex;gap:8px;">'
+      + btnHtml
+      + promptBtnHtml
+      + '</div>'
+      + '</div>';
+  });
+  grid.innerHTML = html;
 }
 
 renderApps();
