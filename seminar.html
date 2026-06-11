@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIミニアプリ展示コーナー｜ストラテジーエイド</title>
+<style>
+:root {
+  --green: #0f7a5a;
+  --green-mid: #1D9E75;
+  --green-light: #e8f5f0;
+  --dark: #1a1f2e;
+  --white: #ffffff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif; background: #f4f6f8; color: #222; min-height: 100vh; }
+
+/* ── パスワード画面 ── */
+#loginScreen {
+  position: fixed; inset: 0;
+  background: linear-gradient(135deg, #0f7a5a, #1a1f2e);
+  display: flex; align-items: center; justify-content: center; z-index: 999;
+}
+#loginScreen.hidden { display: none; }
+.login-box {
+  background: #fff; border-radius: 16px; padding: 48px 40px;
+  width: 360px; text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+}
+.login-logo { font-size: 48px; margin-bottom: 12px; }
+.login-title { font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+.login-sub { font-size: 13px; color: #64748b; margin-bottom: 28px; line-height: 1.6; }
+.login-input {
+  width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0;
+  border-radius: 8px; font-size: 18px; font-family: inherit;
+  text-align: center; letter-spacing: .3em; margin-bottom: 14px;
+  transition: border .2s;
+}
+.login-input:focus { outline: none; border-color: var(--green-mid); }
+.login-btn {
+  width: 100%; background: var(--green-mid); color: #fff;
+  border: none; border-radius: 8px; padding: 14px;
+  font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit;
+  transition: background .2s;
+}
+.login-btn:hover { background: var(--green); }
+.login-error { font-size: 13px; color: #dc2626; margin-top: 10px; height: 20px; }
+.login-company { font-size: 11px; color: #94a3b8; margin-top: 20px; }
+
+/* ── ヘッダー ── */
+header {
+  background: var(--dark); color: #fff;
+  padding: 0 28px; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+.header-logo { display: flex; align-items: center; gap: 10px; }
+.header-logo .badge {
+  background: var(--green-mid); color: #fff;
+  font-size: 11px; font-weight: 800; padding: 3px 10px;
+  border-radius: 99px; letter-spacing: .03em;
+}
+.header-logo .title { font-size: 15px; font-weight: 700; }
+.header-right { font-size: 12px; color: #94a3b8; }
+
+/* ── ヒーロー ── */
+.hero {
+  background: linear-gradient(135deg, #0f7a5a 0%, #1D9E75 60%, #0d5c44 100%);
+  padding: 52px 28px 48px;
+  text-align: center; color: #fff;
+}
+.hero-icon { font-size: 52px; margin-bottom: 12px; }
+.hero h1 { font-size: 28px; font-weight: 900; margin-bottom: 8px; letter-spacing: .02em; }
+.hero p { font-size: 14px; color: rgba(255,255,255,.8); line-height: 1.7; }
+.hero-badge {
+  display: inline-block; background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 99px; padding: 4px 16px;
+  font-size: 12px; font-weight: 600; margin-bottom: 16px; letter-spacing: .05em;
+}
+
+/* ── メインコンテンツ ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; }
+
+.section-title {
+  font-size: 18px; font-weight: 800; color: var(--dark);
+  border-left: 4px solid var(--green-mid); padding-left: 12px;
+  margin-bottom: 24px;
+}
+
+/* ── アプリグリッド ── */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 48px;
+}
+
+.app-card {
+  background: #fff; border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,.08);
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: transform .2s, box-shadow .2s;
+}
+.app-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,.14); }
+
+.card-header {
+  background: var(--dark); padding: 18px 20px 14px;
+}
+.card-num { font-size: 10px; font-weight: 700; color: var(--green-mid); margin-bottom: 6px; letter-spacing: .08em; }
+.card-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.card-company { font-size: 11px; color: #64748b; }
+
+.card-body { padding: 18px 20px; flex: 1; }
+.card-desc { font-size: 13px; color: #374151; line-height: 1.8; margin-bottom: 14px; }
+
+.tag-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tag {
+  font-size: 11px; font-weight: 600;
+  background: var(--green-light); color: var(--green);
+  padding: 3px 10px; border-radius: 99px;
+  border: 1px solid #86efac;
+}
+
+.demo-link {
+  font-size: 12px; color: var(--green); font-weight: 600;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+  margin-bottom: 16px;
+}
+.demo-link:hover { text-decoration: underline; }
+
+.card-footer { padding: 0 20px 20px; }
+.open-btn {
+  display: block; width: 100%;
+  background: var(--green-mid); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 13px; font-size: 14px; font-weight: 700;
+  text-align: center; text-decoration: none;
+  cursor: pointer; font-family: inherit;
+  transition: background .2s;
+}
+.open-btn:hover { background: var(--green); }
+.open-btn.disabled {
+  background: #cbd5e1; color: #64748b; cursor: not-allowed; pointer-events: none;
+}
+
+/* ── 使い方セクション ── */
+.howto-section {
+  background: #fff; border-radius: 16px;
+  padding: 28px; box-shadow: 0 2px 16px rgba(0,0,0,.06);
+  margin-bottom: 32px;
+}
+.howto-section h3 { font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 16px; }
+.howto-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.howto-item {
+  background: var(--green-light); border-radius: 10px;
+  padding: 14px 16px; border: 1px solid #86efac;
+}
+.howto-num { font-size: 20px; font-weight: 900; color: var(--green-mid); margin-bottom: 6px; }
+.howto-text { font-size: 13px; color: #374151; line-height: 1.6; }
+
+/* ── フッター ── */
+footer {
+  background: var(--dark); color: #64748b;
+  text-align: center; padding: 20px;
+  font-size: 12px; line-height: 1.8;
+}
+
+/* ── レスポンシブ ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 22px; }
+  .app-grid { grid-template-columns: 1fr; }
+  .howto-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- パスワード画面 -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">🚀</div>
+    <div class="login-title">AIミニアプリ展示コーナー</div>
+    <div class="login-sub">株式会社ストラテジーエイド<br>セミナー参加者専用ページです</div>
+    <input type="password" class="login-input" id="pwInput"
+      placeholder="パスワード" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="login-btn" onclick="checkPw()">入室する →</button>
+    <div class="login-error" id="pwError"></div>
+    <div class="login-company">© 株式会社ストラテジーエイド</div>
+  </div>
+</div>
+
+<!-- ヘッダー -->
+<header>
+  <div class="header-logo">
+    <span class="badge">AIミニアプリ</span>
+    <span class="title">ミニアプリ展示コーナー</span>
+  </div>
+  <div class="header-right">株式会社ストラテジーエイド</div>
+</header>
+
+<!-- ヒーロー -->
+<div class="hero">
+  <div class="hero-icon">🚀</div>
+  <div class="hero-badge">AIミニアプリ構築講座</div>
+  <h1>ミニアプリ展示コーナー</h1>
+  <p>AIを活用して作成したミニアプリをご紹介します。<br>実際に操作してお試しください。</p>
+</div>
+
+<div class="container">
+
+  <!-- 使い方 -->
+  <div class="howto-section">
+    <h3>📋 使い方</h3>
+    <div class="howto-grid">
+      <div class="howto-item">
+        <div class="howto-num">1</div>
+        <div class="howto-text">使いたいアプリの<br>「アプリを開く」ボタンをクリック</div>
+      </div>
+      <div class="howto-item">
+        <div class="howto-num">2</div>
+        <div class="howto-text">デモ用データがある場合は<br>共有フォルダから取得</div>
+      </div>
+      <div class="howto-item">
+        <div class="howto-num">3</div>
+        <div class="howto-text">画面の指示に従って<br>データを入力・アップロード</div>
+      </div>
+      <div class="howto-item">
+        <div class="howto-num">4</div>
+        <div class="howto-text">AIが自動で処理して<br>結果を表示します</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- アプリ一覧 -->
+  <div class="section-title">🗂 ミニアプリ一覧</div>
+  <div class="app-grid" id="appGrid"></div>
+
+</div>
+
+<!-- プロンプトモーダル -->
+<div id="promptModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:16px;width:100%;max-width:640px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="background:#1a1f2e;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+      <span id="modalTitle" style="color:#fff;font-size:15px;font-weight:700;"></span>
+      <button onclick="closePrompt()" style="background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;line-height:1;">×</button>
+    </div>
+    <div style="overflow-y:auto;padding:20px;flex:1;">
+      <pre id="modalText" style="font-family:monospace;font-size:13px;color:#1e293b;line-height:1.8;white-space:pre-wrap;word-break:break-all;background:#f8fafc;padding:16px;border-radius:8px;border:1px solid #e2e8f0;"></pre>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;background:#f8fafc;">
+      <button onclick="closePrompt()" style="background:#f1f5f9;color:#374151;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;">閉じる</button>
+      <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#1D9E75;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;">📋 コピー</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  AIミニアプリ展示コーナー　／　株式会社ストラテジーエイド<br>
+  長崎県デジタル力向上支援事業費補助金 対象講座
+</footer>
+
+<script>
+// ═══════════════════════════════
+//  パスワード認証
+// ═══════════════════════════════
+const PASSWORD = "fukuoka2026";
+
+function checkPw() {
+  const val = document.getElementById('pwInput').value;
+  if (val === PASSWORD) {
+    document.getElementById('loginScreen').classList.add('hidden');
+    sessionStorage.setItem('seminar_loggedIn', '1');
+  } else {
+    document.getElementById('pwError').textContent = 'パスワードが違います';
+    document.getElementById('pwInput').value = '';
+    setTimeout(() => document.getElementById('pwError').textContent = '', 2000);
+  }
+}
+if (sessionStorage.getItem('seminar_loggedIn') === '1') {
+  document.getElementById('loginScreen').classList.add('hidden');
+}
+
+// ═══════════════════════════════
+//  アプリデータ
+//  ★ 新しいアプリを追加する場合はここに追記するだけ
+// ═══════════════════════════════
+const DRIVE_URL = "https://drive.google.com/drive/folders/1NY9y27uoqLWS3T0e6-gXqdwQ593LZz9d";
+
+const APPS = [
+  {
+    num: 1,
+    title: "営業研修アプリ公開版",
+    company: "株式会社ストラテジーエイド",
+    desc: "営業スキルの向上を支援するAI対話型ロールプレイ練習ツールです。商材や顧客タイプを設定して、リアルな商談練習と具体的なフィードバックを受けられます。",
+    tags: ["Build", "営業研修", "ロールプレイ", "AI対話"],
+    demoUrl: "",
+    appUrl: "https://service-1006509308450.us-west1.run.app",
+    prompt: "",
+  },
+  {
+    num: 2,
+    title: "経理伝票抽出くん",
+    company: "株式会社ストラテジーエイド",
+    desc: "紙またはPDFの領収書・請求書を読み込んで、会計システムに渡せるCSVデータを自動作成します。手入力の手間を大幅に削減できます。",
+    tags: ["Build", "経理", "OCR", "CSV出力"],
+    demoUrl: DRIVE_URL,
+    appUrl: "https://remix-smart-invoice-extractor-969769004178.us-west1.run.app/",
+    prompt: "",
+  },
+  {
+    num: 3,
+    title: "Document to Word OCR",
+    company: "株式会社ストラテジーエイド",
+    desc: "紙またはPDFの各種書類を読み込んで、Word形式に変換するOCRツールです。手書き書類のデジタル化や書類整理の効率化に活用できます。",
+    tags: ["Build", "OCR", "Word変換", "書類デジタル化"],
+    demoUrl: DRIVE_URL,
+    appUrl: "https://document-to-word-ocr-969769004178.us-west1.run.app",
+    prompt: "",
+  },
+  {
+    num: 4,
+    title: "議事録作成アシスタント",
+    company: "株式会社ストラテジーエイド",
+    desc: "動画録画ファイルや音声録音ファイルから、詳細な議事録と決定事項を抽出した要約版を自動生成します。Word形式での書き出しも可能です。",
+    tags: ["Build", "議事録", "音声認識", "Word出力"],
+    demoUrl: DRIVE_URL,
+    appUrl: "https://service-969769004178.us-west1.run.app",
+    prompt: "＃前提条件\n役割：あなたはプロの事務局スタッフです。\n目的：アップロードされた動画の内容から、欠席者でも会議の内容が完璧に理解できる議事録を作成してください。\n\n＃実行指示\n・会議の議事録として2つ作ってください\n　一つは詳細議事録\n　もう一つは簡易議事録です\n・簡易議事録：会議の議題、決定事項、保留事項を抽出してください。\n・発言者ごとの主要な意見をまとめてください。\n・次回までに誰が何をすべきか（ToDoリスト）を作成してください。\n\n＃出力\n作製した議事録はWord文書として保存できるようにする\n\n＃出力形式\n詳細議事録 ／ 簡易議事録\n【議題】\n【決定事項】（箇条書き）\n【各発言者の要点】\n【ToDoリスト】（担当者・期限を明記）",
+  },
+  {
+    num: 5,
+    title: "チラシ・店頭POP生成ツール",
+    company: "株式会社ストラテジーエイド",
+    desc: "店頭POP・チラシ・お知らせの文章とレイアウトをAIが瞬時に生成します。A4デザインのプレビュー表示とWord出力に対応。\n\n💡 使い方：「商品名」にとんかつ、「伝えたい強み」に地元の豚肉、「年代」に50代など入力するだけで完成します。",
+    tags: ["Build", "チラシ", "店頭POP", "デザイン", "コピーライティング"],
+    demoUrl: "",
+    appUrl: "https://pop-969769004178.us-west1.run.app",
+    prompt: "",
+  },
+];
+
+// ═══════════════════════════════
+//  アプリカード描画
+// ═══════════════════════════════
+// プロンプトモーダル
+function openPrompt(idx) {
+  const app = APPS[idx];
+  document.getElementById('modalTitle').textContent = app.title + ' プロンプト';
+  document.getElementById('modalText').textContent = app.prompt.replace(/\\n/g, '\n');
+  document.getElementById('promptModal').style.display = 'flex';
+}
+function closePrompt() {
+  document.getElementById('promptModal').style.display = 'none';
+}
+function copyPrompt() {
+  const text = document.getElementById('modalText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyPromptBtn');
+    btn.textContent = '✅ コピー済';
+    setTimeout(() => btn.textContent = '📋 コピー', 2000);
+  });
+}
+
+function renderApps() {
+  const grid = document.getElementById('appGrid');
+  grid.innerHTML = APPS.map((app, idx) => `
+    <div class="app-card">
+      <div class="card-header">
+        <div class="card-num">作品 ${app.num}</div>
+        <div class="card-title">${app.title}</div>
+        <div class="card-company">${app.company}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">${app.desc.replace(/\n/g, '<br>')}</div>
+        <div class="tag-wrap">${app.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        \${app.demoUrl ? `
+          <div style="margin-bottom:14px;">
+            <a class="demo-link" href="\${app.demoUrl}" target="_blank">📁 デモ用データはこちら（共有フォルダ）→</a>
+            <div style="margin-top:8px;display:flex;align-items:center;gap:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:10px 12px;">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=\${encodeURIComponent(app.demoUrl)}" 
+                   alt="QRコード" width="80" height="80" style="border-radius:4px;flex-shrink:0;">
+              <div style="font-size:11px;color:#166534;line-height:1.7;">
+                <strong>📱 スマホでQRを読み取ると<br>共有フォルダが開きます</strong><br>
+                <span style="color:#4ade80;">デモ用データをダウンロードしてください</span>
+              </div>
+            </div>
+          </div>` : ''}
+      </div>
+      <div class="card-footer" style="display:flex;gap:8px;">
+        ${app.appUrl
+          ? `<a class="open-btn" href="${app.appUrl}" target="_blank" style="flex:1;">🚀 アプリを開く</a>`
+          : `<span class="open-btn disabled" style="flex:1;">🔧 準備中</span>`
+        }
+        ${app.prompt
+          ? `<button class="open-btn" onclick="openPrompt(${idx})" style="flex:0 0 auto;width:auto;padding:13px 14px;background:#1e293b;">💡</button>`
+          : ''
+        }
+      </div>
+    </div>
+  `).join('');
+}
+
+renderApps();
+</script>
+</body>
+</html>
