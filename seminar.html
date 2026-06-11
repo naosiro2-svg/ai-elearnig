@@ -183,8 +183,16 @@ footer {
     <div class="login-logo">🚀</div>
     <div class="login-title">AIミニアプリ展示コーナー</div>
     <div class="login-sub">株式会社ストラテジーエイド<br>セミナー参加者専用ページです</div>
-    <input type="password" class="login-input" id="pwInput"
-      placeholder="パスワード" onkeydown="if(event.key==='Enter')checkPw()">
+    <div style="position:relative;margin-bottom:14px;">
+      <input type="password" class="login-input" id="pwInput"
+        placeholder="パスワードを入力（半角英数字）"
+        onkeydown="if(event.key==='Enter')checkPw()"
+        style="margin-bottom:0;padding-right:50px;">
+      <button onclick="togglePw()" id="toggleBtn"
+        style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:20px;padding:4px;">
+        👁
+      </button>
+    </div>
     <button class="login-btn" onclick="checkPw()">入室する →</button>
     <div class="login-error" id="pwError"></div>
     <div class="login-company">© 株式会社ストラテジーエイド</div>
@@ -266,6 +274,18 @@ footer {
 //  パスワード認証
 // ═══════════════════════════════
 const PASSWORD = "fukuoka2026";
+
+function togglePw() {
+  const input = document.getElementById('pwInput');
+  const btn = document.getElementById('toggleBtn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
 
 function checkPw() {
   const val = document.getElementById('pwInput').value;
