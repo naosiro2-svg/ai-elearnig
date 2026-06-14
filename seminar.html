@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VL15VRFB7E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VL15VRFB7E');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AIミニアプリ展示コーナー｜ストラテジーエイド</title>
@@ -274,6 +282,19 @@ footer {
 //  パスワード認証
 // ═══════════════════════════════
 const PASSWORD = "fukuoka2026";
+const LOG_URL = "https://script.google.com/macros/s/AKfycbyrCQgOUDKGbM_or4bnNsMYIbSwjH55ky4INbO_ucK9_5-q3TwBS8s8uhrAv1SjUxnT/exec";
+
+function sendLog(type, detail) {
+  if (!LOG_URL || LOG_URL === "YOUR_GAS_WEB_APP_URL_HERE") return;
+  const now = new Date();
+  const jst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+  const dateStr = jst.toISOString().replace('T',' ').substring(0,19);
+  fetch(LOG_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ type, detail, datetime: dateStr, ua: navigator.userAgent.substring(0,80) })
+  }).catch(()=>{});
+}
 
 function togglePw() {
   const input = document.getElementById('pwInput');
@@ -292,10 +313,14 @@ function checkPw() {
   if (val === PASSWORD) {
     document.getElementById('loginScreen').classList.add('hidden');
     sessionStorage.setItem('seminar_loggedIn', '1');
+    if(typeof gtag !== 'undefined') gtag('event','login',{method:'password',event_category:'seminar'});
+    sendLog('ログイン成功','セミナー展示ページ');
   } else {
     document.getElementById('pwError').textContent = 'パスワードが違います';
     document.getElementById('pwInput').value = '';
     setTimeout(() => document.getElementById('pwError').textContent = '', 2000);
+    if(typeof gtag !== 'undefined') gtag('event','login_failed',{event_category:'seminar_security'});
+    sendLog('ログイン失敗','セミナー展示ページ・パスワード不一致');
   }
 }
 if (sessionStorage.getItem('seminar_loggedIn') === '1') {
