@@ -426,13 +426,13 @@ if(sessionStorage.getItem('loggedIn')==='1'){
 }
 
 const lessons = [
-  {num:1,badge:"動画①",name:"AIの現状と2026年トレンド", time:"30分",hasDemo:false,hasOverview:true, hasReal:false,done:false},
-  {num:2,badge:"動画②",name:"プロンプト8原則＋演習", time:"40分",hasDemo:true, hasOverview:true, hasReal:true, done:false},
-  {num:3,badge:"動画③",name:"AIリスク・著作権・ガイドライン",time:"30分",hasDemo:true, hasOverview:false,hasReal:false,done:false},
-  {num:4,badge:"動画④",name:"議事録・要約・業界調査の実践",time:"40分",hasDemo:true, hasOverview:false,hasReal:true, done:false},
-  {num:5,badge:"動画⑤",name:"GEM設定の基本操作", time:"30分",hasDemo:true, hasOverview:true, hasReal:true, done:false},
-  {num:6,badge:"動画⑥",name:"NotebookLMデモ紹介", time:"20分",hasDemo:true, hasOverview:true, hasReal:true, done:false},
-  {num:7,badge:"動画⑦",name:"ビルドの基本操作（ミニアプリ入門）",time:"50分",hasDemo:true, hasOverview:true, hasReal:true, done:false},
+  {num:1,badge:"動画①",name:"AIの現状と2026年トレンド", time:"30分",hasDemo:false,done:false},
+  {num:2,badge:"動画②",name:"プロンプト8原則＋演習", time:"40分",hasDemo:true, done:false},
+  {num:3,badge:"動画③",name:"AIリスク・著作権・ガイドライン",time:"30分",hasDemo:true, done:false},
+  {num:4,badge:"動画④",name:"議事録・要約・業界調査の実践",time:"40分",hasDemo:true, done:false},
+  {num:5,badge:"動画⑤",name:"GEM設定の基本操作", time:"30分",hasDemo:true, done:false},
+  {num:6,badge:"動画⑥",name:"NotebookLMデモ紹介", time:"20分",hasDemo:true, done:false},
+  {num:7,badge:"動画⑦",name:"ビルドの基本操作（ミニアプリ入門）",time:"50分",hasDemo:true,done:false},
 ];
 let current = 4;
 let currentVType = 0;
@@ -462,19 +462,6 @@ function renderSidebar(){
     </div>`).join('');
 }
 
-function updateTabVisibility(){
-  const l=lessons[current];
-  document.getElementById('vsel0').style.display=l.hasOverview?'':'none';
-  document.getElementById('vsel2').style.display=l.hasReal?'':'none';
-  const exBtn=document.getElementById('exTabBtn');
-  exBtn.style.display=(currentVType===2&&l.hasDemo)?'block':'none';
-  if(!l.hasOverview && currentVType===0){
-    currentVType=1;
-    [0,1,2].forEach(i=>document.getElementById('vsel'+i).className='vsel-btn'+(i===1?' active':''));
-    document.getElementById('vTypeLabel').textContent=VT_LABELS[1];
-  }
-}
-
 function selectVideoType(type){
   currentVType=type;
   [0,1,2].forEach(i=>document.getElementById('vsel'+i).className='vsel-btn'+(i===type?' active':''));
@@ -482,7 +469,6 @@ function selectVideoType(type){
   const exBtn=document.getElementById('exTabBtn');
   exBtn.style.display=(type===2&&lessons[current].hasDemo)?'block':'none';
   if(!(type===2&&lessons[current].hasDemo)) showTab('desc',document.querySelector('.tab-btn'));
-  updateTabVisibility();
   loadVideo();
 }
 
@@ -516,7 +502,7 @@ function selectLesson(i){
   document.getElementById('finalBanner').className='final-banner'+(i===6?' show':'');
   document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
   document.getElementById('nextBtn').style.visibility=i===6?'hidden':'visible';
-  loadVideo();updateProgress();renderSidebar();renderAll();updateTabVisibility();
+  loadVideo();updateProgress();renderSidebar();renderAll();
   showTab('desc',document.querySelector('.tab-btn'));
   window.scrollTo({top:0,behavior:'smooth'});
 }
