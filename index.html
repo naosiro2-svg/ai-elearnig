@@ -196,7 +196,7 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
         </div>
         <div class="howto-step">
           <div class="howto-num">2</div>
-          <div class="howto-text">演習問題では<strong>音声入力</strong>を使います。以下の2種類のどちらか一方でも使えれば大丈夫です。<br>
+          <div class="howto-text">演習問題では<strong>音声で入力することもできます</strong>。以下の2種類のどちらか一方でも使えれば大丈夫です。<br>
           ・<strong>Windowsキー＋H</strong>（Windows標準の音声入力）<br>
           ・<strong>Voice In</strong>（Chrome拡張機能・無料）</div>
         </div>
@@ -243,7 +243,7 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
         <h3>🏆 総合確認テストと修了証・集合研修</h3>
         <div class="howto-step">
           <div class="howto-num">1</div>
-          <div class="howto-text">全7本の動画を視聴後、<strong>総合確認テスト（21問）</strong>を受けてください。<br>70点以上で合格すると<strong>修了証が発行</strong>されます。印刷して集合研修当日にお持ちください。</div>
+          <div class="howto-text">全7本の動画を視聴後、<strong>総合確認テスト（20問）</strong>を受けてください。<br>70点以上で合格すると<strong>修了証が発行</strong>されます。印刷して集合研修当日にお持ちください。</div>
         </div>
         <div class="howto-step">
           <div class="howto-num">2</div>
@@ -426,13 +426,13 @@ if(sessionStorage.getItem('loggedIn')==='1'){
 }
 
 const lessons = [
-  {num:1,badge:"動画①",name:"AIの現状と2026年トレンド", time:"30分",hasDemo:false,done:false},
-  {num:2,badge:"動画②",name:"プロンプト8原則＋演習", time:"40分",hasDemo:true, done:false},
-  {num:3,badge:"動画③",name:"AIリスク・著作権・ガイドライン",time:"30分",hasDemo:true, done:false},
-  {num:4,badge:"動画④",name:"議事録・要約・業界調査の実践",time:"40分",hasDemo:true, done:false},
-  {num:5,badge:"動画⑤",name:"GEM設定の基本操作", time:"30分",hasDemo:true, done:false},
-  {num:6,badge:"動画⑥",name:"NotebookLMデモ紹介", time:"20分",hasDemo:true, done:false},
-  {num:7,badge:"動画⑦",name:"ビルドの基本操作（ミニアプリ入門）",time:"50分",hasDemo:true,done:false},
+  {num:1,badge:"動画①",name:"AIの現状と2026年トレンド", time:"30分",hasDemo:false,hasOverview:true, hasReal:false,done:false},
+  {num:2,badge:"動画②",name:"プロンプト8原則＋演習", time:"40分",hasDemo:true, hasOverview:true, hasReal:true, done:false},
+  {num:3,badge:"動画③",name:"AIリスク・著作権・ガイドライン",time:"30分",hasDemo:true, hasOverview:false,hasReal:false,done:false},
+  {num:4,badge:"動画④",name:"議事録・要約・業界調査の実践",time:"40分",hasDemo:true, hasOverview:false,hasReal:true, done:false},
+  {num:5,badge:"動画⑤",name:"GEM設定の基本操作", time:"30分",hasDemo:true, hasOverview:true, hasReal:true, done:false},
+  {num:6,badge:"動画⑥",name:"NotebookLMデモ紹介", time:"20分",hasDemo:true, hasOverview:true, hasReal:true, done:false},
+  {num:7,badge:"動画⑦",name:"ビルドの基本操作（ミニアプリ入門）",time:"50分",hasDemo:true, hasOverview:true, hasReal:true, done:false},
 ];
 let current = 4;
 let currentVType = 0;
@@ -462,6 +462,19 @@ function renderSidebar(){
     </div>`).join('');
 }
 
+function updateTabVisibility(){
+  const l=lessons[current];
+  document.getElementById('vsel0').style.display=l.hasOverview?'':'none';
+  document.getElementById('vsel2').style.display=l.hasReal?'':'none';
+  const exBtn=document.getElementById('exTabBtn');
+  exBtn.style.display=(currentVType===2&&l.hasDemo)?'block':'none';
+  if(!l.hasOverview && currentVType===0){
+    currentVType=1;
+    [0,1,2].forEach(i=>document.getElementById('vsel'+i).className='vsel-btn'+(i===1?' active':''));
+    document.getElementById('vTypeLabel').textContent=VT_LABELS[1];
+  }
+}
+
 function selectVideoType(type){
   currentVType=type;
   [0,1,2].forEach(i=>document.getElementById('vsel'+i).className='vsel-btn'+(i===type?' active':''));
@@ -469,6 +482,7 @@ function selectVideoType(type){
   const exBtn=document.getElementById('exTabBtn');
   exBtn.style.display=(type===2&&lessons[current].hasDemo)?'block':'none';
   if(!(type===2&&lessons[current].hasDemo)) showTab('desc',document.querySelector('.tab-btn'));
+  updateTabVisibility();
   loadVideo();
 }
 
@@ -502,7 +516,7 @@ function selectLesson(i){
   document.getElementById('finalBanner').className='final-banner'+(i===6?' show':'');
   document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
   document.getElementById('nextBtn').style.visibility=i===6?'hidden':'visible';
-  loadVideo();updateProgress();renderSidebar();renderAll();
+  loadVideo();updateProgress();renderSidebar();renderAll();updateTabVisibility();
   showTab('desc',document.querySelector('.tab-btn'));
   window.scrollTo({top:0,behavior:'smooth'});
 }
