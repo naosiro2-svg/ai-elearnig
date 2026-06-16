@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIミニアプリ体験コーナー｜ワークショップ専用</title>
+<title>AIワークショップ専用ページ</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --bg: #0F1923;
     --surface: #1A2535;
@@ -20,305 +17,107 @@
     --border: rgba(255,255,255,0.08);
     --radius: 12px;
   }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
 
-  body {
-    font-family: 'Noto Sans JP', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.7;
-  }
-
-  /* ===== ロック画面 ===== */
-  #lockScreen {
-    position: fixed; inset: 0;
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 1000;
-  }
-  .lock-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 48px 40px;
-    width: 90%; max-width: 420px;
-    text-align: center;
-  }
-  .lock-logo {
-    width: 64px; height: 64px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 16px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; margin: 0 auto 24px;
-  }
+  /* ロック画面 */
+  #lockScreen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+  .lock-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 48px 40px; width: 90%; max-width: 420px; text-align: center; }
+  .lock-logo { width: 64px; height: 64px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 24px; }
   .lock-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
   .lock-sub { font-size: 13px; color: var(--text2); margin-bottom: 32px; }
-  .lock-input {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 18px;
-    color: var(--text);
-    font-size: 16px;
-    font-family: inherit;
-    text-align: center;
-    letter-spacing: 4px;
-    margin-bottom: 16px;
-    outline: none;
-    transition: border-color .2s;
-  }
+  .lock-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; color: var(--text); font-size: 16px; font-family: inherit; text-align: center; letter-spacing: 4px; margin-bottom: 16px; outline: none; transition: border-color .2s; }
   .lock-input:focus { border-color: var(--accent); }
-  .lock-btn {
-    width: 100%;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 14px;
-    font-size: 16px;
-    font-weight: 700;
-    font-family: inherit;
-    cursor: pointer;
-    transition: opacity .2s;
-  }
+  .lock-btn { width: 100%; background: var(--accent); color: white; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; transition: opacity .2s; }
   .lock-btn:hover { opacity: .85; }
-  .lock-error {
-    color: #FF6B6B;
-    font-size: 13px;
-    margin-top: 12px;
-    display: none;
-  }
-  .lock-closed {
-    color: var(--text2);
-    font-size: 13px;
-    margin-top: 16px;
-    padding: 12px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 8px;
-    display: none;
-  }
+  .lock-error { color: #FF6B6B; font-size: 13px; margin-top: 12px; display: none; }
+  .lock-closed { color: var(--text2); font-size: 13px; margin-top: 16px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 8px; display: none; }
 
-  /* ===== メインページ ===== */
+  /* メインページ */
   #mainPage { display: none; }
 
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 60px;
-    position: sticky; top: 0; z-index: 100;
-  }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .header-badge {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: white;
-    font-size: 11px; font-weight: 700;
-    padding: 3px 10px; border-radius: 20px;
-    letter-spacing: .05em;
-  }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; }
+  .header-badge { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: .05em; margin-right: 10px; }
   .header-title { font-size: 15px; font-weight: 700; }
   .header-right { font-size: 12px; color: var(--text2); }
 
-  .hero {
-    padding: 56px 24px 40px;
-    max-width: 1100px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .hero-eyebrow {
-    display: inline-block;
-    font-size: 12px; font-weight: 700;
-    color: var(--accent);
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .hero h1 {
-    font-size: clamp(24px, 4vw, 36px);
-    font-weight: 700;
-    line-height: 1.4;
-    margin-bottom: 16px;
-  }
-  .hero-sub { font-size: 15px; color: var(--text2); max-width: 600px; margin: 0 auto 40px; }
+  /* パートヘッダー */
+  .part-wrap { max-width: 1100px; margin: 0 auto; padding: 48px 24px 0; }
+  .part-badge { display: inline-flex; align-items: center; gap: 10px; border-radius: 8px; padding: 8px 18px; margin-bottom: 12px; font-size: 13px; font-weight: 700; letter-spacing: .1em; }
+  .part-badge.green { background: rgba(29,158,117,.12); border: 1px solid rgba(29,158,117,.3); color: var(--accent); }
+  .part-badge.blue { background: rgba(22,184,243,.10); border: 1px solid rgba(22,184,243,.3); color: var(--accent2); }
+  .part-sub { font-size: 14px; color: var(--text2); margin-bottom: 24px; }
 
-  .steps {
-    display: flex; gap: 0;
-    justify-content: center;
-    max-width: 900px;
-    margin: 0 auto 60px;
-    flex-wrap: wrap;
-  }
-  .step {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 0 24px;
-    border-right: 1px solid var(--border);
-    flex: 1; min-width: 180px;
-  }
-  .step:last-child { border-right: none; }
-  .step-num {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: var(--accent);
-    color: white; font-size: 14px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 2px;
-  }
-  .step-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
-  .step-text strong { display: block; color: var(--text); font-size: 14px; margin-bottom: 2px; }
+  /* ロールプレイカード */
+  .rp-grid { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .rp-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 16px; }
+  .rp-card.a { border-top: 3px solid var(--accent); }
+  .rp-card.b { border-top: 3px solid var(--accent2); }
+  .rp-type-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+  .rp-card.a .rp-type-badge { background: rgba(29,158,117,.15); color: var(--accent); }
+  .rp-card.b .rp-type-badge { background: rgba(22,184,243,.12); color: var(--accent2); }
+  .rp-letter { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: white; margin-bottom: 4px; }
+  .rp-card.a .rp-letter { background: linear-gradient(135deg,#1D9E75,#16B8F3); }
+  .rp-card.b .rp-letter { background: linear-gradient(135deg,#6E2F8A,#16B8F3); }
+  .rp-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .rp-desc { font-size: 13px; color: var(--text2); line-height: 1.7; flex: 1; }
+  .rp-btn { display: flex; align-items: center; justify-content: center; gap: 8px; color: white; text-decoration: none; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 700; transition: opacity .2s; margin-top: auto; }
+  .rp-card.a .rp-btn { background: var(--accent); }
+  .rp-card.b .rp-btn { background: #1A7FAF; }
+  .rp-btn:hover { opacity: .85; }
 
-  /* ===== ロールプレイ特集 ===== */
-  .roleplay-banner {
-    max-width: 1100px;
-    margin: 0 auto 48px;
-    padding: 0 24px;
-  }
-  .roleplay-card {
-    background: linear-gradient(135deg, #0F3A2A 0%, #0A2535 100%);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius);
-    padding: 32px 40px;
-    display: flex; align-items: center; gap: 32px;
-    flex-wrap: wrap;
-  }
-  .roleplay-icon {
-    font-size: 48px; flex-shrink: 0;
-  }
-  .roleplay-content { flex: 1; min-width: 200px; }
-  .roleplay-label {
-    font-size: 11px; font-weight: 700; color: var(--accent);
-    letter-spacing: .15em; text-transform: uppercase; margin-bottom: 8px;
-  }
-  .roleplay-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-  .roleplay-desc { font-size: 14px; color: var(--text2); }
-  .roleplay-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--accent);
-    color: white;
-    text-decoration: none;
-    border-radius: 10px;
-    padding: 14px 28px;
-    font-size: 15px; font-weight: 700;
-    transition: opacity .2s;
-    flex-shrink: 0;
-  }
-  .roleplay-btn:hover { opacity: .85; }
-
-  /* ===== フォームバナー ===== */
-  .form-banner {
-    max-width: 1100px;
-    margin: 0 auto 48px;
-    padding: 0 24px;
-  }
-  .form-card {
-    background: linear-gradient(135deg, #1A2030 0%, #1A2A35 100%);
-    border: 1px solid var(--accent2);
-    border-radius: var(--radius);
-    padding: 24px 40px;
-    display: flex; align-items: center; gap: 24px;
-    flex-wrap: wrap;
-  }
+  /* フォームバナー */
+  .form-wrap { max-width: 1100px; margin: 0 auto 48px; padding: 0 24px; }
+  .form-card { background: linear-gradient(135deg,#1A2030,#1A2A35); border: 1px solid rgba(22,184,243,.3); border-radius: var(--radius); padding: 24px 32px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
   .form-content { flex: 1; min-width: 200px; }
-  .form-label {
-    font-size: 11px; font-weight: 700; color: var(--accent2);
-    letter-spacing: .15em; text-transform: uppercase; margin-bottom: 6px;
-  }
+  .form-label { font-size: 11px; font-weight: 700; color: var(--accent2); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 6px; }
   .form-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-  .form-desc { font-size: 13px; color: var(--text2); }
-  .form-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--accent2);
-    color: #0F1923;
-    text-decoration: none;
-    border-radius: 10px;
-    padding: 12px 24px;
-    font-size: 14px; font-weight: 700;
-    transition: opacity .2s;
-    flex-shrink: 0;
-  }
+  .form-desc { font-size: 13px; color: var(--text2); line-height: 1.7; }
+  .form-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent2); color: #0F1923; text-decoration: none; border-radius: 10px; padding: 12px 24px; font-size: 14px; font-weight: 700; transition: opacity .2s; flex-shrink: 0; }
   .form-btn:hover { opacity: .85; }
 
-  /* ===== ミニアプリグリッド ===== */
-  .section {
-    max-width: 1100px;
-    margin: 0 auto 60px;
-    padding: 0 24px;
-  }
-  .section-header {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--border);
-  }
-  .section-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--accent);
-  }
+  /* 仕切り */
+  .divider { max-width: 1100px; margin: 0 auto 0; padding: 0 24px; }
+  .divider hr { border: none; border-top: 2px dashed var(--border); margin: 8px 0; }
+
+  /* ミニアプリ手順 */
+  .steps-wrap { max-width: 1100px; margin: 0 auto 32px; padding: 0 24px; }
+  .steps { display: flex; gap: 0; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .step { display: flex; align-items: flex-start; gap: 12px; padding: 20px 24px; border-right: 1px solid var(--border); flex: 1; min-width: 160px; }
+  .step:last-child { border-right: none; }
+  .step-num { width: 30px; height: 30px; border-radius: 50%; background: var(--accent2); color: #0F1923; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .step-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .step-text strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 2px; }
+
+  /* ミニアプリグリッド */
+  .section { max-width: 1100px; margin: 0 auto 60px; padding: 0 24px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .section-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); }
   .section-title { font-size: 18px; font-weight: 700; }
   .section-count { font-size: 13px; color: var(--text2); }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-  }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: flex; flex-direction: column;
-    transition: border-color .2s, transform .2s;
-  }
-  .card:hover { border-color: rgba(29,158,117,.4); transform: translateY(-2px); }
-  .card-head {
-    padding: 20px 20px 16px;
-    border-bottom: 1px solid var(--border);
-  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
+  .card:hover { border-color: rgba(22,184,243,.35); transform: translateY(-2px); }
+  .card-head { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
   .card-num { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
   .card-name { font-size: 17px; font-weight: 700; margin-bottom: 2px; }
   .card-author { font-size: 12px; color: var(--text2); }
   .card-body { padding: 16px 20px; flex: 1; display: flex; flex-direction: column; }
   .card-desc { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 14px; flex: 1; }
   .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-  .tag {
-    font-size: 11px; font-weight: 500;
-    background: rgba(29,158,117,.15);
-    color: var(--accent);
-    padding: 3px 10px; border-radius: 20px;
-  }
-  .drive-link {
-    display: block; font-size: 12px; color: var(--accent);
-    text-decoration: none; margin-bottom: 12px;
-    padding: 8px 12px;
-    background: rgba(29,158,117,.08);
-    border-radius: 8px;
-  }
+  .tag { font-size: 11px; font-weight: 500; background: rgba(22,184,243,.12); color: var(--accent2); padding: 3px 10px; border-radius: 20px; }
+  .drive-link { display: block; font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; padding: 8px 12px; background: rgba(29,158,117,.08); border-radius: 8px; }
   .drive-link:hover { background: rgba(29,158,117,.15); }
-  .app-btn {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    background: var(--accent);
-    color: white; text-decoration: none;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 14px; font-weight: 700;
-    transition: opacity .2s;
-    width: 100%;
-  }
-  .app-btn:hover { opacity: .85; }
+  .app-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--surface2); border: 1px solid rgba(22,184,243,.3); color: var(--accent2); text-decoration: none; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 700; transition: all .2s; width: 100%; }
+  .app-btn:hover { background: var(--accent2); color: #0F1923; border-color: var(--accent2); }
 
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 24px;
-    text-align: center;
-    font-size: 12px; color: var(--text2);
-  }
+  footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; font-size: 12px; color: var(--text2); }
 
-  @media (max-width: 600px) {
-    .roleplay-card, .form-card { flex-direction: column; }
+  @media (max-width: 700px) {
+    .rp-grid { grid-template-columns: 1fr; }
     .steps { flex-direction: column; }
-    .step { border-right: none; border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .step { border-right: none; border-bottom: 1px solid var(--border); }
     .step:last-child { border-bottom: none; }
+    .form-card { flex-direction: column; }
   }
 </style>
 </head>
@@ -328,8 +127,8 @@
 <div id="lockScreen">
   <div class="lock-box">
     <div class="lock-logo">🤖</div>
-    <div class="lock-title">AIミニアプリ体験コーナー</div>
-    <div class="lock-sub">ワークショップ参加者専用ページです<br>講師からお伝えしたパスワードを入力してください</div>
+    <div class="lock-title">AIワークショップ専用ページ</div>
+    <div class="lock-sub">参加者専用ページです<br>講師からお伝えしたパスワードを入力してください</div>
     <input class="lock-input" type="password" id="pwInput" placeholder="パスワードを入力" maxlength="20" onkeydown="if(event.key==='Enter')tryUnlock()">
     <button class="lock-btn" onclick="tryUnlock()">入室する →</button>
     <div class="lock-error" id="lockError">パスワードが違います。講師にご確認ください。</div>
@@ -340,22 +139,70 @@
 <!-- メインページ -->
 <div id="mainPage">
   <header>
-    <div class="header-left">
+    <div>
       <span class="header-badge">WS専用</span>
-      <span class="header-title">AIミニアプリ体験コーナー</span>
+      <span class="header-title">AI経営参謀ワークショップ</span>
     </div>
     <div class="header-right">株式会社ストラテジーエイド</div>
   </header>
 
-  <div class="hero">
-    <span class="hero-eyebrow">AI経営参謀ワークショップ</span>
-    <h1>AIを使った業務効率化を<br>今日、体験してください</h1>
-    <p class="hero-sub">以下の手順でアプリを開いて使ってみましょう。デモ用データはQRコードからダウンロードできます。</p>
+  <!-- ========== PART 1：ロールプレイ ========== -->
+  <div class="part-wrap">
+    <div class="part-badge green">🎯 &nbsp;PART 1　経営課題ロールプレイ</div>
+    <p class="part-sub">グループで1台のPCを使用します。AとBの2種類があります。講師の指示に従って選択してください。</p>
+  </div>
 
+  <div class="rp-grid">
+    <div class="rp-card a">
+      <div>
+        <div class="rp-letter">A</div>
+        <span class="rp-type-badge">経営者課題提案型</span>
+      </div>
+      <div class="rp-name">経営者課題提案：課題解決シミュレーター</div>
+      <div class="rp-desc">与えられた課題・選択した課題の詳細に経営者が回答するタイプ。AIが課題を提示し、経営者が回答しながら深掘りします。</div>
+      <a href="https://aistudio.google.com/apps/1d34310d-0f9b-4bfa-ac6e-64ec7d99798e?showAssistant=true&project=gen-lang-client-0849490181&showPreview=true" target="_blank" class="rp-btn">🚀 アプリを開く</a>
+    </div>
+
+    <div class="rp-card b">
+      <div>
+        <div class="rp-letter">B</div>
+        <span class="rp-type-badge">経営者自由提案型</span>
+      </div>
+      <div class="rp-name">経営課題を経営者が提案ロールプレイ</div>
+      <div class="rp-desc">経営者が自ら課題を選択し、課題の詳細を説明してAIと共に深掘りしていくタイプ。業種・課題・伴走者タイプを選んで開始します。</div>
+      <a href="https://aistudio.google.com/apps/afda763c-6053-47cb-891e-178e9e1f2697?showPreview=true&showAssistant=true" target="_blank" class="rp-btn">🚀 アプリを開く</a>
+    </div>
+  </div>
+
+  <!-- 結果提出フォーム -->
+  <div class="form-wrap">
+    <div class="form-card">
+      <div class="form-content">
+        <div class="form-label">A・B 共通 · ロールプレイ終了後 · 必須</div>
+        <div class="form-title">📋 結果提出フォーム</div>
+        <div class="form-desc">
+          ロールプレイ終了後、会話内容とAIフィードバックをコピーして送信してください。講師がコメントを準備します。<br>
+          <span style="font-size:12px;color:#8FA3BC;margin-top:4px;display:block;">Ctrl+A（全選択）→ Ctrl+C（コピー）→ フォームに Ctrl+V（貼付）→ 送信</span>
+        </div>
+      </div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfkU-PQQcrsOvAfacy6ph2TTJidTUFPn8FA12KpWN91mv8nkQ/viewform" target="_blank" class="form-btn">📤 フォームを開く</a>
+    </div>
+  </div>
+
+  <!-- 仕切り -->
+  <div class="divider"><hr></div>
+
+  <!-- ========== PART 2：ミニアプリ ========== -->
+  <div class="part-wrap">
+    <div class="part-badge blue">⚡ &nbsp;PART 2　AIミニアプリ体験</div>
+    <p class="part-sub">各自のPCで体験してください。デモ用データはQRコードから共有フォルダを開いてダウンロードできます。</p>
+  </div>
+
+  <div class="steps-wrap">
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
-        <div class="step-text"><strong>使いたいアプリを選ぶ</strong>「アプリを開く」ボタンをクリック</div>
+        <div class="step-text"><strong>使いたいアプリを選ぶ</strong>「アプリを開く」をクリック</div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
@@ -372,39 +219,12 @@
     </div>
   </div>
 
-  <!-- ロールプレイアプリ -->
-  <div class="roleplay-banner">
-    <div class="roleplay-card">
-      <div class="roleplay-icon">🎯</div>
-      <div class="roleplay-content">
-        <div class="roleplay-label">グループで使用 · Part 1</div>
-        <div class="roleplay-title">経営課題ロールプレイアプリ</div>
-        <div class="roleplay-desc">業種・経営課題・伴走者タイプを選んでAIと対話。グループで1台のPCを使ってください。マイクボタンを押して話しかけるだけで始められます。</div>
-      </div>
-      <a href="https://aistudio.google.com/apps/afda763c-6053-47cb-891e-178e9e1f2697?showPreview=true&showAssistant=true" target="_blank" class="roleplay-btn">🚀 アプリを開く</a>
-    </div>
-  </div>
-
-  <!-- 結果提出フォーム -->
-  <div class="form-banner">
-    <div class="form-card">
-      <div class="form-content">
-        <div class="form-label">ロールプレイ終了後 · 必須</div>
-        <div class="form-title">📋 結果提出フォーム</div>
-        <div class="form-desc">ロールプレイ終了後、会話内容とAIフィードバックをコピーしてこのフォームに送信してください。講師がコメントを準備します。</div>
-      </div>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfkU-PQQcrsOvAfacy6ph2TTJidTUFPn8FA12KpWN91mv8nkQ/viewform" target="_blank" class="form-btn">📤 フォームを開く</a>
-    </div>
-  </div>
-
-  <!-- ミニアプリ一覧 -->
   <div class="section">
     <div class="section-header">
       <div class="section-dot"></div>
       <div class="section-title">ミニアプリ一覧</div>
       <div class="section-count">全5アプリ · 各自のPCで体験</div>
     </div>
-
     <div class="grid">
 
       <div class="card">
@@ -415,9 +235,7 @@
         </div>
         <div class="card-body">
           <div class="card-desc">営業スキルの向上を支援するAI対話型ロールプレイ練習ツールです。商材や顧客タイプを設定して、リアルな商談練習と具体的なフィードバックを受けられます。</div>
-          <div class="card-tags">
-            <span class="tag">Build</span><span class="tag">営業研修</span><span class="tag">ロールプレイ</span><span class="tag">AI対話</span>
-          </div>
+          <div class="card-tags"><span class="tag">Build</span><span class="tag">営業研修</span><span class="tag">ロールプレイ</span><span class="tag">AI対話</span></div>
           <a href="https://service-1006509308450.us-west1.run.app" target="_blank" class="app-btn">🚀 アプリを開く</a>
         </div>
       </div>
@@ -430,10 +248,8 @@
         </div>
         <div class="card-body">
           <div class="card-desc">紙またはPDFの領収書・請求書を読み込んで、会計システムに渡せるCSVデータを自動作成します。手入力の手間を大幅に削減できます。</div>
-          <div class="card-tags">
-            <span class="tag">Build</span><span class="tag">経理</span><span class="tag">OCR</span><span class="tag">CSV出力</span>
-          </div>
-          <a href="DRIVE_URL" target="_blank" class="drive-link">📁 デモ用データはこちら（共有フォルダ）→</a>
+          <div class="card-tags"><span class="tag">Build</span><span class="tag">経理</span><span class="tag">OCR</span><span class="tag">CSV出力</span></div>
+          <a id="drive2" href="#" target="_blank" class="drive-link">📁 デモ用データはこちら（共有フォルダ）→</a>
           <a href="https://remix-smart-invoice-extractor-969769004178.us-west1.run.app/" target="_blank" class="app-btn">🚀 アプリを開く</a>
         </div>
       </div>
@@ -446,10 +262,8 @@
         </div>
         <div class="card-body">
           <div class="card-desc">紙またはPDFの各種書類を読み込んで、Word形式に変換するOCRツールです。手書き書類のデジタル化や書類整理の効率化に活用できます。</div>
-          <div class="card-tags">
-            <span class="tag">Build</span><span class="tag">OCR</span><span class="tag">Word変換</span><span class="tag">書類デジタル化</span>
-          </div>
-          <a href="DRIVE_URL" target="_blank" class="drive-link">📁 デモ用データはこちら（共有フォルダ）→</a>
+          <div class="card-tags"><span class="tag">Build</span><span class="tag">OCR</span><span class="tag">Word変換</span><span class="tag">書類デジタル化</span></div>
+          <a id="drive3" href="#" target="_blank" class="drive-link">📁 デモ用データはこちら（共有フォルダ）→</a>
           <a href="https://document-to-word-ocr-969769004178.us-west1.run.app" target="_blank" class="app-btn">🚀 アプリを開く</a>
         </div>
       </div>
@@ -462,10 +276,8 @@
         </div>
         <div class="card-body">
           <div class="card-desc">動画録画ファイルや音声録音ファイルから、詳細な議事録と決定事項を抽出した要約版を自動生成します。Word形式での書き出しも可能です。</div>
-          <div class="card-tags">
-            <span class="tag">Build</span><span class="tag">議事録</span><span class="tag">音声認識</span><span class="tag">Word出力</span>
-          </div>
-          <a href="DRIVE_URL" target="_blank" class="drive-link">📁 デモ用データはこちら（共有フォルダ）→</a>
+          <div class="card-tags"><span class="tag">Build</span><span class="tag">議事録</span><span class="tag">音声認識</span><span class="tag">Word出力</span></div>
+          <a id="drive4" href="#" target="_blank" class="drive-link">📁 デモ用データはこちら（共有フォルダ）→</a>
           <a href="https://service-969769004178.us-west1.run.app" target="_blank" class="app-btn">🚀 アプリを開く</a>
         </div>
       </div>
@@ -478,9 +290,7 @@
         </div>
         <div class="card-body">
           <div class="card-desc">店頭POP・チラシ・お知らせの文章とレイアウトをAIが瞬時に生成します。A4デザインのプレビュー表示とWord出力に対応。商品名・強み・ターゲットを入力するだけで完成します。</div>
-          <div class="card-tags">
-            <span class="tag">Build</span><span class="tag">チラシ</span><span class="tag">店頭POP</span><span class="tag">デザイン</span>
-          </div>
+          <div class="card-tags"><span class="tag">Build</span><span class="tag">チラシ</span><span class="tag">店頭POP</span><span class="tag">デザイン</span></div>
           <a href="https://pop-969769004178.us-west1.run.app" target="_blank" class="app-btn">🚀 アプリを開く</a>
         </div>
       </div>
@@ -488,70 +298,36 @@
     </div>
   </div>
 
-  <footer>
-    © 株式会社ストラテジーエイド｜ワークショップ参加者専用ページ
-  </footer>
+  <footer>© 株式会社ストラテジーエイド｜AI経営参謀ワークショップ参加者専用ページ</footer>
 </div>
 
 <script>
-  // ============================================================
-  // 設定（ここを変更するだけで運用できます）
-  // ============================================================
-  const PASSWORD = "ws0807";          // ← 受講者・リハーサル用パスワード
-  const TEST_PASSWORD = "maeda0617";  // ← 講師テスト用パスワード（日付制限なし）
-  const DRIVE_URL = "https://drive.google.com/drive/folders/10duSj-asZjtD8xd543ZKR_j8oWNeu89F";
-
-  // アクセス可能な日付（この日付以外はロック状態のまま）
-  // ※テスト用パスワードは日付に関係なく常時使用可能
+  const PASSWORD      = "ws0807";
+  const TEST_PASSWORD = "maeda0617";
+  const DRIVE_URL     = "https://drive.google.com/drive/folders/10duSj-asZjtD8xd543ZKR_j8oWNeu89F";
   const ALLOWED_DATES = ["2026-06-17", "2026-06-21", "2026-08-07"];
 
-  // ============================================================
-  // ドライブURLをページ内のリンクに反映
-  // ============================================================
-  document.querySelectorAll('a[href="DRIVE_URL"]').forEach(a => {
-    a.href = DRIVE_URL;
-  });
+  // ドライブURLをセット
+  document.querySelectorAll('#drive2,#drive3,#drive4').forEach(a => a.href = DRIVE_URL);
 
-  // ============================================================
-  // 日付チェック（アクセス可能日かどうか）
-  // ============================================================
   function getTodayStr() {
     const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
+  function isAllowedDate() { return ALLOWED_DATES.includes(getTodayStr()); }
 
-  function isAllowedDate() {
-    return ALLOWED_DATES.includes(getTodayStr());
-  }
-
-  // ============================================================
-  // ロック解除
-  // ============================================================
   function tryUnlock() {
     const input = document.getElementById('pwInput').value.trim();
-
-    // テスト用パスワードは日付制限なし・常時使用可能
-    if (input === TEST_PASSWORD) {
-      document.getElementById('lockScreen').style.display = 'none';
-      document.getElementById('mainPage').style.display = 'block';
-      sessionStorage.setItem('ws_unlocked', '1');
-      return;
-    }
-
-    // 通常パスワードは許可日のみ
+    // テスト用PW：日付制限なし
+    if (input === TEST_PASSWORD) { unlock(); return; }
+    // 日付チェック
     if (!isAllowedDate()) {
       document.getElementById('lockClosed').style.display = 'block';
       document.getElementById('lockError').style.display = 'none';
       return;
     }
-
     if (input === PASSWORD) {
-      document.getElementById('lockScreen').style.display = 'none';
-      document.getElementById('mainPage').style.display = 'block';
-      sessionStorage.setItem('ws_unlocked', '1');
+      unlock();
     } else {
       document.getElementById('lockError').style.display = 'block';
       document.getElementById('lockClosed').style.display = 'none';
@@ -560,18 +336,17 @@
     }
   }
 
-  // ============================================================
-  // 初期化：セッション内で一度解除済みなら再表示
-  // ============================================================
+  function unlock() {
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('mainPage').style.display = 'block';
+    sessionStorage.setItem('ws_unlocked','1');
+  }
+
   window.addEventListener('load', () => {
-    if (!isAllowedDate()) {
+    if (!isAllowedDate() && sessionStorage.getItem('ws_unlocked') !== '1') {
       document.getElementById('lockClosed').style.display = 'block';
-      return;
     }
-    if (sessionStorage.getItem('ws_unlocked') === '1') {
-      document.getElementById('lockScreen').style.display = 'none';
-      document.getElementById('mainPage').style.display = 'block';
-    }
+    if (sessionStorage.getItem('ws_unlocked') === '1') { unlock(); return; }
     document.getElementById('pwInput').focus();
   });
 </script>
