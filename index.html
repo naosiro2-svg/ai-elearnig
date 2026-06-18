@@ -416,7 +416,7 @@ function checkPw(){
     // GA: ログイン成功イベント
     if(typeof gtag !== 'undefined') gtag('event', 'login', { method: 'password', event_category: 'engagement' });
     // スプレッドシートに記録（名前付き）
-    sendLog('ログイン成功', 'eラーニング｜' + name);
+    sendLog('ログイン成功', 'eラーニング|||' + name);
     if(localStorage.getItem('howto_skip') !== '1'){
       setTimeout(openHowto, 600);
     }
@@ -427,7 +427,7 @@ function checkPw(){
     // GA: ログイン失敗イベント
     if(typeof gtag !== 'undefined') gtag('event', 'login_failed', { event_category: 'security' });
     // スプレッドシートに記録（不正アクセス検知・名前付き）
-    sendLog('ログイン失敗', 'パスワード不一致｜' + name);
+    sendLog('ログイン失敗', 'パスワード不一致|||' + name);
   }
 }
 if(sessionStorage.getItem('loggedIn')==='1'){
@@ -546,7 +546,7 @@ function markDone(){
   });
   // スプレッドシートに視聴完了を記録
   const name = sessionStorage.getItem('userEmail') || '（不明）';
-  sendLog('視聴完了', lessons[current].badge + ' ' + lessons[current].name + '｜' + name);
+  sendLog('視聴完了', lessons[current].badge + ' ' + lessons[current].name + '|||' + name);
 }
 function nextLesson(){if(current<lessons.length-1)selectLesson(current+1);}
 function prevLesson(){if(current>0)selectLesson(current-1);}
