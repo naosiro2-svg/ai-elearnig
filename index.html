@@ -101,6 +101,10 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
 .vc-btn:hover{color:#fff;background:rgba(255,255,255,.1);}
 .done-btn{background:var(--green-mid);color:#fff;border:none;border-radius:5px;padding:5px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
 .done-btn:hover{background:var(--green);}
+.done-btn.locked{background:#94a3b8;cursor:not-allowed;opacity:.8;}
+.done-btn.locked:hover{background:#94a3b8;}
+.comment-required-msg{font-size:11px;color:#f59e0b;font-weight:600;margin-left:8px;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 /* ── 総合テストバナー ── */
 .final-banner{display:none;background:linear-gradient(135deg,#0f7a5a,#1D9E75);padding:12px 20px;align-items:center;gap:14px;}
 .final-banner.show{display:flex;}
@@ -136,6 +140,13 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
 .ex-hint-label{font-size:10px;font-weight:700;color:var(--green);display:block;margin-bottom:5px;}
 .ex-copy-btn{font-size:11px;background:#e8f5f0;color:var(--green);border:1px solid var(--green-mid);border-radius:4px;padding:3px 10px;cursor:pointer;font-family:inherit;float:right;margin-bottom:4px;}
 .ex-copy-btn:hover{background:var(--green-mid);color:#fff;}
+.ex-comment-wrap{margin-top:10px;border-top:1px dashed #e2e8f0;padding-top:10px;}
+.ex-comment-label{font-size:11px;color:#64748b;margin-bottom:6px;display:block;}
+.ex-comment-input{width:100%;padding:8px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;min-height:70px;line-height:1.7;color:#374151;}
+.ex-comment-input:focus{outline:none;border-color:var(--green-mid);}
+.ex-comment-btn{margin-top:6px;font-size:12px;background:var(--green-mid);color:#fff;border:none;border-radius:5px;padding:5px 16px;cursor:pointer;font-family:inherit;}
+.ex-comment-btn:hover{background:var(--green);}
+.ex-comment-btn.sent{background:#94a3b8;cursor:default;}
 /* 演習データ案内バナー */
 .ex-drive-banner{background:#e8f5f0;border:1px solid #86efac;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--green);display:flex;align-items:center;gap:8px;}
 .ex-drive-banner a{color:var(--green);font-weight:700;text-decoration:underline;}
@@ -361,10 +372,10 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
     <!-- 総合テストバナー -->
     <div class="final-banner" id="finalBanner">
       <div class="fb-text">
-        <h3>🎉 全7動画の視聴お疲れさまでした！</h3>
-        <p>総合確認テストで理解度を確認しましょう（所要時間：約10分）</p>
+        <h3 id="finalBannerTitle">🎉 全7動画の視聴お疲れさまでした！</h3>
+        <p id="finalBannerMsg">総合確認テストで理解度を確認しましょう（所要時間：約10分）</p>
       </div>
-      <a href="quiz.html" class="fb-btn">総合確認テストへ →</a>
+      <a href="quiz.html" class="fb-btn" id="finalBannerBtn">総合確認テストへ →</a>
     </div>
 
     <div class="content-area">
@@ -562,10 +573,11 @@ function selectLesson(i){
     document.getElementById('vsub'+j).textContent=`動画${NUMS[i]}-${j+1}`;
   });
   document.getElementById('exTabBtn').style.display='none';
-  document.getElementById('finalBanner').className='final-banner'+(i===6?' show':'');
+  // 最終バナーの状態更新
+updateFinalBanner();
   document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
   document.getElementById('nextBtn').style.visibility=i===6?'hidden':'visible';
-  loadVideo();updateProgress();renderSidebar();renderAll();
+  loadVideo();updateProgress();renderSidebar();renderAll();setTimeout(updateDoneBtn,100);
   showTab('desc',document.querySelector('.tab-btn'));
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -583,8 +595,93 @@ function seekProg(e){
   simProg=Math.max(0,Math.min(100,Math.round((e.clientX-r.left)/r.width*100)));
   updateProgress();
 }
+function checkCommentDone(){
+  // 演習問題があるかチェック
+  const c = CONTENT[current];
+  if(!c || !c.exercises || c.exercises.length === 0) return true;
+  // localStorageにコメント送信済みフラグがあるかチェック
+  return localStorage.getItem('commented_' + current) === '1';
+}
+
+function updateFinalBanner(){
+  const doneCount = lessons.filter(l => l.done).length;
+  const banner = document.getElementById('finalBanner');
+  const btn = document.getElementById('finalBannerBtn');
+  const title = document.getElementById('finalBannerTitle');
+  const msg = document.getElementById('finalBannerMsg');
+  if(!banner) return;
+
+  if(doneCount < 7){
+    banner.className = 'final-banner' + (doneCount > 0 ? ' show' : '');
+    if(title) title.textContent = `📺 あと ${7 - doneCount} 本の動画を視聴完了にしてください`;
+    if(msg) msg.textContent = '全7本の視聴完了後に総合確認テストが受けられます';
+    if(btn){
+      btn.style.background = '#94a3b8';
+      btn.style.cursor = 'not-allowed';
+      btn.onclick = function(e){
+        e.preventDefault();
+        const flash = document.createElement('div');
+        flash.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#ef4444;color:#fff;padding:12px 28px;border-radius:99px;font-size:14px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);';
+        flash.textContent = `⚠️ あと${7-doneCount}本の動画を視聴完了にしてからテストへ進んでください`;
+        document.body.appendChild(flash);
+        setTimeout(()=>flash.remove(), 3500);
+      };
+    }
+  } else {
+    banner.className = 'final-banner show';
+    if(title) title.textContent = '🎉 全7動画の視聴お疲れさまでした！';
+    if(msg) msg.textContent = '総合確認テストで理解度を確認しましょう（所要時間：約10分）';
+    if(btn){
+      btn.style.background = '';
+      btn.style.cursor = '';
+      btn.onclick = null;
+      btn.href = 'quiz.html';
+    }
+  }
+}
+
+function updateDoneBtn(){
+  const btn = document.querySelector('.done-btn');
+  if(!btn) return;
+  const c = CONTENT[current];
+  const hasEx = c && c.exercises && c.exercises.length > 0;
+  const commented = checkCommentDone();
+  if(hasEx && !commented){
+    btn.classList.add('locked');
+    btn.title = '演習問題のコメントを送信してから押してください';
+  } else {
+    btn.classList.remove('locked');
+    btn.title = '';
+  }
+}
+
 function markDone(){
-  lessons[current].done=true;simProg=100;updateProgress();renderSidebar();saveProgress();
+  // コメント送信チェック
+  if(!checkCommentDone()){
+    // ロックされている場合はメッセージ表示
+    const btn = document.querySelector('.done-btn');
+    btn.classList.add('locked');
+    // 演習問題タブに誘導
+    const exBtn = document.getElementById('exTabBtn');
+    if(exBtn && exBtn.style.display !== 'none'){
+      showTab('exercise', exBtn);
+      exBtn.style.animation = 'blink 0.5s 3';
+      setTimeout(()=>exBtn.style.animation='', 1500);
+    }
+    // メッセージ表示
+    let msg = document.getElementById('commentRequiredMsg');
+    if(!msg){
+      msg = document.createElement('span');
+      msg.id = 'commentRequiredMsg';
+      msg.className = 'comment-required-msg';
+      msg.textContent = '📝 演習問題に1問コメントを送信してください';
+      btn.parentNode.insertBefore(msg, btn.nextSibling);
+    }
+    msg.style.display = 'inline';
+    setTimeout(()=>{ if(msg) msg.style.display='none'; }, 4000);
+    return;
+  }
+  lessons[current].done=true;simProg=100;updateProgress();renderSidebar();saveProgress();updateFinalBanner();updateDoneBtn();
   // GA: 動画視聴完了イベント
   if(typeof gtag !== 'undefined') gtag('event', 'video_complete', {
     event_category: 'learning',
@@ -632,6 +729,10 @@ function renderExercises(){
       </a>
       にあります
     </div>
+    <div style="background:#fff8ed;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#78350f;line-height:1.7;">
+      📝 <strong>1問以上Geminiで試して、コメントを送信してください。</strong><br>
+      コメントを送信すると「✓ 視聴完了」ボタンが押せるようになります。
+    </div>
     <div class="ex-title">演習問題 — Geminiで実際に操作してみましょう</div>`+
   exs.map((ex,ei)=>`<div class="ex-item">
     <div class="ex-num">問題 ${ei+1}</div>
@@ -643,7 +744,45 @@ function renderExercises(){
       <button class="ex-copy-btn" onclick="copyEx(this,'hint')">📋 ヒントをコピー</button>
       <div class="ex-hint"><span class="ex-hint-label">💡 ヒント</span>${esc(ex.hint)}</div>
     </div>
+    <div class="ex-comment-wrap">
+      <span class="ex-comment-label">📝 やってみた感想・気づきを残しましょう（任意）</span>
+      <textarea class="ex-comment-input" id="comment_${current}_${ei}" placeholder="例：うまくできました / ○○が難しかった / ○○という結果になった"></textarea>
+      <button class="ex-comment-btn" onclick="submitComment(${current},${ei},this)">送信する</button>
+    </div>
   </div>`).join('');
+}
+
+function submitComment(videoIdx, exIdx, btn){
+  const email = sessionStorage.getItem('userEmail') || '（未入力）';
+  const commentEl = document.getElementById('comment_' + videoIdx + '_' + exIdx);
+  const comment = commentEl.value.trim();
+  if(!comment){
+    commentEl.style.borderColor = '#f59e0b';
+    commentEl.placeholder = '感想・気づきを入力してから送信してください';
+    setTimeout(()=>{ commentEl.style.borderColor=''; }, 2000);
+    return;
+  }
+  const videoName = lessons[videoIdx].badge + ' ' + lessons[videoIdx].name;
+  const detail = '演習コメント|||' + email + '|||' + videoName + ' 問題' + (exIdx+1) + '|||' + comment;
+  sendLog('演習コメント', detail);
+  // コメント送信済みフラグを保存
+  localStorage.setItem('commented_' + videoIdx, '1');
+  btn.textContent = '✅ 送信済み';
+  btn.classList.add('sent');
+  btn.disabled = true;
+  commentEl.disabled = true;
+  commentEl.style.background = '#f8fafc';
+  // 視聴完了ボタンのロックを解除
+  updateDoneBtn();
+  // 解除メッセージ
+  const doneBtn = document.querySelector('.done-btn');
+  if(doneBtn){
+    const flash = document.createElement('div');
+    flash.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1D9E75;color:#fff;padding:12px 28px;border-radius:99px;font-size:14px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);';
+    flash.textContent = '✅ コメント送信完了！「✓ 視聴完了」ボタンが押せるようになりました';
+    document.body.appendChild(flash);
+    setTimeout(()=>flash.remove(), 3500);
+  }
 }
 
 function copyEx(btn, type){
