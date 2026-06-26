@@ -387,6 +387,34 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
 
 <script>
 const PASSWORD = "nagasaki2026";
+
+// ── 登録受講者メアドリスト ──
+const ALLOWED_EMAILS = [
+  "m-sasano@fuyou-nagasaki.co.jp",
+  "tanaka@smifulhome.jp",
+  "ma-bull109mikko@docomo.ne.jp",
+  "ybs-tt0123@outlook.jp",
+  "mken_ta@yahoo.co.jp",
+  "shimomura@n-kensou.com",
+  "komatu_setubi_yuuko@xqg.biglobe.ne.jp",
+  "ogatasw.with.office@gmail.com",
+  "sanuiyuu1210@gmail.com",
+  "nagasou@ngs1.cncm.ne.jp",
+  "shimabara.forest@gmail.com",
+  "misao.k@lunon.co.jp",
+  "m.sakamoto@sakamoto1956.co.jp",
+  "horikawa@takeoff2012.com",
+  "mitsuonakayama1688@gmail.com",
+  "fuyou-k@estate.ocn.ne.jp",
+  "ooki0917@gmail.com",
+  "shi_takeda@mx61.tiki.ne.jp",
+  "grasswonder4cm@yahoo.co.jp",
+  "sr-araki@sage.ocn.ne.jp",
+  "earth.kenchiku@gmail.com",
+  "naosiro2@gmail.com",
+  "hamasaki.ryunosuke@think-nagasaki.or.jp",
+  "bfd483221@phe.bbiq.jp",
+];
 // ── ログ記録先（GASのWebアプリURL）──
 // ★ GASをデプロイ後、以下のURLを書き換えてください
 const LOG_URL = "https://script.google.com/macros/s/AKfycbz1462f4KTlo_odm3PE1A0GAzwHQW0Hj4ENYTIWcefYpA416iBV8udCNii3wfRi2XWK/exec";
@@ -406,13 +434,27 @@ function sendLog(type, detail) {
 
 function checkPw(){
   const val = document.getElementById('pwInput').value;
-  const name = document.getElementById('nameInput').value.trim() || '（メアド未入力）';
+  const name = document.getElementById('nameInput').value.trim();
+  // メアド未入力チェック
+  if(!name){
+    document.getElementById('pwError').textContent = 'メールアドレスを入力してください';
+    document.getElementById('nameInput').focus();
+    setTimeout(()=>document.getElementById('pwError').textContent='', 3000);
+    return;
+  }
+  // 登録メアドチェック
+  if(!ALLOWED_EMAILS.includes(name.toLowerCase())){
+    document.getElementById('pwError').textContent = '登録されていないメールアドレスです。事務局にお問い合わせください。';
+    setTimeout(()=>document.getElementById('pwError').textContent='', 4000);
+    sendLog('ログイン拒否', '未登録メアド|||' + name);
+    return;
+  }
   if(val === PASSWORD){
     document.getElementById('loginScreen').classList.add('hidden');
     sessionStorage.setItem('loggedIn','1');
     sessionStorage.setItem('userEmail', name);
     // メルアドをlocalStorageに保存（次回自動入力用）
-    if(name !== '（メアド未入力）') localStorage.setItem('userEmail', name);
+    localStorage.setItem('userEmail', name);
     // GA: ログイン成功イベント
     if(typeof gtag !== 'undefined') gtag('event', 'login', { method: 'password', event_category: 'engagement' });
     // スプレッドシートに記録（名前付き）
