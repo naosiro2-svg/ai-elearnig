@@ -596,7 +596,9 @@ function seekProg(e){
   updateProgress();
 }
 function checkCommentDone(){
-  // 演習問題があるかチェック
+  // 演習問題タブが表示される動画かどうかで判定（hasDemoがfalseならコメント不要）
+  const l = lessons[current];
+  if(!l || !l.hasDemo) return true;
   const c = CONTENT[current];
   if(!c || !c.exercises || c.exercises.length === 0) return true;
   // localStorageにコメント送信済みフラグがあるかチェック
