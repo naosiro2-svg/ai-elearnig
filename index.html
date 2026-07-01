@@ -434,6 +434,49 @@ const ALLOWED_EMAILS = [
 // ★ GASをデプロイ後、以下のURLを書き換えてください
 const LOG_URL = "https://script.google.com/macros/s/AKfycbz1462f4KTlo_odm3PE1A0GAzwHQW0Hj4ENYTIWcefYpA416iBV8udCNii3wfRi2XWK/exec";
 
+// ── GASから進捗を復元 ──
+function restoreProgress(email) {
+  if(!LOG_URL || LOG_URL === "YOUR_GAS_WEB_APP_URL_HERE") return;
+  const url = LOG_URL.replace('/exec', '/exec') + '?email=' + encodeURIComponent(email);
+  fetch(url, { method: 'GET', mode: 'cors' })
+    .then(r => r.json())
+    .then(data => {
+      if(data.status !== 'ok') return;
+      let restored = 0;
+
+      // 視聴完了を復元
+      if(data.completed && data.completed.length > 0){
+        data.completed.forEach(idx => {
+          if(idx >= 0 && idx < lessons.length && !lessons[idx].done){
+            lessons[idx].done = true;
+            restored++;
+          }
+        });
+      }
+
+      // コメント送信済みを復元
+      if(data.comments && data.comments.length > 0){
+        data.comments.forEach(idx => {
+          localStorage.setItem('commented_' + idx, '1');
+        });
+      }
+
+      if(restored > 0){
+        saveProgress();
+        updateProgress();
+        renderSidebar();
+        updateFinalBanner();
+        // 復元通知
+        const flash = document.createElement('div');
+        flash.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1D9E75;color:#fff;padding:12px 28px;border-radius:99px;font-size:14px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);';
+        flash.textContent = '✅ 前回の視聴進捗（' + restored + '本）を復元しました';
+        document.body.appendChild(flash);
+        setTimeout(() => flash.remove(), 4000);
+      }
+    })
+    .catch(() => {}); // エラーは無視
+}
+
 function sendLog(type, detail) {
   if (!LOG_URL || LOG_URL === "YOUR_GAS_WEB_APP_URL_HERE") return;
   const now = new Date();
@@ -474,6 +517,8 @@ function checkPw(){
     if(typeof gtag !== 'undefined') gtag('event', 'login', { method: 'password', event_category: 'engagement' });
     // スプレッドシートに記録（名前付き）
     sendLog('ログイン成功', 'eラーニング|||' + name);
+    // GASから進捗を復元
+    restoreProgress(name);
     if(localStorage.getItem('howto_skip') !== '1'){
       setTimeout(openHowto, 600);
     }
@@ -696,7 +741,25 @@ function markDone(){
 function nextLesson(){if(current<lessons.length-1)selectLesson(current+1);}
 function prevLesson(){if(current>0)selectLesson(current-1);}
 
-function renderAll(){renderDesc();renderPrompts();renderExercises();}
+function renderAll(){renderDesc();renderPrompts();renderExercises();restoreComments();}
+
+function restoreComments(){
+  const exs = (CONTENT[current]||{}).exercises||[];
+  exs.forEach((ex,ei)=>{
+    const savedComment = localStorage.getItem('comment_text_' + current + '_' + ei);
+    const commentEl = document.getElementById('comment_' + current + '_' + ei);
+    const btnEl = document.getElementById('commentBtn_' + current + '_' + ei);
+    if(savedComment && commentEl && btnEl){
+      commentEl.value = savedComment;
+      commentEl.disabled = true;
+      commentEl.style.background = '#f8fafc';
+      commentEl.style.color = '#374151';
+      btnEl.textContent = '✅ 送信済み';
+      btnEl.classList.add('sent');
+      btnEl.disabled = true;
+    }
+  });
+}
 
 function renderDesc(){
   const c=CONTENT[current];
@@ -732,8 +795,9 @@ function renderExercises(){
       にあります
     </div>
     <div style="background:#fff8ed;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#78350f;line-height:1.7;">
-      📝 <strong>1問以上Geminiで試して、コメントを送信してください。</strong><br>
-      コメントを送信すると「✓ 視聴完了」ボタンが押せるようになります。
+      📝 <strong>1問以上Geminiで実際に試してください。</strong><br>
+      回答後、感想等を書いて送信してください。送信すると「✓ 視聴完了」ボタンが押せるようになります。<br>
+      <span style="font-size:11px;color:#92400e;">※ この感想等の内容はサイト上には表示されません</span>
     </div>
     <div class="ex-title">演習問題 — Geminiで実際に操作してみましょう</div>`+
   exs.map((ex,ei)=>`<div class="ex-item">
@@ -747,9 +811,9 @@ function renderExercises(){
       <div class="ex-hint"><span class="ex-hint-label">💡 ヒント</span>${esc(ex.hint)}</div>
     </div>
     <div class="ex-comment-wrap">
-      <span class="ex-comment-label">📝 やってみた感想・気づきを残しましょう（任意）</span>
-      <textarea class="ex-comment-input" id="comment_${current}_${ei}" placeholder="例：うまくできました / ○○が難しかった / ○○という結果になった"></textarea>
-      <button class="ex-comment-btn" onclick="submitComment(${current},${ei},this)">送信する</button>
+      <span class="ex-comment-label">📝 回答後、感想等を書いて送信してください（この内容はサイト上には表示されません）</span>
+      <textarea class="ex-comment-input" id="comment_${current}_${ei}" placeholder="例：うまくできた / ○○という結果になった / ○○が難しかった"></textarea>
+      <button class="ex-comment-btn" id="commentBtn_${current}_${ei}" onclick="submitComment(${current},${ei},this)">送信する</button>
     </div>
   </div>`).join('');
 }
@@ -767,13 +831,15 @@ function submitComment(videoIdx, exIdx, btn){
   const videoName = lessons[videoIdx].badge + ' ' + lessons[videoIdx].name;
   const detail = '演習コメント|||' + email + '|||' + videoName + ' 問題' + (exIdx+1) + '|||' + comment;
   sendLog('演習コメント', detail);
-  // コメント送信済みフラグを保存
+  // コメント送信済みフラグとコメント内容をlocalStorageに保存
   localStorage.setItem('commented_' + videoIdx, '1');
+  localStorage.setItem('comment_text_' + videoIdx + '_' + exIdx, comment);
   btn.textContent = '✅ 送信済み';
   btn.classList.add('sent');
   btn.disabled = true;
   commentEl.disabled = true;
   commentEl.style.background = '#f8fafc';
+  commentEl.style.color = '#374151';
   // 視聴完了ボタンのロックを解除
   updateDoneBtn();
   // 解除メッセージ
