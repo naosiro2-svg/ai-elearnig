@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>総合確認テスト｜AIミニアプリ構築講座</title>
+<style>
+  :root {
+    --green-dark: #1B5E3B;
+    --green-mid: #2D7D52;
+    --green-light: #E8F5EE;
+    --green-pale: #f0faf5;
+    --green-accent: #A8D5B5;
+    --orange: #F4A742;
+    --orange-light: #fff3e0;
+    --red: #C0392B;
+    --red-light: #fdecea;
+    --text-dark: #1A2E23;
+    --text-mid: #3D5A46;
+    --text-gray: #6B7C72;
+    --white: #ffffff;
+    --shadow: 0 2px 12px rgba(27,94,59,0.10);
+    --shadow-lg: 0 8px 32px rgba(27,94,59,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: var(--green-pale);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--green-dark);
+    color: white;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  header .logo { font-size: 15px; font-weight: 700; letter-spacing: 0.02em; }
+  header .back-btn {
+    font-size: 13px;
+    color: var(--green-accent);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  header .back-btn:hover { color: white; }
+
+  /* ─── PROGRESS BAR ─── */
+  #progress-wrap {
+    background: var(--green-dark);
+    padding: 0 24px 12px;
+  }
+  #progress-bar-track {
+    background: rgba(255,255,255,0.2);
+    border-radius: 99px;
+    height: 6px;
+    width: 100%;
+  }
+  #progress-bar-fill {
+    background: var(--orange);
+    border-radius: 99px;
+    height: 6px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  #progress-text {
+    color: var(--green-accent);
+    font-size: 12px;
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* ─── MAIN CONTAINER ─── */
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 16px 80px;
+  }
+
+  /* ─── START SCREEN ─── */
+  #start-screen {
+    text-align: center;
+    padding: 48px 24px;
+  }
+  #start-screen .icon { font-size: 64px; margin-bottom: 16px; }
+  #start-screen h1 { font-size: 26px; color: var(--green-dark); margin-bottom: 8px; }
+  #start-screen p { color: var(--text-mid); font-size: 15px; line-height: 1.8; }
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .info-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px 12px;
+    border: 1px solid var(--green-accent);
+    box-shadow: var(--shadow);
+  }
+  .info-card .num { font-size: 28px; font-weight: 800; color: var(--green-dark); }
+  .info-card .label { font-size: 12px; color: var(--text-gray); margin-top: 2px; }
+  .notice-box {
+    background: var(--orange-light);
+    border-left: 4px solid var(--orange);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #7a5200;
+    text-align: left;
+    margin-bottom: 28px;
+    line-height: 1.7;
+  }
+  .name-section {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    text-align: left;
+  }
+  .name-section label { font-size: 14px; font-weight: 700; color: var(--text-dark); display: block; margin-bottom: 8px; }
+  .name-section input {
+    width: 100%;
+    border: 2px solid var(--green-accent);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .name-section input:focus { border-color: var(--green-mid); }
+
+  /* ─── BUTTONS ─── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 36px;
+    border-radius: 99px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .btn-primary {
+    background: var(--green-dark);
+    color: white;
+    box-shadow: 0 4px 16px rgba(27,94,59,0.3);
+  }
+  .btn-primary:hover { background: var(--green-mid); transform: translateY(-2px); }
+  .btn-primary:disabled { background: #ccc; transform: none; cursor: not-allowed; }
+  .btn-secondary {
+    background: var(--white);
+    color: var(--green-dark);
+    border: 2px solid var(--green-dark);
+  }
+  .btn-secondary:hover { background: var(--green-light); }
+
+  /* ─── QUIZ SCREEN ─── */
+  #quiz-screen { display: none; }
+  .question-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .q-number {
+    background: var(--green-dark);
+    color: white;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 4px 14px;
+    white-space: nowrap;
+  }
+  .q-tag {
+    background: var(--green-light);
+    color: var(--green-mid);
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+  }
+  .q-text {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--green-pale);
+    border: 2px solid var(--green-accent);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-dark);
+    text-align: left;
+    transition: all 0.15s;
+    line-height: 1.6;
+  }
+  .option-btn:hover:not(.disabled) { border-color: var(--green-mid); background: var(--green-light); }
+  .option-btn.selected { border-color: var(--green-dark); background: var(--green-light); }
+  .option-btn.correct { border-color: #27ae60; background: #eafaf1; }
+  .option-btn.wrong { border-color: var(--red); background: var(--red-light); }
+  .option-btn.disabled { cursor: default; }
+  .option-label {
+    background: var(--green-dark);
+    color: white;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .option-btn.correct .option-label { background: #27ae60; }
+  .option-btn.wrong .option-label { background: var(--red); }
+
+  .feedback-box {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.7;
+    display: none;
+  }
+  .feedback-box.correct { background: #eafaf1; border-left: 4px solid #27ae60; color: #1a5c36; }
+  .feedback-box.wrong { background: var(--red-light); border-left: 4px solid var(--red); color: #7a1c14; }
+
+  /* ─── NAVIGATION ─── */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .nav-counter { font-size: 14px; color: var(--text-gray); font-weight: 600; }
+
+  /* ─── RESULT SCREEN ─── */
+  #result-screen { display: none; }
+  .result-hero {
+    text-align: center;
+    padding: 40px 24px 32px;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 24px;
+  }
+  .result-icon { font-size: 72px; margin-bottom: 12px; }
+  .result-title { font-size: 24px; font-weight: 800; color: var(--green-dark); margin-bottom: 8px; }
+  .result-sub { font-size: 15px; color: var(--text-mid); line-height: 1.7; }
+  .score-big {
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--green-dark);
+    line-height: 1;
+    margin: 20px 0 4px;
+  }
+  .score-label { font-size: 18px; color: var(--text-gray); }
+  .score-bar-wrap {
+    background: var(--green-pale);
+    border-radius: 99px;
+    height: 16px;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto 0;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 16px;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--green-mid), var(--green-dark));
+    transition: width 1s ease;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .result-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .result-card .val { font-size: 28px; font-weight: 800; }
+  .result-card .key { font-size: 12px; color: var(--text-gray); margin-top: 4px; }
+  .result-card.pass .val { color: var(--green-dark); }
+  .result-card.fail .val { color: var(--red); }
+
+  /* ─── CERTIFICATE ─── */
+  #cert-wrap {
+    display: none;
+    margin-top: 28px;
+  }
+  #cert-wrap h2 { font-size: 18px; color: var(--green-dark); margin-bottom: 16px; text-align: center; }
+  #certificate {
+    background: white;
+    border: 3px solid var(--green-dark);
+    border-radius: 16px;
+    padding: 48px 40px;
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
+  }
+  .cert-corner {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-color: var(--green-dark);
+    border-style: solid;
+  }
+  .cert-corner.tl { top: 10px; left: 10px; border-width: 3px 0 0 3px; }
+  .cert-corner.tr { top: 10px; right: 10px; border-width: 3px 3px 0 0; }
+  .cert-corner.bl { bottom: 10px; left: 10px; border-width: 0 0 3px 3px; }
+  .cert-corner.br { bottom: 10px; right: 10px; border-width: 0 3px 3px 0; }
+  .cert-header { text-align: center; margin-bottom: 32px; }
+  .cert-company { font-size: 12px; color: var(--text-gray); letter-spacing: 0.1em; margin-bottom: 8px; font-family: sans-serif; }
+  .cert-title-jp { font-size: 28px; font-weight: 900; color: var(--green-dark); letter-spacing: 0.08em; }
+  .cert-divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green-dark), transparent);
+    margin: 20px 0;
+  }
+  .cert-body { text-align: center; }
+  .cert-name-label { font-size: 12px; color: var(--text-gray); letter-spacing: 0.1em; font-family: sans-serif; }
+  .cert-name { font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 8px 0 4px; letter-spacing: 0.05em; }
+  .cert-name-suffix { font-size: 16px; color: var(--text-mid); margin-bottom: 28px; }
+  .cert-desc { font-size: 14px; line-height: 2.2; color: var(--text-mid); }
+  .cert-course-name { font-size: 18px; font-weight: 700; color: var(--green-dark); }
+  .cert-score-section {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--green-pale);
+    border-radius: 12px;
+    padding: 16px 32px;
+    margin: 24px 0;
+  }
+  .cert-score-item { text-align: center; }
+  .cert-score-item .sv { font-size: 32px; font-weight: 800; color: var(--green-dark); }
+  .cert-score-item .sk { font-size: 11px; color: var(--text-gray); font-family: sans-serif; }
+  .cert-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 32px;
+    border-top: 1px solid var(--green-accent);
+    padding-top: 16px;
+    font-family: sans-serif;
+    font-size: 12px;
+    color: var(--text-gray);
+  }
+  .cert-seal {
+    width: 72px;
+    height: 72px;
+    border: 3px solid var(--green-dark);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--green-dark);
+    text-align: center;
+    line-height: 1.4;
+    font-family: sans-serif;
+    letter-spacing: 0.04em;
+  }
+  .print-btn-wrap { text-align: center; margin-top: 16px; }
+
+  /* ─── REVIEW LIST ─── */
+  .review-section { margin-top: 28px; }
+  .review-section h3 { font-size: 16px; font-weight: 700; color: var(--green-dark); margin-bottom: 14px; border-left: 4px solid var(--green-dark); padding-left: 10px; }
+  .review-item {
+    background: white;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    font-size: 13px;
+    border-left: 4px solid transparent;
+  }
+  .review-item.correct-item { border-left-color: #27ae60; }
+  .review-item.wrong-item { border-left-color: var(--red); }
+  .review-q { font-weight: 700; margin-bottom: 6px; line-height: 1.6; }
+  .review-your { color: var(--red); }
+  .review-answer { color: #27ae60; }
+
+  /* ─── PRINT ─── */
+  @media print {
+    body { background: white; }
+    header, #progress-wrap, #start-screen, #quiz-screen, .review-section,
+    .print-btn-wrap, .result-hero, .result-grid, nav, .btn, #cert-wrap h2 { display: none !important; }
+    #result-screen { display: block !important; }
+    #cert-wrap { display: block !important; }
+    #certificate { box-shadow: none; border: 2px solid var(--green-dark); }
+    .container { padding: 0; max-width: 100%; }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 480px) {
+    .info-grid, .result-grid { grid-template-columns: 1fr 1fr; }
+    .score-big { font-size: 56px; }
+    #certificate { padding: 32px 20px; }
+    .cert-title-jp { font-size: 22px; }
+    .cert-name { font-size: 28px; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeInUp 0.4s ease forwards; }
+
+  @keyframes celebrate {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(-3deg); }
+    75% { transform: scale(1.1) rotate(3deg); }
+  }
+  .celebrate { animation: celebrate 0.6s ease; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🏆 総合確認テスト</div>
+  <a href="index.html" class="back-btn">← サイトへ戻る</a>
+</header>
+
+<div id="progress-wrap" style="display:none">
+  <div id="progress-bar-track"><div id="progress-bar-fill"></div></div>
+  <div id="progress-text">0 / 21 問</div>
+</div>
+
+<div class="container">
+
+<!-- ─── START SCREEN ─── -->
+<div id="start-screen">
+  <div class="icon">📝</div>
+  <h1>総合確認テスト</h1>
+  <p>eラーニング全7動画の内容を確認します。</p>
+
+  <div class="info-grid">
+    <div class="info-card"><div class="num">21</div><div class="label">問題数</div></div>
+    <div class="info-card"><div class="num">70%</div><div class="label">合格ライン</div></div>
+    <div class="info-card"><div class="num">約10分</div><div class="label">所要時間</div></div>
+  </div>
+
+  <div class="notice-box">
+    ⚠️ <strong>テストを始める前に</strong><br>
+    全7本の動画を視聴してからテストを受けてください。<br>
+    一度始めると中断できません（ブラウザを閉じると最初からになります）。
+  </div>
+
+  <div class="name-section">
+    <label for="user-name">お名前を入力してください（修了証に表示されます）</label>
+    <input type="text" id="user-name" placeholder="例：田中 花子" maxlength="20">
+  </div>
+
+  <button class="btn btn-primary" id="start-btn" onclick="startQuiz()" disabled>
+    テストを開始する →
+  </button>
+</div>
+
+<!-- ─── QUIZ SCREEN ─── -->
+<div id="quiz-screen"></div>
+
+<!-- ─── RESULT SCREEN ─── -->
+<div id="result-screen">
+  <div class="result-hero" id="result-hero">
+    <div class="result-icon" id="result-icon"></div>
+    <div class="score-big" id="score-display"></div>
+    <div class="score-label">点（<span id="total-count"></span>問中 <span id="correct-count"></span>問正解）</div>
+    <div class="score-bar-wrap"><div class="score-bar-fill" id="score-bar"></div></div>
+    <div class="result-title" id="result-title" style="margin-top:20px"></div>
+    <div class="result-sub" id="result-sub"></div>
+  </div>
+
+  <div class="result-grid">
+    <div class="result-card pass">
+      <div class="val" id="correct-card">—</div>
+      <div class="key">✅ 正解</div>
+    </div>
+    <div class="result-card fail">
+      <div class="val" id="wrong-card">—</div>
+      <div class="key">❌ 不正解</div>
+    </div>
+    <div class="result-card">
+      <div class="val" id="pct-card" style="color:var(--green-dark)">—</div>
+      <div class="key">📊 正解率</div>
+    </div>
+  </div>
+
+  <div id="cert-wrap">
+    <h2>🎓 修了証</h2>
+    <div id="certificate">
+      <div class="cert-corner tl"></div>
+      <div class="cert-corner tr"></div>
+      <div class="cert-corner bl"></div>
+      <div class="cert-corner br"></div>
+      <div class="cert-header">
+        <div class="cert-company">株式会社ストラテジーエイド</div>
+        <div class="cert-title-jp">修　了　証</div>
+      </div>
+      <hr class="cert-divider">
+      <div class="cert-body">
+        <div class="cert-name-label">受　講　者</div>
+        <div class="cert-name" id="cert-name-display"></div>
+        <div class="cert-name-suffix">殿</div>
+        <div class="cert-desc">
+          上記の者は下記講座を受講し、<br>
+          総合確認テストに合格されましたことを証明します。
+        </div>
+        <div style="margin-top:20px">
+          <div class="cert-course-name">現場主導の業務自動化・AI活用実践講座</div>
+          <div style="font-size:13px;color:var(--text-gray);margin-top:4px;font-family:sans-serif">（AIミニアプリ構築講座 eラーニング）</div>
+        </div>
+        <div class="cert-score-section">
+          <div class="cert-score-item"><div class="sv" id="cert-score"></div><div class="sk">テストスコア</div></div>
+          <div style="width:1px;height:48px;background:var(--green-accent)"></div>
+          <div class="cert-score-item"><div class="sv" id="cert-correct"></div><div class="sk">正解数／全問</div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-gray);font-family:sans-serif">長崎県デジタル力向上支援事業費補助金 対象講座</div>
+      </div>
+      <div class="cert-footer">
+        <div>
+          <div id="cert-date" style="font-weight:700;color:var(--text-dark);font-size:14px"></div>
+          <div style="margin-top:4px">発行：株式会社ストラテジーエイド</div>
+        </div>
+        <div class="cert-seal">STRATEGY<br>AID<br>認定</div>
+      </div>
+    </div>
+    <div class="print-btn-wrap">
+      <button class="btn btn-secondary" onclick="window.print()" style="margin-top:16px">🖨️ 修了証を印刷する</button>
+    </div>
+  </div>
+
+  <div class="review-section" id="review-section">
+    <h3>📋 解答の見直し</h3>
+    <div id="review-list"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:32px">
+    <button class="btn btn-secondary" onclick="retryQuiz()">🔄 もう一度受ける</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════
+//  20問のテストデータ（動画①〜⑦カバー）
+// ═══════════════════════════════════════
+const questions = [
+  // 動画① AIの現状と2026年トレンド（3問）
+  {
+    video: "動画①",
+    q: "生成AIの説明として最も正確なものはどれですか？",
+    options: [
+      "決まったルールに従って処理するプログラム",
+      "テキスト・画像・音声などを新たに生成できるAI",
+      "インターネット上の情報を検索するだけのツール",
+      "計算式を自動的に解くための専用ソフト"
+    ],
+    answer: 1,
+    explanation: "生成AIは、学習データをもとにテキスト・画像・音声・動画などのコンテンツを「新たに生成」できるAIです。検索や計算専用のツールとは異なります。"
+  },
+  {
+    video: "動画①",
+    q: "2026年現在、中小企業がAIを活用する上で最も重要な考え方はどれですか？",
+    options: [
+      "大企業が導入してから追いかければよい",
+      "AIは技術者だけが使うもの",
+      "現場の業務課題を起点に、使えるAIを選ぶ",
+      "高額なAIシステムを一括導入する"
+    ],
+    answer: 2,
+    explanation: "AIは現場の業務課題（何が不便か・何に時間がかかっているか）を起点に選ぶことが重要です。大企業の後追いや技術者任せでは、中小企業の現場には定着しません。"
+  },
+  {
+    video: "動画①",
+    q: "本講座のメインツールであるGeminiは、どの会社が提供していますか？",
+    options: ["Microsoft", "OpenAI", "Google", "Amazon"],
+    answer: 2,
+    explanation: "Geminiは、Google（グーグル）が提供する生成AIサービスです。本講座ではGeminiのGEM機能・Deep Research・Buildなどを活用します。"
+  },
+
+  // 動画② プロンプト8原則（3問）
+  {
+    video: "動画②",
+    q: "効果的なプロンプトの書き方として、正しいものはどれですか？",
+    options: [
+      "「いい感じに書いて」のように感覚的な表現で伝える",
+      "役割・背景・出力形式など必要な情報を具体的に書く",
+      "できるだけ短くシンプルにする",
+      "日本語より英語で書くと必ず良い結果が出る"
+    ],
+    answer: 1,
+    explanation: "「誰に・何のために・どんな形式で」という情報を具体的に書くことがプロンプトの基本です。感覚的な表現や単なる短縮では、期待通りの出力が得られにくいです。"
+  },
+  {
+    video: "動画②",
+    q: "「前置きや挨拶は不要です。すぐに結果を出してください」という文をプロンプトに加える主な目的は何ですか？",
+    options: [
+      "AIへの礼儀として必要だから",
+      "不要な前置きをなくして、すぐ使える出力にするため",
+      "AIの処理速度を上げるため",
+      "日本語の文章を短くするため"
+    ],
+    answer: 1,
+    explanation: "この一文を加えることで、AIが毎回「もちろんです！」などの挨拶を省略し、すぐに使える本題だけを出力するようになります。繰り返し使うGEMのプロンプトでは特に有効です。"
+  },
+  {
+    video: "動画②",
+    q: "プロンプトで出力形式を指定する方法として適切なものはどれですか？",
+    options: [
+      "「よろしくお願いします」で終わる",
+      "「Markdown形式の表で出力してください」のように明示する",
+      "文字数を増やせば自動的に表になる",
+      "出力形式はAIが自動で最適なものを選ぶので指定不要"
+    ],
+    answer: 1,
+    explanation: "「Markdown形式の表で」「箇条書きで」「JSON形式で」など、出力形式を明示することで、そのまま使える形式の結果を得られます。"
+  },
+
+  // 動画③ AIリスク・著作権（3問）
+  {
+    video: "動画③",
+    q: "AIを業務で使う際の個人情報の取り扱いとして、最も適切なものはどれですか？",
+    options: [
+      "顧客の氏名・住所・電話番号をそのままAIに入力してよい",
+      "個人が特定できる情報は「A社様」など匿名化してから入力する",
+      "AIは個人情報を記憶しないので、何を入力しても問題ない",
+      "社外秘の情報は必要に応じてAIに入力してよい"
+    ],
+    answer: 1,
+    explanation: "個人情報・社外秘情報は、AIのサーバーに送信されるため、そのまま入力しないことが原則です。匿名化・一般化してから使いましょう。"
+  },
+  {
+    video: "動画③",
+    q: "AIが生成した文章を社外に公開する際に注意すべきこととして正しいのはどれですか？",
+    options: [
+      "AIが作った文章なので著作権は存在せず、問題なく使える",
+      "内容の正確性・著作権侵害の有無・事実確認を必ず人間が行う",
+      "AIが有料サービスなら内容をそのまま使って問題ない",
+      "日本語で生成した文章は著作権法の対象外"
+    ],
+    answer: 1,
+    explanation: "AIの生成物は「ハルシネーション（事実誤認）」が起きる場合があります。公開前に人間が内容を確認・編集することが必須です。著作権についても注意が必要です。"
+  },
+  {
+    video: "動画③",
+    q: "社内でのAI活用ガイドラインを作る目的として最も適切なものはどれですか？",
+    options: [
+      "AIの使用を禁止して情報漏洩リスクをゼロにするため",
+      "使ってよい場面・いけない場面を明確にして安全に活用するため",
+      "コストを削減するために外部ツールの使用を制限するため",
+      "ベンダー（提供会社）の免責事項を社員に周知するため"
+    ],
+    answer: 1,
+    explanation: "ガイドラインは「禁止」が目的ではなく、「安全・適切に活用するためのルール」を整えることが目的です。使ってよい場面と注意が必要な場面を明確にします。"
+  },
+
+  // 動画④ 議事録・要約・Deep Research（3問）
+  {
+    video: "動画④",
+    q: "Geminiで議事録からToDoを自動生成するとき、最も効果的なプロンプトの書き方はどれですか？",
+    options: [
+      "「ToDoを作って」とだけ入力する",
+      "「誰が・いつまでに・何をする」の形式で整理し、優先度もつけるよう指示する",
+      "議事録をそのままコピーして貼り付けるだけ",
+      "英語で指示するとToDoが自動で日本語になる"
+    ],
+    answer: 1,
+    explanation: "「誰が・いつまでに・何をする」という形式を明示し、「優先度（高・中・低）もつけてください」と指示することで、すぐ使えるToDoリストが得られます。"
+  },
+  {
+    video: "動画④",
+    q: "Geminiの「Deep Research」機能の特徴として正しいものはどれですか？",
+    options: [
+      "ウェブを自動で深掘り調査し、レポート形式で結果を出力する",
+      "過去のチャット履歴を自動で整理してくれる機能",
+      "社内データベースに直接アクセスして分析する",
+      "PDF文書を翻訳するためのツール"
+    ],
+    answer: 0,
+    explanation: "Deep Researchは、指定したテーマについてウェブを自律的に調査・収集し、構造化されたレポートを自動生成する機能です。業界調査・競合分析などに活用できます。"
+  },
+  {
+    video: "動画④",
+    q: "PDFやテキスト文書をGeminiで要約するときの正しい操作はどれですか？",
+    options: [
+      "PDFを印刷してから写真を撮り、Geminiに送る",
+      "テキストをコピーしてGeminiに貼り付けるか、PDFをアップロードして要約を依頼する",
+      "GeminiはPDFを読めないので、別のツールで先に変換する",
+      "ファイルをメールで送るとGeminiが自動で要約する"
+    ],
+    answer: 1,
+    explanation: "GeminiはPDFのアップロード、またはテキストの貼り付けに対応しています。「○○の対象読者向けに要約してください」と用途を指定するとより実用的な要約が得られます。"
+  },
+
+  // 動画⑤ GEM設定（3問）
+  {
+    video: "動画⑤",
+    q: "GEMを作成する主な目的として正しいものはどれですか？",
+    options: [
+      "Geminiを無料で使い続けるためのライセンス認証",
+      "毎回プロンプトを入力しなくても、役割・指示を事前設定しておくため",
+      "他のAIサービスと連携するためのAPI設定",
+      "Google Driveのファイルを自動で整理するため"
+    ],
+    answer: 1,
+    explanation: "GEMは「Geminiへの役割・指示・回答ルールを事前設定しておく機能」です。一度設定すれば、以降は必要な情報を貼り付けるだけで業務が完結します。"
+  },
+  {
+    video: "動画⑤",
+    q: "GEMを作成する手順として正しい順番はどれですか？",
+    options: [
+      "GEMを作成→名前と指示を入力→サイドバーを開く→保存",
+      "サイドバーから「GEMを表示」→「GEMを作成」→名前・指示を入力→保存",
+      "Geminiを再起動→GEMを選択→プロンプトを貼り付け→名前をつける",
+      "Deep Researchを開く→GEM設定→テンプレートを選ぶ"
+    ],
+    answer: 1,
+    explanation: "正しい手順：①サイドバーから「GEMを表示」→②「GEMを作成」ボタン→③名前とカスタム指示を入力→④保存　の4ステップです。"
+  },
+  {
+    video: "動画⑤",
+    q: "GEMを社内で共有するメリットとして正しいものはどれですか？",
+    options: [
+      "GEMは個人のみ使用可能で、共有することはできない",
+      "ベテランのノウハウをGEMに蓄積し、新人でも同じ品質で業務ができる",
+      "共有することで自分のGEMが削除されるリスクがある",
+      "共有にはプログラミングの知識が必要"
+    ],
+    answer: 1,
+    explanation: "GEMはGEM設定画面の「共有」ボタンからリンクを発行して共有できます。ベテランのノウハウをGEMに蓄積することで「組織のAI資産」になり、新人でも即戦力になれます。"
+  },
+
+  // 動画⑥ NotebookLM（2問）
+  {
+    video: "動画⑥",
+    q: "NotebookLMの主な使い方として正しいものはどれですか？",
+    options: [
+      "インターネット全体の情報を検索してまとめる",
+      "自社のマニュアル・議事録などをアップロードし、その内容についてQ&Aできる",
+      "表計算ソフトとして使う",
+      "動画編集のために使う"
+    ],
+    answer: 1,
+    explanation: "NotebookLMは、自分でアップロードした文書（マニュアル・議事録・規定など）を「知識ソース」として、その内容についてAIに質問できるツールです。外部情報は参照しません。"
+  },
+  {
+    video: "動画⑥",
+    q: "NotebookLMを業務に活用する具体例として最も適切なものはどれですか？",
+    options: [
+      "競合他社のウェブサイトを自動で収集・分析する",
+      "就業規則や社内マニュアルをアップロードし、「有給申請の手続きを教えて」と質問する",
+      "メールを自動送信する",
+      "SNSの投稿を自動スケジューリングする"
+    ],
+    answer: 1,
+    explanation: "就業規則・社内マニュアル・製品カタログなどをアップロードすれば、社員が「有給申請は何日前に？」などと質問できるQ&Aボットになります。社内の情報検索が大幅に効率化されます。"
+  },
+
+  // 動画⑦ ビルド・ミニアプリ（3問）
+  {
+    video: "動画⑦",
+    q: "Geminiの「Build（ビルド）」機能の説明として正しいものはどれですか？",
+    options: [
+      "プログラミング言語を学ぶための学習機能",
+      "プログラミング不要で、業務用Webアプリを作れる機能",
+      "ウェブサイトのデザインを自動で改善する機能",
+      "動画を自動編集してYouTubeに投稿する機能"
+    ],
+    answer: 1,
+    explanation: "BuildはGeminiに搭載された「アプリ作成機能」です。「システムインストラクション」と呼ばれる指示文を日本語で書くだけで、業務専用のWebアプリが完成します。"
+  },
+  {
+    video: "動画⑦",
+    q: "Buildで作ったミニアプリを社内で共有する方法として正しいものはどれですか？",
+    options: [
+      "アプリのコードをメールで送付する",
+      "「公開」ボタンを押してURLを発行し、リンクをチームに共有する",
+      "Googleドライブに保存して全員がダウンロードする",
+      "Googleアカウントがない人は使えないので、共有は不可能"
+    ],
+    answer: 1,
+    explanation: "Buildで「公開」ボタンを押すとURLが発行されます。そのURLを共有するだけで、Googleアカウントがない人でも使えます（設定による）。"
+  },
+  {
+    video: "動画⑦",
+    q: "ミニアプリを作った後、現場に定着させるために最も効果的な方法はどれですか？",
+    options: [
+      "アプリだけ完成させて全員に使うよう指示する",
+      "アプリと「業務手順書」をセットで用意し、誰でも使い方がわかるようにする",
+      "使えない社員に個別でプログラミング研修を実施する",
+      "毎月アプリを新しく作り直すことで関心を維持する"
+    ],
+    answer: 1,
+    explanation: "アプリだけでは「何を入力すればいい？」という疑問で使われなくなります。「起動方法→入力例→出力の使い方」を示した業務手順書をセットで用意することで、現場定着率が大幅に上がります。"
+  }
+];
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+let answered = new Array(questions.length).fill(false);
+let userName = "";
+let startTime;
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+document.getElementById('user-name').addEventListener('input', function() {
+  document.getElementById('start-btn').disabled = this.value.trim().length === 0;
+});
+
+function startQuiz() {
+  userName = document.getElementById('user-name').value.trim();
+  if (!userName) return;
+  startTime = new Date();
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  document.getElementById('progress-wrap').style.display = 'block';
+  renderQuestion();
+}
+
+// ═══════════════════════════════════════
+//  RENDER QUESTION
+// ═══════════════════════════════════════
+function renderQuestion() {
+  const q = questions[current];
+  const labels = ['A', 'B', 'C', 'D'];
+  const isAnswered = answered[current];
+
+  const optionsHTML = q.options.map((opt, i) => {
+    let cls = 'option-btn';
+    if (isAnswered) {
+      cls += ' disabled';
+      if (i === q.answer) cls += ' correct';
+      else if (i === answers[current] && i !== q.answer) cls += ' wrong';
+    } else if (answers[current] === i) {
+      cls += ' selected';
+    }
+    return `<button class="${cls}" onclick="selectOption(${i})" ${isAnswered ? 'disabled' : ''}>
+      <span class="option-label">${labels[i]}</span>
+      <span>${opt}</span>
+    </button>`;
+  }).join('');
+
+  const feedbackHTML = isAnswered ? `
+    <div class="feedback-box ${answers[current] === q.answer ? 'correct' : 'wrong'}" style="display:block">
+      ${answers[current] === q.answer ? '✅ 正解！' : `❌ 不正解。正解は【${labels[q.answer]}】${q.options[q.answer]}`}<br>
+      💡 ${q.explanation}
+    </div>` : '';
+
+  const card = `
+    <div class="question-card fade-in">
+      <div class="q-header">
+        <span class="q-number">問 ${current + 1} / ${questions.length}</span>
+        <span class="q-tag">${q.video}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optionsHTML}</div>
+      ${feedbackHTML}
+    </div>
+    <div class="nav-bar">
+      <button class="btn btn-secondary" style="padding:10px 20px;font-size:14px" onclick="goTo(${current - 1})" ${current === 0 ? 'disabled' : ''}>← 前へ</button>
+      <span class="nav-counter">${current + 1} / ${questions.length}</span>
+      ${current < questions.length - 1
+        ? `<button class="btn btn-secondary" style="padding:10px 20px;font-size:14px" onclick="goTo(${current + 1})" ${!isAnswered ? 'disabled' : ''}>次へ →</button>`
+        : `<button class="btn btn-primary" style="padding:10px 20px;font-size:14px" onclick="showResult()" ${!isAnswered ? 'disabled' : ''}>結果を見る →</button>`
+      }
+    </div>`;
+
+  document.getElementById('quiz-screen').innerHTML = card;
+
+  // progress
+  const done = answered.filter(Boolean).length;
+  const pct = (done / questions.length) * 100;
+  document.getElementById('progress-bar-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${done} / ${questions.length} 問`;
+  window.scrollTo(0, 0);
+}
+
+function goTo(idx) {
+  current = idx;
+  renderQuestion();
+}
+
+function selectOption(idx) {
+  if (answered[current]) return;
+  answers[current] = idx;
+  answered[current] = true;
+  renderQuestion();
+}
+
+// ═══════════════════════════════════════
+//  RESULT
+// ═══════════════════════════════════════
+function showResult() {
+  const correctCount = answers.filter((a, i) => a === questions[i].answer).length;
+  const score = Math.round((correctCount / questions.length) * 100);
+  const passed = score >= 70;
+
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+
+  document.getElementById('result-icon').textContent = passed ? '🎉' : '📚';
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('correct-count').textContent = correctCount;
+  document.getElementById('total-count').textContent = questions.length;
+  document.getElementById('result-title').textContent = passed ? '合格おめでとうございます！' : 'もう一度チャレンジしましょう';
+  document.getElementById('result-sub').textContent = passed
+    ? `${userName}さん、全7動画の内容をしっかり理解されています。修了証を印刷して集合研修にお持ちください。`
+    : `正解率70%未満のため、不正解だった動画を復習してから再挑戦してください。合格ラインは${Math.ceil(questions.length * 0.7)}問正解（${score}点以上）です。`;
+
+  document.getElementById('correct-card').textContent = correctCount;
+  document.getElementById('wrong-card').textContent = questions.length - correctCount;
+  document.getElementById('pct-card').textContent = score + '点';
+  setTimeout(() => { document.getElementById('score-bar').style.width = score + '%'; }, 100);
+
+  // 修了証
+  if (passed) {
+    document.getElementById('cert-wrap').style.display = 'block';
+    document.getElementById('cert-name-display').textContent = userName;
+    document.getElementById('cert-score').textContent = score + '点';
+    document.getElementById('cert-correct').textContent = `${correctCount} / ${questions.length}`;
+    const now = new Date();
+    document.getElementById('cert-date').textContent =
+      `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+  }
+
+  // 解答見直し
+  const labels = ['A','B','C','D'];
+  const reviewHTML = questions.map((q, i) => {
+    const isCorrect = answers[i] === q.answer;
+    return `<div class="review-item ${isCorrect ? 'correct-item' : 'wrong-item'}">
+      <div class="review-q">${isCorrect ? '✅' : '❌'} 問${i+1}（${q.video}）${q.q}</div>
+      ${!isCorrect ? `<div class="review-your">あなたの回答：【${labels[answers[i]]}】${q.options[answers[i]]}</div>` : ''}
+      <div class="review-answer">正解：【${labels[q.answer]}】${q.options[q.answer]}</div>
+      <div style="font-size:12px;color:#555;margin-top:4px">${q.explanation}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('review-list').innerHTML = reviewHTML;
+
+  window.scrollTo(0, 0);
+}
+
+function retryQuiz() {
+  current = 0;
+  answers = new Array(questions.length).fill(null);
+  answered = new Array(questions.length).fill(false);
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  document.getElementById('progress-wrap').style.display = 'block';
+  renderQuestion();
+}
+</script>
+</body>
+</html>
