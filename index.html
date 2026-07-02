@@ -230,7 +230,8 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
         </div>
         <div class="howto-step">
           <div class="howto-num">2</div>
-          <div class="howto-text">「🎬 実演」タブを選ぶと<span class="tag">🎯 演習問題</span>タブが現れます。<br><strong>演習問題は必ず実際にGeminiで操作しながら取り組んでください。</strong></div>
+          <div class="howto-text">「🎬 実演」タブを選ぶと<span class="tag">🎯 演習問題</span>タブが現れます。<br><strong>演習問題は必ず実際に各ツールを開いて操作しながら取り組んでください。
+（動画①〜⑤はGemini・動画⑥はNotebookLM・動画⑦はGoogle AI Studio）</strong></div>
         </div>
         <div class="howto-step">
           <div class="howto-num">3</div>
@@ -795,9 +796,9 @@ function renderExercises(){
       にあります
     </div>
     <div style="background:#fff8ed;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#78350f;line-height:1.7;">
-      📝 <strong>1問以上Geminiで実際に試してください。</strong><br>
+      📝 <strong>1問以上回答してください。</strong><br>
       回答後、感想等を書いて送信してください。送信すると「✓ 視聴完了」ボタンが押せるようになります。<br>
-      <span style="font-size:11px;color:#92400e;">※ この感想等の内容はサイト上には表示されません</span>
+      <span style="font-size:11px;color:#92400e;">※ 送信後もコメントはこの画面に残ります（他の受講者には見えません）</span>
     </div>
     <div class="ex-title">演習問題 — Geminiで実際に操作してみましょう</div>`+
   exs.map((ex,ei)=>`<div class="ex-item">
@@ -811,7 +812,7 @@ function renderExercises(){
       <div class="ex-hint"><span class="ex-hint-label">💡 ヒント</span>${esc(ex.hint)}</div>
     </div>
     <div class="ex-comment-wrap">
-      <span class="ex-comment-label">📝 回答後、感想等を書いて送信してください（この内容はサイト上には表示されません）</span>
+      <span class="ex-comment-label">📝 回答後、感想等を書いて送信してください（送信後もこの画面に残ります・他の受講者には見えません）</span>
       <textarea class="ex-comment-input" id="comment_${current}_${ei}" placeholder="例：うまくできた / ○○という結果になった / ○○が難しかった"></textarea>
       <button class="ex-comment-btn" id="commentBtn_${current}_${ei}" onclick="submitComment(${current},${ei},this)">送信する</button>
     </div>
