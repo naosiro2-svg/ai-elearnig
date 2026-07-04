@@ -465,7 +465,7 @@
 
 <div id="progress-wrap" style="display:none">
   <div id="progress-bar-track"><div id="progress-bar-fill"></div></div>
-  <div id="progress-text">0 / 21 問</div>
+  <div id="progress-text">0 / 20 問</div>
 </div>
 
 <div class="container">
@@ -477,7 +477,7 @@
   <p>eラーニング全7動画の内容を確認します。</p>
 
   <div class="info-grid">
-    <div class="info-card"><div class="num">21</div><div class="label">問題数</div></div>
+    <div class="info-card"><div class="num" id="total-q-display">20</div><div class="label">問題数</div></div>
     <div class="info-card"><div class="num">70%</div><div class="label">合格ライン</div></div>
     <div class="info-card"><div class="num">約10分</div><div class="label">所要時間</div></div>
   </div>
@@ -506,7 +506,7 @@
   <div class="result-hero" id="result-hero">
     <div class="result-icon" id="result-icon"></div>
     <div class="score-big" id="score-display"></div>
-    <div class="score-label">点（21問中 <span id="correct-count"></span>問正解）</div>
+    <div class="score-label">点（<span id="total-q-count"></span>問中 <span id="correct-count"></span>問正解）</div>
     <div class="score-bar-wrap"><div class="score-bar-fill" id="score-bar"></div></div>
     <div class="result-title" id="result-title" style="margin-top:20px"></div>
     <div class="result-sub" id="result-sub"></div>
@@ -585,7 +585,7 @@
 
 <script>
 // ═══════════════════════════════════════
-//  21問のテストデータ（動画①〜⑦カバー）
+//  20問のテストデータ（動画①〜⑦カバー）
 // ═══════════════════════════════════════
 const questions = [
   // 動画① AIの現状と2026年トレンド（3問）
@@ -854,6 +854,9 @@ document.getElementById('user-name').addEventListener('input', function() {
   document.getElementById('start-btn').disabled = this.value.trim().length === 0;
 });
 
+document.getElementById('total-q-display').textContent = questions.length;
+document.getElementById('progress-text').textContent = `0 / ${questions.length} 問`;
+
 function startQuiz() {
   userName = document.getElementById('user-name').value.trim();
   if (!userName) return;
@@ -949,6 +952,7 @@ function showResult() {
   document.getElementById('result-icon').textContent = passed ? '🎉' : '📚';
   document.getElementById('score-display').textContent = score;
   document.getElementById('correct-count').textContent = correctCount;
+  document.getElementById('total-q-count').textContent = questions.length;
   document.getElementById('result-title').textContent = passed ? '合格おめでとうございます！' : 'もう一度チャレンジしましょう';
   document.getElementById('result-sub').textContent = passed
     ? `${userName}さん、全7動画の内容をしっかり理解されています。修了証を印刷して集合研修にお持ちください。`
