@@ -16,7 +16,7 @@
 <script src="content.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
-:root{--green:#0f7a5a;--green-light:#e8f5f0;--green-mid:#1D9E75;--dark:#1a1f2e;--sidebar-w:260px;--header-h:52px;}
+:root{--green:#0f7a5a;--green-light:#e8f5f0;--green-mid:#1D9E75;--dark:#1a1f2e;--sidebar-w:300px;--header-h:46px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans JP',sans-serif;background:#f4f6f8;color:#222;min-height:100vh;}
 body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
@@ -48,41 +48,41 @@ header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var
 /* ── レイアウト ── */
 .layout{display:flex;margin-top:var(--header-h);}
 aside{width:var(--sidebar-w);position:fixed;top:var(--header-h);bottom:0;left:0;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;z-index:50;}
-.aside-head{padding:14px 16px 10px;border-bottom:1px solid #e2e8f0;flex-shrink:0;}
+.aside-head{padding:10px 16px 8px;border-bottom:1px solid #e2e8f0;flex-shrink:0;}
 .aside-head h2{font-size:12px;color:#64748b;font-weight:500;}
 .lesson-list{overflow-y:auto;flex:1;}
 .lesson-list::-webkit-scrollbar{width:4px;}
 .lesson-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px;}
-.lesson-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #f1f5f9;transition:background .15s;}
+.lesson-item{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;cursor:pointer;border-bottom:1px solid #f1f5f9;transition:background .15s;}
 .lesson-item:hover{background:#f8fafc;}
 .lesson-item.active{background:var(--green-light);border-left:3px solid var(--green-mid);padding-left:13px;}
-.lnum{font-size:10px;font-weight:700;color:#94a3b8;padding-top:2px;min-width:28px;}
+.lnum{font-size:11px;font-weight:700;color:#94a3b8;padding-top:2px;min-width:28px;}
 .lesson-item.active .lnum{color:var(--green);}
 .linfo{flex:1;min-width:0;}
-.lname{font-size:12px;font-weight:500;color:#1e293b;line-height:1.4;}
+.lname{font-size:13px;font-weight:500;color:#1e293b;line-height:1.4;}
 .lesson-item.active .lname{color:var(--green);}
 .lmeta{display:flex;align-items:center;gap:6px;margin-top:4px;}
-.ltime{font-size:11px;color:#94a3b8;}
+.ltime{font-size:12px;color:#94a3b8;}
 .done-tag{font-size:10px;background:#dcfce7;color:#16a34a;padding:1px 6px;border-radius:10px;font-weight:500;}
 .lcheck{width:18px;height:18px;border-radius:50%;border:1.5px solid #cbd5e1;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:10px;}
 .lcheck.done{background:var(--green-mid);border-color:var(--green-mid);color:#fff;}
 main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h));}
 /* ── 動画セレクタ ── */
-.video-selector{display:flex;background:#111827;border-bottom:2px solid #1f2937;position:sticky;top:0;z-index:40;}
-.vsel-btn{flex:1;padding:14px 8px;font-size:14px;font-weight:700;color:#6b7280;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:inherit;line-height:1.5;transition:all .2s;}
+.video-selector{display:flex;background:#111827;border-bottom:2px solid #1f2937;position:sticky;top:0;z-index:100;min-height:0;}
+.vsel-btn{flex:1;padding:6px 8px;font-size:13px;font-weight:700;color:#6b7280;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:inherit;line-height:1.4;transition:all .2s;white-space:nowrap;}
 .vsel-btn:hover{color:#d1d5db;background:rgba(255,255,255,.05);}
 .vsel-btn.active{color:#1D9E75;border-bottom-color:#1D9E75;background:rgba(29,158,117,.1);}
-.vsel-btn .vsel-sub{display:block;font-size:10px;color:#4b5563;font-weight:400;margin-bottom:2px;}
-.vsel-btn.active .vsel-sub{color:#9FE1CB;}
-.vsel-btn .vsel-icon{display:block;font-size:18px;margin-bottom:3px;}
+.vsel-btn .vsel-sub{display:inline;font-size:13px;color:#6b7280;font-weight:700;margin-bottom:0;margin-right:4px;}
+.vsel-btn.active .vsel-sub{color:#1D9E75;}
+.vsel-btn .vsel-icon{display:none;}
 /* ── 動画プレイヤー ── */
 .video-area{background:#0d1117;}
-.video-topbar{display:flex;align-items:center;padding:8px 20px;background:rgba(0,0,0,.5);gap:10px;}
+.video-topbar{display:flex;align-items:center;padding:4px 16px;background:rgba(0,0,0,.5);gap:10px;}
 .vid-badge{font-size:11px;color:var(--green-mid);font-weight:700;}
 .vid-title{font-size:13px;color:#e2e8f0;font-weight:500;flex:1;}
 .vid-time{font-size:11px;color:#64748b;}
 .vid-type{font-size:10px;color:#4b5563;background:#1f2937;padding:2px 7px;border-radius:10px;}
-.video-player-wrap{position:relative;width:100%;padding-top:56.25%;background:#0d1117;}
+.video-player-wrap{position:relative;width:100%;padding-top:0;height:calc(100vh - var(--header-h) - 36px - 28px - 60px);background:#0d1117;}
 .video-player-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 .ov-top{position:absolute;top:0;left:0;right:0;height:18%;z-index:10;}
 .ov-left{position:absolute;top:18%;left:0;width:20%;bottom:15%;z-index:10;}
