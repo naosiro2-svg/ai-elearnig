@@ -5,7 +5,7 @@
 // ============================================================
 
 const YOUTUBE_URLS = [
-  ["https://youtu.be/v43uzVKq2Og", "https://youtu.be/icMXtBDmgUU", ""],   // 動画① [概要, 具体的内容, 実演]　講座の目的とAIの基礎
+  ["https://youtu.be/MHDyE6qCg1A", "https://youtu.be/tdO_Nk8lMeo", ""],   // 動画① [概要, 具体的内容, 実演]　講座の目的とAIの基礎
 　["https://youtu.be/a2H0zTIympw", "https://youtu.be/pDoXGUrDxMI", "https://youtu.be/aqMCX7Ez8KM"],  // 動画②　AIプロンプト
   ["https://youtu.be/nU5BW-IayQI", "https://youtu.be/6DqJeXa6sew", ""],  // 動画③　ガイドライン
   ["", "https://youtu.be/0GIoAAYamPs", "https://youtu.be/CBp4u4AaCno"],  // 動画4 議事録　要約　調査　スライド作成
