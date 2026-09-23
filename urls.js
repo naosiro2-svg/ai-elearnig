@@ -10,8 +10,8 @@ const YOUTUBE_URLS = [
   ["https://youtu.be/nU5BW-IayQI", "https://youtu.be/6DqJeXa6sew", ""],  // 動画③　ガイドライン
   ["", "https://youtu.be/0GIoAAYamPs", "https://youtu.be/CBp4u4AaCno"],  // 動画4 議事録　要約　調査　スライド作成
   ["https://youtu.be/0LSnxBVAKiE", "https://youtu.be/xrtODLI-_cA", "https://youtu.be/QG2lwKB-tE0"],  // 動画⑤GEM
-  ["https://youtu.be/VFoLSVibLk8", "https://youtu.be/PDcIvrL9W8s", "https://youtu.be/LZvkrlupusg"],  // 動画⑥NOTEBOOKLM
-  ["https://youtu.be/WQq7mYEZh6Y", "https://youtu.be/SEjopK-zJps", "https://youtu.be/K9RT4e0hbcE"],  // 動画⑦ビルド機能
+  ["https://youtu.be/VFoLSVibLk8", "https://youtu.be/PDcIvrL9W8s", "https://youtu.be/PnlDeSSpzAk"],  // 動画⑥NOTEBOOKLM
+  ["https://youtu.be/WQq7mYEZh6Y", "https://youtu.be/h9wZvq3hx7c", "https://youtu.be/0CHiCFBa32w"],  // 動画⑦ビルド機能
 ];
 
 // 総合確認テスト GoogleフォームURL
