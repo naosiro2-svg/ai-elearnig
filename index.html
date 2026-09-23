@@ -142,6 +142,14 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
 .ex-copy-btn:hover{background:var(--green-mid);color:#fff;}
 .ex-comment-wrap{margin-top:10px;border-top:1px dashed #e2e8f0;padding-top:10px;}
 .ex-comment-label{font-size:11px;color:#64748b;margin-bottom:6px;display:block;}
+.ex-shot-wrap{margin-top:10px;border-top:1px dashed #e2e8f0;padding-top:10px;}
+.ex-shot-label{font-size:12px;color:#c0392b;font-weight:700;margin-bottom:6px;display:block;}
+.ex-shot-drop{border:2px dashed #f59e0b;border-radius:8px;padding:16px;text-align:center;font-size:12px;color:#92400e;background:#fffbeb;cursor:text;transition:background .2s;}
+.ex-shot-drop:focus{outline:none;background:#fef3c7;}
+.ex-shot-drop.has-img{border-color:var(--green-mid);background:#f0fdf4;}
+.ex-shot-btn{margin-top:6px;font-size:12px;background:#fff;color:#92400e;border:1px solid #f59e0b;border-radius:5px;padding:5px 14px;cursor:pointer;font-family:inherit;}
+.ex-shot-preview{max-width:220px;max-height:140px;margin-top:8px;border-radius:6px;border:1px solid #e2e8f0;display:none;}
+.ex-shot-remove{font-size:11px;color:#c0392b;margin-left:10px;cursor:pointer;text-decoration:underline;display:none;}
 .ex-comment-input{width:100%;padding:8px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;min-height:70px;line-height:1.7;color:#374151;}
 .ex-comment-input:focus{outline:none;border-color:var(--green-mid);}
 .ex-comment-btn{margin-top:6px;font-size:12px;background:var(--green-mid);color:#fff;border:none;border-radius:5px;padding:5px 16px;cursor:pointer;font-family:inherit;}
@@ -505,16 +513,21 @@ function restoreProgress(email) {
     .catch(() => {}); // エラーは無視
 }
 
-function sendLog(type, detail) {
+function sendLog(type, detail, image, imageMime) {
   if (!LOG_URL || LOG_URL === "YOUR_GAS_WEB_APP_URL_HERE") return;
   const now = new Date();
   const jst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
   const dateStr = jst.toISOString().replace('T', ' ').substring(0, 19);
+  const body = { type, detail, datetime: dateStr, ua: navigator.userAgent.substring(0, 80) };
+  if(image){
+    body.image = image;
+    body.imageMime = imageMime || 'image/png';
+  }
   fetch(LOG_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type, detail, datetime: dateStr, ua: navigator.userAgent.substring(0, 80) })
+    body: JSON.stringify(body)
   }).catch(() => {});
 }
 
@@ -838,12 +851,74 @@ function renderExercises(){
       <button class="ex-copy-btn" onclick="copyEx(this,'hint')">📋 ヒントをコピー</button>
       <div class="ex-hint"><span class="ex-hint-label">💡 ヒント</span>${esc(ex.hint)}</div>
     </div>
+    ${ei===0 ? `
+    <div class="ex-shot-wrap">
+      <span class="ex-shot-label">📸 実施結果のスクリーンショットを貼り付けてください（問題1のみ必須）</span>
+      <div class="ex-shot-drop" id="shotDrop_${current}_${ei}" tabindex="0"
+           onpaste="handleShotPaste(event,${current},${ei})"
+           onclick="document.getElementById('shotFile_${current}_${ei}').click()">
+        ここをクリックしてファイルを選択、または画面のコピー画像をここに貼り付け（Ctrl+V）
+        <input type="file" accept="image/*" id="shotFile_${current}_${ei}" style="display:none;"
+               onchange="handleShotFile(event,${current},${ei})">
+      </div>
+      <img class="ex-shot-preview" id="shotPreview_${current}_${ei}">
+      <span class="ex-shot-remove" id="shotRemove_${current}_${ei}" onclick="removeShot(${current},${ei})">画像を削除</span>
+    </div>` : ''}
     <div class="ex-comment-wrap">
       <span class="ex-comment-label">📝 回答後、感想等を書いて送信してください（送信後もこの画面に残ります・他の受講者には見えません）</span>
       <textarea class="ex-comment-input" id="comment_${current}_${ei}" placeholder="例：うまくできた / ○○という結果になった / ○○が難しかった"></textarea>
       <button class="ex-comment-btn" id="commentBtn_${current}_${ei}" onclick="submitComment(${current},${ei},this)">送信する</button>
     </div>
   </div>`).join('');
+}
+
+// ── スクリーンショット添付（問題1用）──
+const shotData = {}; // key: "videoIdx_exIdx" → base64 dataURL
+
+function setShotPreview(videoIdx, exIdx, dataUrl){
+  shotData[videoIdx + '_' + exIdx] = dataUrl;
+  const preview = document.getElementById('shotPreview_' + videoIdx + '_' + exIdx);
+  const drop = document.getElementById('shotDrop_' + videoIdx + '_' + exIdx);
+  const remove = document.getElementById('shotRemove_' + videoIdx + '_' + exIdx);
+  preview.src = dataUrl;
+  preview.style.display = 'block';
+  drop.classList.add('has-img');
+  drop.textContent = '✅ 画像が貼り付けられました（クリックで別の画像に差し替え）';
+  remove.style.display = 'inline';
+}
+
+function removeShot(videoIdx, exIdx){
+  delete shotData[videoIdx + '_' + exIdx];
+  const preview = document.getElementById('shotPreview_' + videoIdx + '_' + exIdx);
+  const drop = document.getElementById('shotDrop_' + videoIdx + '_' + exIdx);
+  const remove = document.getElementById('shotRemove_' + videoIdx + '_' + exIdx);
+  preview.style.display = 'none';
+  drop.classList.remove('has-img');
+  drop.textContent = 'ここをクリックしてファイルを選択、または画面のコピー画像をここに貼り付け（Ctrl+V）';
+  remove.style.display = 'none';
+}
+
+function readImageFile(file, videoIdx, exIdx){
+  if(!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = e => setShotPreview(videoIdx, exIdx, e.target.result);
+  reader.readAsDataURL(file);
+}
+
+function handleShotFile(event, videoIdx, exIdx){
+  const file = event.target.files[0];
+  readImageFile(file, videoIdx, exIdx);
+}
+
+function handleShotPaste(event, videoIdx, exIdx){
+  const items = (event.clipboardData || window.clipboardData).items;
+  for(let i=0; i<items.length; i++){
+    if(items[i].type.indexOf('image') !== -1){
+      readImageFile(items[i].getAsFile(), videoIdx, exIdx);
+      event.preventDefault();
+      return;
+    }
+  }
 }
 
 function submitComment(videoIdx, exIdx, btn){
@@ -856,9 +931,26 @@ function submitComment(videoIdx, exIdx, btn){
     setTimeout(()=>{ commentEl.style.borderColor=''; }, 2000);
     return;
   }
+  // 問題1のみ：スクリーンショット添付を必須チェック
+  let imageDataUrl = '';
+  if(exIdx === 0){
+    imageDataUrl = shotData[videoIdx + '_' + exIdx] || '';
+    if(!imageDataUrl){
+      const drop = document.getElementById('shotDrop_' + videoIdx + '_' + exIdx);
+      drop.style.borderColor = '#c0392b';
+      drop.textContent = '⚠ 問題1は実施結果のスクリーンショットの貼り付けが必須です';
+      drop.scrollIntoView({behavior:'smooth', block:'center'});
+      setTimeout(()=>{ drop.style.borderColor=''; }, 3000);
+      return;
+    }
+  }
   const videoName = lessons[videoIdx].badge + ' ' + lessons[videoIdx].name;
   const detail = '演習コメント|||' + email + '|||' + videoName + ' 問題' + (exIdx+1) + '|||' + comment;
-  sendLog('演習コメント', detail);
+  if(imageDataUrl){
+    sendLog('演習コメント', detail, imageDataUrl, 'image/png');
+  } else {
+    sendLog('演習コメント', detail);
+  }
   // コメント送信済みフラグとコメント内容をlocalStorageに保存
   localStorage.setItem('commented_' + videoIdx, '1');
   localStorage.setItem('comment_text_' + videoIdx + '_' + exIdx, comment);
