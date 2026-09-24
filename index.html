@@ -142,13 +142,19 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
 .ex-copy-btn:hover{background:var(--green-mid);color:#fff;}
 .ex-comment-wrap{margin-top:10px;border-top:1px dashed #e2e8f0;padding-top:10px;}
 .ex-comment-label{font-size:11px;color:#64748b;margin-bottom:6px;display:block;}
-.ex-shot-wrap{margin-top:10px;border-top:1px dashed #e2e8f0;padding-top:10px;}
-.ex-shot-label{font-size:12px;color:#c0392b;font-weight:700;margin-bottom:6px;display:block;}
-.ex-shot-drop{border:2px dashed #f59e0b;border-radius:8px;padding:16px;text-align:center;font-size:12px;color:#92400e;background:#fffbeb;cursor:text;transition:background .2s;}
+.ex-submit-block{margin-top:10px;border-top:1px dashed #e2e8f0;padding-top:10px;}
+.ex-submit-title{font-size:12px;color:#c0392b;font-weight:700;margin-bottom:8px;display:block;}
+.ex-submit-note{font-size:11px;color:#64748b;margin-bottom:10px;}
+.ex-method-box{border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#fafafa;}
+.ex-method-label{font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.ex-or-divider{text-align:center;font-size:11px;color:#94a3b8;margin:2px 0 10px;}
+.ex-prompt-input{width:100%;padding:8px 12px;border:1px solid #f59e0b;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;min-height:70px;line-height:1.7;color:#374151;background:#fffbeb;}
+.ex-prompt-input:focus{outline:none;border-color:var(--green-mid);background:#fff;}
+.ex-prompt-hint{font-size:11px;color:#92400e;margin-top:4px;}
+.ex-shot-drop{border:2px dashed #f59e0b;border-radius:8px;padding:14px;text-align:center;font-size:12px;color:#92400e;background:#fffbeb;cursor:text;transition:background .2s;}
 .ex-shot-drop:focus{outline:none;background:#fef3c7;}
 .ex-shot-drop.has-img{border-color:var(--green-mid);background:#f0fdf4;}
-.ex-shot-btn{margin-top:6px;font-size:12px;background:#fff;color:#92400e;border:1px solid #f59e0b;border-radius:5px;padding:5px 14px;cursor:pointer;font-family:inherit;}
-.ex-shot-preview{max-width:220px;max-height:140px;margin-top:8px;border-radius:6px;border:1px solid #e2e8f0;display:none;}
+.ex-shot-preview{max-width:200px;max-height:130px;margin-top:8px;border-radius:6px;border:1px solid #e2e8f0;display:none;}
 .ex-shot-remove{font-size:11px;color:#c0392b;margin-left:10px;cursor:pointer;text-decoration:underline;display:none;}
 .ex-comment-input{width:100%;padding:8px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;min-height:70px;line-height:1.7;color:#374151;}
 .ex-comment-input:focus{outline:none;border-color:var(--green-mid);}
@@ -241,7 +247,7 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
         <div class="howto-step">
           <div class="howto-num">2</div>
           <div class="howto-text">「🎬 実演」タブを選ぶと<span class="tag">🎯 演習問題</span>タブが現れます。<br><strong>演習問題は必ず実際に各ツールを開いて操作しながら取り組んでください。
-（動画①〜⑤はGemini・動画⑥はNotebookLM・動画⑦はGoogle AI Studio）</strong><br>なお、各動画の<strong>【問題1】</strong>は、実施結果の画面のスクリーンショットを貼り付ける欄があります。忘れずに貼り付けてください。</div>
+（動画①〜⑤はGemini・動画⑥はNotebookLM・動画⑦はGoogle AI Studio）</strong><br>なお、各動画の<strong>【問題1】</strong>は、①Geminiに入力した内容をテキストで貼り付ける、②実施結果の画面を画像で貼り付ける、のどちらか一方で提出してください。</div>
         </div>
         <div class="howto-step">
           <div class="howto-num">3</div>
@@ -299,7 +305,7 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
         <h3>⚠️ 受講上の注意事項</h3>
         <div class="howto-note">
           ・このeラーニングは<strong>受講者専用</strong>です。他の方へのパスワードの共有は<strong>絶対にやめてください</strong>。<br>
-          ・講座内のミニアプリは<strong>受講期間中のみ</strong>使用できます。終了後も使用を希望する場合は事務局にご連絡ください。<br>
+          ・講座内のミニアプリは<strong>受講期間中のみ</strong>使用できます。終了後も使用を希望する場合は講師にご相談ください。<br>
           ・研修中に不具合があれば<strong>事務局までご連絡</strong>ください。
         </div>
       </div>
@@ -852,17 +858,27 @@ function renderExercises(){
       <div class="ex-hint"><span class="ex-hint-label">💡 ヒント</span>${esc(ex.hint)}</div>
     </div>
     ${ei===0 ? `
-    <div class="ex-shot-wrap">
-      <span class="ex-shot-label">📸 実施結果のスクリーンショットを貼り付けてください（問題1のみ必須）</span>
-      <div class="ex-shot-drop" id="shotDrop_${current}_${ei}" tabindex="0"
-           onpaste="handleShotPaste(event,${current},${ei})"
-           onclick="document.getElementById('shotFile_${current}_${ei}').click()">
-        ここをクリックしてファイルを選択、または画面のコピー画像をここに貼り付け（Ctrl+V）
-        <input type="file" accept="image/*" id="shotFile_${current}_${ei}" style="display:none;"
-               onchange="handleShotFile(event,${current},${ei})">
+    <div class="ex-submit-block">
+      <span class="ex-submit-title">⚠ 実施した証拠を残してください（問題1のみ必須・どちらか一方でOK）</span>
+      <div class="ex-submit-note">下の「テキストで貼り付け」か「画像で貼り付け」、やりやすい方法を1つ選んでください。</div>
+      <div class="ex-method-box">
+        <div class="ex-method-label">📋 方法A：Geminiに入力した内容をテキストで貼り付け</div>
+        <textarea class="ex-prompt-input" id="promptPaste_${current}_${ei}" placeholder="Geminiの入力欄に実際に入力した文章を、そのままコピーして貼り付けてください"></textarea>
+        <div class="ex-prompt-hint">Geminiの入力欄をクリック→Ctrl+A（全選択）→Ctrl+C（コピー）→ここにCtrl+V（貼り付け）</div>
       </div>
-      <img class="ex-shot-preview" id="shotPreview_${current}_${ei}">
-      <span class="ex-shot-remove" id="shotRemove_${current}_${ei}" onclick="removeShot(${current},${ei})">画像を削除</span>
+      <div class="ex-or-divider">――― または ―――</div>
+      <div class="ex-method-box">
+        <div class="ex-method-label">📸 方法B：実施結果の画面を画像で貼り付け</div>
+        <div class="ex-shot-drop" id="shotDrop_${current}_${ei}" tabindex="0"
+             onpaste="handleShotPaste(event,${current},${ei})"
+             onclick="document.getElementById('shotFile_${current}_${ei}').click()">
+          ここをクリックしてファイルを選択、または画面のコピー画像をここに貼り付け（Ctrl+V）
+          <input type="file" accept="image/*" id="shotFile_${current}_${ei}" style="display:none;"
+                 onchange="handleShotFile(event,${current},${ei})">
+        </div>
+        <img class="ex-shot-preview" id="shotPreview_${current}_${ei}">
+        <span class="ex-shot-remove" id="shotRemove_${current}_${ei}" onclick="removeShot(${current},${ei})">画像を削除</span>
+      </div>
     </div>` : ''}
     <div class="ex-comment-wrap">
       <span class="ex-comment-label">📝 回答後、感想等を書いて送信してください（送信後もこの画面に残ります・他の受講者には見えません）</span>
@@ -872,7 +888,7 @@ function renderExercises(){
   </div>`).join('');
 }
 
-// ── スクリーンショット添付（問題1用）──
+// ── スクリーンショット添付（問題1・方法B用）──
 const shotData = {}; // key: "videoIdx_exIdx" → base64 dataURL
 
 function setShotPreview(videoIdx, exIdx, dataUrl){
@@ -931,21 +947,26 @@ function submitComment(videoIdx, exIdx, btn){
     setTimeout(()=>{ commentEl.style.borderColor=''; }, 2000);
     return;
   }
-  // 問題1のみ：スクリーンショット添付を必須チェック
+  // 問題1のみ：テキスト貼り付け／画像貼り付けの「どちらか一方」を必須チェック
+  let pastedPrompt = '';
   let imageDataUrl = '';
   if(exIdx === 0){
+    const promptEl = document.getElementById('promptPaste_' + videoIdx + '_' + exIdx);
+    pastedPrompt = promptEl.value.trim();
     imageDataUrl = shotData[videoIdx + '_' + exIdx] || '';
-    if(!imageDataUrl){
+    if(!pastedPrompt && !imageDataUrl){
+      promptEl.style.borderColor = '#c0392b';
+      promptEl.placeholder = '⚠ 問題1は、テキストか画像のどちらかの貼り付けが必須です';
       const drop = document.getElementById('shotDrop_' + videoIdx + '_' + exIdx);
       drop.style.borderColor = '#c0392b';
-      drop.textContent = '⚠ 問題1は実施結果のスクリーンショットの貼り付けが必須です';
-      drop.scrollIntoView({behavior:'smooth', block:'center'});
-      setTimeout(()=>{ drop.style.borderColor=''; }, 3000);
+      promptEl.scrollIntoView({behavior:'smooth', block:'center'});
+      setTimeout(()=>{ promptEl.style.borderColor=''; drop.style.borderColor=''; }, 3000);
       return;
     }
   }
   const videoName = lessons[videoIdx].badge + ' ' + lessons[videoIdx].name;
-  const detail = '演習コメント|||' + email + '|||' + videoName + ' 問題' + (exIdx+1) + '|||' + comment;
+  const detail = '演習コメント|||' + email + '|||' + videoName + ' 問題' + (exIdx+1) + '|||' + comment
+                 + '|||' + pastedPrompt;
   if(imageDataUrl){
     sendLog('演習コメント', detail, imageDataUrl, 'image/png');
   } else {
