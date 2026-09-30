@@ -794,6 +794,7 @@ function restoreComments(){
     const savedComment = localStorage.getItem('comment_text_' + current + '_' + ei);
     const commentEl = document.getElementById('comment_' + current + '_' + ei);
     const btnEl = document.getElementById('commentBtn_' + current + '_' + ei);
+    const editLinkEl = document.getElementById('editLink_' + current + '_' + ei);
     if(savedComment && commentEl && btnEl){
       commentEl.value = savedComment;
       commentEl.disabled = true;
@@ -802,6 +803,17 @@ function restoreComments(){
       btnEl.textContent = '✅ 送信済み';
       btnEl.classList.add('sent');
       btnEl.disabled = true;
+      if(editLinkEl) editLinkEl.style.display = 'inline';
+      if(ei === 0){
+        const promptEl = document.getElementById('promptPaste_' + current + '_' + ei);
+        const savedPrompt = localStorage.getItem('prompt_text_' + current + '_' + ei);
+        if(promptEl){
+          if(savedPrompt) promptEl.value = savedPrompt;
+          promptEl.disabled = true;
+          promptEl.style.background = '#f8fafc';
+          promptEl.style.color = '#374151';
+        }
+      }
     }
   });
 }
@@ -882,6 +894,7 @@ function renderExercises(){
       <span class="ex-comment-label">📝 回答後、感想等を書いて送信してください（送信後もこの画面に残ります・他の受講者には見えません）</span>
       <textarea class="ex-comment-input" id="comment_${current}_${ei}" placeholder="例：うまくできた / ○○という結果になった / ○○が難しかった"></textarea>
       <button class="ex-comment-btn" id="commentBtn_${current}_${ei}" onclick="submitComment(${current},${ei},this)">送信する</button>
+      <span class="ex-edit-link" id="editLink_${current}_${ei}" style="display:none;margin-left:12px;font-size:12px;color:#2563eb;text-decoration:underline;cursor:pointer;" onclick="editComment(${current},${ei})">内容を修正してもう一度送信する</span>
     </div>
   </div>`).join('');
 }
@@ -973,12 +986,25 @@ function submitComment(videoIdx, exIdx, btn){
   // コメント送信済みフラグとコメント内容をlocalStorageに保存
   localStorage.setItem('commented_' + videoIdx, '1');
   localStorage.setItem('comment_text_' + videoIdx + '_' + exIdx, comment);
+  if(exIdx === 0){
+    localStorage.setItem('prompt_text_' + videoIdx + '_' + exIdx, pastedPrompt);
+  }
   btn.textContent = '✅ 送信済み';
   btn.classList.add('sent');
   btn.disabled = true;
   commentEl.disabled = true;
   commentEl.style.background = '#f8fafc';
   commentEl.style.color = '#374151';
+  if(exIdx === 0){
+    const promptEl = document.getElementById('promptPaste_' + videoIdx + '_' + exIdx);
+    if(promptEl){
+      promptEl.disabled = true;
+      promptEl.style.background = '#f8fafc';
+      promptEl.style.color = '#374151';
+    }
+  }
+  const editLinkEl = document.getElementById('editLink_' + videoIdx + '_' + exIdx);
+  if(editLinkEl) editLinkEl.style.display = 'inline';
   // 視聴完了ボタンのロックを解除
   updateDoneBtn();
   // 解除メッセージ
@@ -989,6 +1015,33 @@ function submitComment(videoIdx, exIdx, btn){
     flash.textContent = '✅ コメント送信完了！「✓ 視聴完了」ボタンが押せるようになりました';
     document.body.appendChild(flash);
     setTimeout(()=>flash.remove(), 3500);
+  }
+}
+
+function editComment(videoIdx, exIdx){
+  const commentEl = document.getElementById('comment_' + videoIdx + '_' + exIdx);
+  const btnEl = document.getElementById('commentBtn_' + videoIdx + '_' + exIdx);
+  const editLinkEl = document.getElementById('editLink_' + videoIdx + '_' + exIdx);
+  if(commentEl){
+    commentEl.disabled = false;
+    commentEl.style.background = '';
+    commentEl.style.color = '';
+    commentEl.focus();
+  }
+  if(btnEl){
+    btnEl.textContent = '送信する';
+    btnEl.classList.remove('sent');
+    btnEl.disabled = false;
+  }
+  if(editLinkEl) editLinkEl.style.display = 'none';
+  if(exIdx === 0){
+    const promptEl = document.getElementById('promptPaste_' + videoIdx + '_' + exIdx);
+    if(promptEl){
+      promptEl.disabled = false;
+      promptEl.style.background = '';
+      promptEl.style.color = '';
+    }
+    // 画像を貼り直したい場合は、そのままクリック／貼り付けで新しい画像に差し替え可能
   }
 }
 
