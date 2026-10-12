@@ -7,7 +7,7 @@
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Meiryo","Hiragino Sans","Yu Gothic",sans-serif;line-height:1.75;font-size:15px}
 header{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
 header .t{font-weight:700;font-size:15px} header .s{font-size:11px;opacity:.7}
-header a{margin-left:auto;color:#fff;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.35);padding:5px 12px;border-radius:6px}
+header nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}header a{color:#fff;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.35);padding:5px 12px;border-radius:6px}
 header a:hover{background:rgba(255,255,255,.15)}
 main{max-width:920px;margin:0 auto;padding:20px 16px 80px}
 h1{font-size:22px;color:var(--navy);margin:8px 0 4px} .lead{color:var(--mut);margin:0 0 16px}
@@ -44,7 +44,7 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 @media print{header,.acts,button{display:none}}
 </style></head><body>
 <div id="gate"><div><h2 style="background:none">ログインが必要です</h2><p>eラーニングのトップでログインしてから、もう一度開いてください。</p><p><a href="index.html">▶ eラーニングのトップへ</a></p></div></div>
-<header><div><div class="t">AIミニアプリ構築講座</div><div class="s">集合研修　演習ページ</div></div><a href="index.html">← eラーニングに戻る</a></header>
+<header><div><div class="t">AIミニアプリ構築講座</div><div class="s">集合研修　演習ページ</div></div><nav><a href="workshop.html">第1回</a><a href="workshop2.html">第2回</a><a href="index.html">← eラーニングに戻る</a></nav></header>
 <main>
 <h1>集合研修　第1回演習問題（予習用）</h1>
 <p class="lead">実践応用編（プロンプト・GEM・Gemini Notebook）。集合研修の前に、内容の確認と予習ができます。</p>
@@ -52,25 +52,25 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <b>📌 このページの使い方</b>
 <p>・演習の手順・見本のプロンプト・操作画面を、ここで確認できます。見本のプロンプトは「📋 コピー」ボタンでコピーできます。</p>
 <p>・黄色の記入欄に書いた内容は、このパソコン（ブラウザ）に自動で保存されます。ほかの端末には引き継がれません。</p>
-<p>・集合研修の当日の成果物は、講師が用意する班ごとのGoogleドライブ共有フォルダに保存します。</p>
-<p><a class="btn-drive" href="https://drive.google.com/drive/folders/XXXXXXXXXXXX" target="_blank" rel="noopener">📁 Googleドライブ共有フォルダを開く</a></p>
+<p>・集合研修の当日の成果物は、Googleドライブ「04集合研修用」フォルダの中の、自分の班のフォルダ（1班〜6班）に保存します。</p>
+<p><a class="btn-drive" href="https://drive.google.com/drive/folders/1ZYJ6UYVccyekG3GPglT8_BlbRZYX6-t7?hl=ja" target="_blank" rel="noopener">📁 Googleドライブ「04集合研修用」フォルダを開く</a></p>
 </div>
 <div class="card">
 <b>📥 サンプルデータ置き場（Googleドライブが開けない場合はここから）</b>
-<p class="gray">演習で使うサンプルデータです。Googleドライブの共有フォルダが開けない場合は、ここからコピーするか、テキストファイルとして保存して使ってください。</p>
+<p class="gray">演習で使うサンプルデータです。Googleドライブのフォルダが開けない場合は、ここからコピーするか、テキストファイルとして保存して使ってください。</p>
 <div class="srow"><div class="st">サンプル文章</div><div class="sa"><button class="cp" data-sample="0">📋 コピー</button><button class="dl" data-sample="0">⬇ テキストで保存</button><a href="#sample1">本文を見る</a></div></div><div class="srow"><div class="st">サンプル会議メモ</div><div class="sa"><button class="cp" data-sample="1">📋 コピー</button><button class="dl" data-sample="1">⬇ テキストで保存</button><a href="#sample2">本文を見る</a></div></div><div class="srow"><div class="st">各候補のサンプル入力例</div><div class="sa"><button class="cp" data-sample="2">📋 コピー</button><button class="dl" data-sample="2">⬇ テキストで保存</button><a href="#sample3">本文を見る</a></div></div><div class="srow"><div class="st">サンプル資料</div><div class="sa"><button class="cp" data-sample="3">📋 コピー</button><button class="dl" data-sample="3">⬇ テキストで保存</button><a href="#sample4">本文を見る</a></div></div><div class="srow"><div class="st">サンプル契約書</div><div class="sa"><button class="cp" data-sample="4">📋 コピー</button><button class="dl" data-sample="4">⬇ テキストで保存</button><a href="#sample5">本文を見る</a></div></div>
 </div>
-<div class="toc"><a href="#sec1">準備<span>Gemini（ジェミニ）を開きましょう</span></a><a href="#sec2">S1<span>プロンプト実践（動画②の応用）　30分</span></a><a href="#sec3">S2<span>議事録 → 要約 → 調査 → Googleスライド（動画④の応用）　40分</span></a><a href="#sec4">S3<span>GEM作成実践（動画⑤の応用）　45分</span></a><a href="#sec5">S4<span>Gemini Notebookで資料をAI化する（動画⑥の応用）　35分</span></a><a href="#sec6">時間があれば<span>Gemini Notebook 応用編　20分</span></a></div>
+<div class="toc"><a href="#sec1">準備<span>Gemini（ジェミニ）を開きましょう</span></a><a href="#sec2">S1<span>プロンプト実践（動画②の応用）　30分</span></a><a href="#sec3">S2<span>議事録 → 要約 → 調査 → Googleスライド（動画④の応用）　40分</span></a><a href="#sec4">S3<span>GEM作成実践（動画⑤の応用）　45分</span></a><a href="#sec5">S4<span>Gemini Notebookで資料をAI化する（動画⑥の応用）　35分</span></a><a href="#sec6">時間があれば<span>Gemini Notebook 応用編　20分</span></a><a href="#sec7">最後に<span>サイバー攻撃の防御策についてのお話　15分</span></a></div>
 <div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📝 この資料の進め方</div><div class="ln" style="">① 各演習は「やること」→「手順」→「見本」→「確認ポイント」の順に書いてあります。上から順に進めてください。</div><div class="ln" style="">② 8＋1の項目のうち、必ず書くのは「＃実行指示」だけです。ほかは、必要だと思うものを選んで足します。</div><div class="ln" style="">③ 黄色の「✍️ 自分で書いたプロンプト」欄は下書き用です。いきなり画面に入力せず、まずここに書き出してから、抜けている要素がないか見直してください。</div><div class="ln" style="">④ 灰色の枠は「見本のプロンプト」です。先に自分で書いてみて、行き詰まったら見本を参考にしてください。そのままコピーして使うこともできます。</div><div class="ln" style="">⑤ 赤い番号が付いた画像は、操作画面です。番号の順にクリック・入力してください。</div><div class="ln" style="">⑥ 時間が足りないときは「必須」と書かれた演習だけ進めれば大丈夫です。「任意」の演習は余裕があるときに取り組んでください。</div></div><div class="box" style="background:#F0FDF4;border-color:#16A34A"><div class="bt">📌 8＋1の法則 早見表（必須は実行指示だけ。見ながら進めましょう）</div><div class="ln" style="font-weight:700;">【入力設計】AIに渡す材料を決めます</div><div class="ln" style="">＃前提条件　どんな場面で、何のために使うか</div><div class="ln" style="">＃役割定義　AIにどんな担当者・専門家として考えてほしいか</div><div class="ln" style="">＃対象者　誰に向けた文章か（年齢・立場・知識レベル）</div><div class="ln" style="">＃参考情報　AIに使ってほしい材料（文章・資料・調べる範囲）</div><div class="ln" style="">＃実行指示　してほしい作業を、動詞（〜してください）で書きます（★必須）</div><div class="ln" style="font-weight:700;">【出力設計】受け取る形を決めます</div><div class="ln" style="">＃品質条件　文字数・項目数・必ず入れたい内容</div><div class="ln" style="">＃出力形式　メール・箇条書き・表など、使う場面に合わせた形</div><div class="ln" style="">＃文体・トーン　ていねい、親しみやすい、簡潔など</div><div class="ln" style="font-weight:700;">【＋1】仕上げに整えます</div><div class="ln" style="">＃禁止事項　AIに避けてほしいこと（もっともらしい間違いを防ぎます）</div><div class="ln" style="">＃専門視点・＃追加条件　誰の視点で見るか／どの基準で整えるか（必要に応じて）</div><div class="ln" style="font-weight:700;color:#c0392b;">★ 必須なのは「＃実行指示」だけです。ほかの項目は、出力をよくするために必要だと思うものだけを足します。全部を書く必要はありません。「＃」で始まる見出し行は、消さずにそのままAIに入力して大丈夫です。</div></div>
 <h2 id="sec1">準備　Gemini（ジェミニ）を開きましょう</h2>
 <p class="">この演習ではAIとして「Gemini」を使います。次の手順でGeminiを開き、プロンプトを入力する場所を確認してください。Googleアカウントでログインしておきます。</p>
 <div class="step"><span class="n">①</span><div>ブラウザ（Chrome）の検索欄に「ジェミニ」と入力して検索します。</div></div>
 <div class="step"><span class="n">②</span><div>検索結果の中から「Google Gemini」をクリックします（画像の①）。</div></div>
 <p class="gray">【画像】「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。</p>
-<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/g1.jpg" alt="【画像】「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。" loading="lazy"><figcaption>【画像】「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。</figcaption></figure>
+<figure><img src="img/workshop/g1.jpg" alt="【画像】「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。" loading="lazy"><figcaption>【画像】「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。</figcaption></figure>
 <div class="step"><span class="n">③</span><div>Geminiが開きます。「何から始めますか？」の下にある入力欄（画像の①）が、プロンプトを入力する場所です。</div></div>
 <p class="gray">【画像】Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。</p>
-<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/g2.jpg" alt="【画像】Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。" loading="lazy"><figcaption>【画像】Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。</figcaption></figure>
+<figure><img src="img/workshop/g2.jpg" alt="【画像】Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。" loading="lazy"><figcaption>【画像】Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。</figcaption></figure>
 <div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">💡 入力のコツ</div><div class="ln" style="">・入力欄の中で改行したいときは「Shift＋Enter」を押します。Enterだけを押すと、その時点で送信されてしまうので注意してください。</div><div class="ln" style="">・見本のプロンプトをコピーして貼り付けるときは「Ctrl＋V」で貼り付けます。</div><div class="ln" style="">・前の会話と混ざらないように、新しい演習を始めるときは、画面左上の「チャットを新規作成」をクリックして、新しいチャットで始めます。</div></div>
 <h2 id="sec2">S1　プロンプト実践（動画②の応用）　30分</h2>
 <p class="red b">🔖 必須：演習1-1・1-2　／　演習1-3・1-4は時間があれば</p>
@@ -251,7 +251,7 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <h3>⭐必須　STEP1　自社業務の棚卸し　10分</h3>
 <p class="">「毎週・毎日、同じようなプロンプトを入力している作業」はGEM化に向いています。下の候補から選ぶか、自社独自のGEMを考えてください。</p>
 <div class="tw"><table><thead><tr><th>GEM名（例）</th><th>入力するもの</th><th>出力されるもの</th><th>向いている業種</th></tr></thead><tbody><tr><td class=first>クレーム返信文</td><td>クレーム内容のメモ</td><td>丁寧な返信文案（3パターン）</td><td>飲食・宿泊・小売・サービス</td></tr><tr><td class=first>求人票ライター</td><td>雇用条件の箇条書き</td><td>応募者の心に響く求人票</td><td>全業種</td></tr><tr><td class=first>要約専門家</td><td>長い資料・メール</td><td>経営者向け300字の要約</td><td>全業種</td></tr><tr><td class=first>作業完了報告書</td><td>当日作業のメモ書き</td><td>取引先に送れる完了報告書</td><td>建設・製造・設備</td></tr><tr><td class=first>SNS投稿文メーカー</td><td>伝えたい内容の箇条書き</td><td>Instagram・X用の投稿文</td><td>飲食・小売・観光</td></tr><tr><td class=first>自社オリジナル</td><td>毎回入力している内容</td><td>毎回ほしい出力</td><td>自社に合わせる</td></tr></tbody></table></div>
-<p>入力するデータの作り方に迷ったら、班の共有ドライブフォルダの「GEMサンプル入力例集」を開いてください → <a class="drive" href="https://drive.google.com/drive/folders/XXXXXXXXXXXX" target="_blank" rel="noopener">GEMサンプル入力例集（共有フォルダを開く）</a></p>
+<p>入力するデータの作り方に迷ったら、「04集合研修用」フォルダの中の「演習問題及び演習用データ」フォルダにある「GEMサンプル入力例集」を開いてください → <a class="drive" href="https://drive.google.com/drive/folders/1ZYJ6UYVccyekG3GPglT8_BlbRZYX6-t7?hl=ja" target="_blank" rel="noopener">「04集合研修用」フォルダを開く</a></p>
 <p class="gray">うまく開けない場合は、下の入力例をコピーして使ってください。</p>
 <div class="box" id="sample3" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 各候補のサンプル入力例</div><div class="ln" style="font-weight:700;">【クレーム返信文】用</div><div class="ln" style="">注文した商品が届いたら傷がついていた。すぐ交換してほしいとの連絡。お客様は少し怒り気味。</div><div class="ln" style="font-weight:700;">【求人票ライター】用</div><div class="ln" style="">募集職種：接客スタッフ／時給1,100円／週3日〜・1日4時間〜／未経験可／土日勤務できる方歓迎</div><div class="ln" style="font-weight:700;">【要約専門家】用</div><div class="ln" style="">S2のサンプル会議メモ、または別の長めのメール・資料をそのまま使えます。</div><div class="ln" style="font-weight:700;">【作業完了報告書】用</div><div class="ln" style="">本日、A社様の空調フィルター交換作業完了。使用部材：フィルター2枚。所要時間45分。特記事項なし。</div><div class="ln" style="font-weight:700;">【SNS投稿文メーカー】用</div><div class="ln" style="">今週末限定で季節限定パフェを販売。地元産いちご使用。価格は800円。</div><div class="acts"><button class="cp" data-sample="2">📋 コピー</button><button class="dl" data-sample="2">⬇ テキストで保存</button></div></div>
 <div class="wb"><label>✍️ よく繰り返す業務を3つ書き出す</label><textarea data-key="wb20" style="min-height:67px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
@@ -285,10 +285,10 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <div class="box" style="background:#FEF2F2;border-color:#EF4444"><div class="bt">⚠️ 間違えやすいポイント：「カスタム指示」と「入力例」は別の場所です</div><div class="ln" style="">・「カスタム指示」欄（Gem作成画面の左側）＝GEMの振る舞いを決める指示文です。STEP2で書いたプロンプトを、1回だけ入力する場所です。</div><div class="ln" style="">・チャット欄「Geminiに相談」（作成画面の右側のプレビュー）＝実際のデータを入れて使う場所です。クレーム内容のメモなどの入力例は、こちらに入力します。</div><div class="ln" style="">・入力例をカスタム指示欄に入れてしまうと、GEMがうまく動きません。</div></div>
 <div class="step"><span class="n">①</span><div>画面左側のメニューの「Gem」をクリックして、Gemマネージャーを開きます。右上の「＋ Gemを作成」ボタンをクリックします（画像の①）。</div></div>
 <p class="gray">【画像】Gemマネージャー。①の「＋ Gemを作成」をクリックします。</p>
-<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/g3.jpg" alt="【画像】Gemマネージャー。①の「＋ Gemを作成」をクリックします。" loading="lazy"><figcaption>【画像】Gemマネージャー。①の「＋ Gemを作成」をクリックします。</figcaption></figure>
+<figure><img src="img/workshop/g3.jpg" alt="【画像】Gemマネージャー。①の「＋ Gemを作成」をクリックします。" loading="lazy"><figcaption>【画像】Gemマネージャー。①の「＋ Gemを作成」をクリックします。</figcaption></figure>
 <div class="step"><span class="n">②</span><div>「新しいGem」の画面が開きます。画像の番号の順に入力します。</div></div>
 <p class="gray">【画像】新しいGemの作成画面。①〜⑤の順に入力・操作します。</p>
-<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/g4.jpg" alt="【画像】新しいGemの作成画面。①〜⑤の順に入力・操作します。" loading="lazy"><figcaption>【画像】新しいGemの作成画面。①〜⑤の順に入力・操作します。</figcaption></figure>
+<figure><img src="img/workshop/g4.jpg" alt="【画像】新しいGemの作成画面。①〜⑤の順に入力・操作します。" loading="lazy"><figcaption>【画像】新しいGemの作成画面。①〜⑤の順に入力・操作します。</figcaption></figure>
 <div class="tw"><table><thead><tr><th>画像の番号</th><th>入力する内容</th></tr></thead><tbody><tr><td class=first>①　名前</td><td>例：「クレーム返信文メーカー」（GEM候補表の「GEM名」をそのまま使えます）</td></tr><tr><td class=first>②　説明</td><td>このGEMが何をするかを一言で。例：「クレーム内容を入力すると、丁寧な返信文案を作成します」</td></tr><tr><td class=first>③　カスタム指示</td><td>STEP2で書いたプロンプトを貼り付けます</td></tr><tr><td class=first>④　知識（任意）</td><td>いつも参照させたい資料があれば追加します。今回は空欄のままで大丈夫です</td></tr><tr><td class=first>⑤　保存</td><td>①〜③を入力したら、右上の「保存」をクリックします</td></tr></tbody></table></div>
 <div class="step"><span class="n">③</span><div>保存すると、右側のチャット欄（「Geminiに相談」）に、自分で考えた入力例を入力して送信し、動作を確認します。サンプル入力例（STEP1）をそのまま使っても構いません。</div></div>
 <div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">💡 保存しただけでは終わりません：チャット欄には何を入れる？</div><div class="ln" style="">GEMは、保存しただけでは何も生み出しません。チャット欄に、実際のデータを入力して初めて動きます。</div><div class="ln" style="">チャット欄に入れるのは「指示」ではなく、「生のデータ」そのものです。指示はカスタム指示欄にすでに書いてあるので、チャットに書き直す必要はありません。</div><div class="ln" style="">例（クレーム返信文メーカーの場合）：「先週購入した商品が届いたら傷がついていました。すぐ交換してほしいです。かなり困っています。」のように、本物のお客様から連絡が来たかのような文章を、そのまま貼り付けるだけで大丈夫です。</div><div class="ln" style="">思った出力にならない場合は、入力例を変えて何度か試してみましょう。</div></div>
@@ -301,16 +301,16 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <p class="red b">🔖 必須：STEP1・STEP2　／　STEP3は話し合い</p>
 <p class="">Gemini Notebook（旧NotebookLM）は、自分が読み込ませた資料だけを根拠にAIが答えてくれるツールです。就業規則や業務マニュアルを読み込ませて、質問に答えてもらいます。</p>
 <h3>⭐必須　STEP1　資料を読み込ませる　10分</h3>
-<p>共通サンプル資料2点（就業規則の抜粋・業務マニュアルの抜粋）を、全員が使います。班の共有ドライブフォルダに、「サンプル資料_就業規則抜粋」と「業務マニュアル抜粋（新入社員向け）」の2ファイルが入っています。→ <a class="drive" href="https://drive.google.com/drive/folders/XXXXXXXXXXXX" target="_blank" rel="noopener">サンプル資料（共有フォルダを開く）</a></p>
+<p>共通サンプル資料2点（就業規則の抜粋・業務マニュアルの抜粋）を、全員が使います。「04集合研修用」フォルダの中の「演習問題及び演習用データ」フォルダに、「サンプル資料_就業規則抜粋」と「業務マニュアル抜粋（新入社員向け）」の2ファイルが入っています。→ <a class="drive" href="https://drive.google.com/drive/folders/1ZYJ6UYVccyekG3GPglT8_BlbRZYX6-t7?hl=ja" target="_blank" rel="noopener">「04集合研修用」フォルダを開く</a></p>
 <div class="step"><span class="n">①</span><div>ブラウザの検索欄に「Gemini Notebook」と入力して検索し、「AI リサーチツール＆思考パートナー - Gemini Notebook」をクリックします（画像の①）。</div></div>
 <p class="gray">【画像】「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）</p>
-<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/n1.jpg" alt="【画像】「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）" loading="lazy"><figcaption>【画像】「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）</figcaption></figure>
+<figure><img src="img/workshop/n1.jpg" alt="【画像】「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）" loading="lazy"><figcaption>【画像】「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）</figcaption></figure>
 <div class="step"><span class="n">②</span><div>Gemini Notebookのホーム画面が開きます。右上の「＋ 新しいノートブック」をクリックします（画像の①）。</div></div>
 <p class="gray">【画像】Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。</p>
-<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/n2.jpg" alt="【画像】Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。" loading="lazy"><figcaption>【画像】Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。</figcaption></figure>
-<div class="step"><span class="n">③</span><div>「ソースを追加」をクリックし、「Googleドライブ」を選んで、共有フォルダの2ファイルを両方選択して追加します（Gemini Notebookは複数の資料をまとめて読み込めます）。</div></div>
+<figure><img src="img/workshop/n2.jpg" alt="【画像】Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。" loading="lazy"><figcaption>【画像】Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。</figcaption></figure>
+<div class="step"><span class="n">③</span><div>「ソースを追加」をクリックし、「Googleドライブ」を選んで、「演習問題及び演習用データ」フォルダの2ファイルを両方選択して追加します（Gemini Notebookは複数の資料をまとめて読み込めます）。</div></div>
 <p class="gray">【画像】ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。</p>
-<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/n3.jpg" alt="【画像】ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。" loading="lazy"><figcaption>【画像】ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。</figcaption></figure>
+<figure><img src="img/workshop/n3.jpg" alt="【画像】ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。" loading="lazy"><figcaption>【画像】ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。</figcaption></figure>
 <div class="box" id="sample4" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 サンプル資料（就業規則・業務マニュアル抜粋）</div><div class="ln" style="color:#6b7280;">Googleドライブから読み込めない場合は、「ソースを追加」から「コピーしたテキスト」を選び、下の資料本文をコピーして貼り付けてください。</div><div class="ln" style="font-weight:700;">【就業規則（抜粋）】</div><div class="ln" style="">第1条（勤務時間）　勤務時間は午前9時から午後6時までとする（休憩1時間を含む）。</div><div class="ln" style="">第2条（有給休暇）　入社6ヶ月経過後、年10日の有給休暇を付与する。取得を希望する場合は、原則として3営業日前までに上長へ申請すること。緊急の場合はこの限りではない。</div><div class="ln" style="">第3条（慶弔休暇）　本人結婚時5日、配偶者・実父母・子の死亡時5日、祖父母・兄弟姉妹の死亡時2日の休暇を付与する。</div><div class="ln" style="">第4条（経費精算）　交通費・接待費等の経費は、領収書を添付の上、利用月の翌月10日までに経理担当へ提出すること。1万円を超える経費は事前に上長の承認を得ること。</div><div class="ln" style="">第5条（服装・身だしなみ）　清潔感のある服装を心がけ、来客対応時はジャケット着用を基本とする。</div><div class="ln" style="">第6条（情報セキュリティ）　顧客情報・取引先情報を含む資料は社外へ持ち出し禁止とする。社外での作業が必要な場合は上長の承認を得ること。</div><div class="ln" style="font-weight:700;">【新入社員向け業務マニュアル（抜粋）】</div><div class="ln" style="">■電話対応　「お電話ありがとうございます、〇〇（会社名）でございます」と応答し、相手の会社名・氏名を復唱して確認する。</div><div class="ln" style="">■来客対応　来客があった際は速やかに立ち上がり、担当者に取り次ぐ。お茶出しは来客後5分以内を目安とする。</div><div class="ln" style="">■クレーム対応の初動　まずお客様の話を最後まで遮らずに聞く。その場での即答は避け、「担当者に確認の上、〇分以内に折り返します」と伝える。個人の判断で謝罪の範囲を確約しない。</div><div class="ln" style="">■社用車の利用　使用前後に運転日報へ記入し、給油は満タン返却を原則とする。事故発生時は速やかに上長へ報告する。</div><div class="acts"><button class="cp" data-sample="3">📋 コピー</button><button class="dl" data-sample="3">⬇ テキストで保存</button></div></div>
 <h3>⭐必須　STEP2　Q&amp;Aで使ってみる　15分</h3>
 <div class="step"><span class="n">①</span><div>画面中央のチャット欄（画像の②）に、次の質問を順番に入力します。</div></div>
@@ -354,6 +354,10 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <div class="step"><span class="n">②</span><div>画面右側の「Studio」の中の「スライド資料」を選び、就業規則の内容から、社内説明用のスライドを自動作成します（画像の③）。</div></div>
 <div class="step"><span class="n">③</span><div>画面左側の「ソース」の「ウェブで新しいソースを検索」の欄に、「同業種の就業規則の一般的な相場」など、資料にない情報を入力して検索します。検索モードは「Fast Research」を選びます（プランによっては「Deep Research」も選べます）。</div></div>
 <div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 確認ポイント</div><div class="ln" style="">・自動作成されたスライドは、そのまま社内説明会に使えそうですか？</div><div class="ln" style="">・ウェブ調査の結果に、出典（引用元）が書かれていますか？</div><div class="ln" style="">・自社なら、契約書・マニュアル以外に、どんな資料をGemini Notebookに読み込ませたいですか？</div></div>
+<h2 id="sec7">最後に　サイバー攻撃の防御策についてのお話　15分</h2>
+<p class="">第1回の最後に、講師から「サイバー攻撃の防御策」についてお話しします。演習はありません。AIを業務で使う機会が増えるなかで、中小企業が押さえておきたい守りの考え方を学びます。</p>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📝 お話の時間です</div><div class="ln" style="">筆記用具をご用意ください。お話を聞きながら、自社で当てはまることをメモしておくと、あとで見直すときに役立ちます。</div></div>
+<div class="wb"><label>✍️ メモ欄（自社で当てはまること・あとで確認したいこと）</label><textarea data-key="wb27" style="min-height:117px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
 </main>
 <script>
 (function(){

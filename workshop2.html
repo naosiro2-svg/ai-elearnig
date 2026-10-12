@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+    <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>集合研修 第2回演習（予習用）｜AIミニアプリ構築講座</title>
+    <style>
+    :root{--navy:#1e3a5f;--blue:#1d4ed8;--bg:#f4f6fb;--ink:#1f2937;--mut:#6b7280;}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Meiryo","Hiragino Sans","Yu Gothic",sans-serif;line-height:1.75;font-size:15px}
+    header{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+    header .t{font-weight:700;font-size:15px} header .s{font-size:11px;opacity:.7}
+    header nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}header a{color:#fff;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.35);padding:5px 12px;border-radius:6px}
+    header a:hover{background:rgba(255,255,255,.15)}
+    main{max-width:920px;margin:0 auto;padding:20px 16px 80px}
+    h1{font-size:22px;color:var(--navy);margin:8px 0 4px} .lead{color:var(--mut);margin:0 0 16px}
+    h2{background:var(--navy);color:#fff;font-size:17px;padding:10px 14px;border-radius:8px;margin:36px 0 12px;scroll-margin-top:70px}
+    h3{font-size:15.5px;color:var(--navy);border-bottom:2px solid #3b82f6;padding-bottom:3px;margin:26px 0 10px}
+    p{margin:8px 0} p.red{color:#c0392b;font-weight:700;font-size:13.5px} p.gray{color:var(--mut);font-size:13.5px} p.b{font-weight:700}
+    .box{border:1.5px solid;border-radius:10px;padding:12px 16px;margin:14px 0;background:#fff}
+    .box .bt{font-weight:700;color:var(--navy);margin-bottom:4px} .box .ln{margin:2px 0}
+    .acts{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    button{font-family:inherit;cursor:pointer;border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:6px 12px;font-size:12.5px}
+    button:hover{background:#eef2ff;border-color:#6366f1} button.done{background:#dcfce7;border-color:#16a34a}
+    .step{display:flex;gap:10px;margin:8px 0} .step .n{font-weight:700;color:var(--blue);min-width:2.2em} .step ul{margin:4px 0 0;padding-left:1.2em;color:var(--mut);font-size:13.5px}
+    figure{margin:12px 0;text-align:center} figure img{width:100%;max-width:100%;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    figcaption{font-size:12.5px;color:var(--mut);margin-top:4px}
+    .prompt{background:#f3f4f6;border:1.5px solid #6b7280;border-radius:10px;margin:14px 0;overflow:hidden}
+    .prompt .ph{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:#e5e7eb;font-size:12.5px;font-weight:700;color:#4b5563}
+    .prompt pre{margin:0;padding:12px 16px;white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:14px;line-height:1.7}
+    .prompt .hd{color:var(--blue);font-weight:700}
+    .wb{margin:14px 0;border:1.5px solid #6b7280;border-radius:10px;overflow:hidden;background:#fff}
+    .wb label{display:block;background:#fef3c7;color:#92400e;font-weight:700;padding:8px 14px;font-size:13.5px}
+    .wb .hint{background:#fef3c7;padding:0 14px 8px;font-size:12px;color:var(--mut)}
+    textarea{width:100%;border:0;padding:10px 14px;font:inherit;font-size:14px;resize:vertical;display:block;background:#fff}
+    textarea:focus{outline:2px solid #6366f1}
+    .tw{overflow-x:auto;margin:12px 0} table{border-collapse:collapse;width:100%;background:#fff;font-size:13.5px} th,td{border:1px solid #9ca3af;padding:7px 10px;vertical-align:top} th{background:#dbeafe;color:var(--navy);text-align:left} td.first{font-weight:700;background:#f8fafc;white-space:nowrap}
+    td textarea{padding:4px 6px;font-size:13px;border:0;min-height:48px}
+    .card{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+    .srow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px dashed #d1d5db;flex-wrap:wrap}.srow:last-child{border:0}
+    .srow .st{font-weight:700;font-size:13.5px}.srow .sa{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.srow a{font-size:12.5px}
+    a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}.toc a{background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:8px 12px;text-decoration:none;color:var(--navy);font-weight:700;font-size:13.5px}.toc a span{display:block;font-weight:400;color:var(--mut);font-size:12px}
+    .btn-drive{display:inline-block;background:var(--blue);color:#fff!important;text-decoration:none;padding:9px 16px;border-radius:8px;font-weight:700;font-size:14px}
+    #gate{position:fixed;inset:0;background:#0f172a;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;z-index:99;padding:20px}
+    #gate a{color:#93c5fd}
+    @media(max-width:600px){main{padding:14px 10px 60px}.step .n{min-width:2.6em}}
+    @media print{header,.acts,button{display:none}}
+    </style></head><body>
+    <div id="gate"><div><h2 style="background:none">ログインが必要です</h2><p>eラーニングのトップでログインしてから、もう一度開いてください。</p><p><a href="index.html">▶ eラーニングのトップへ</a></p></div></div>
+    <header><div><div class="t">AIミニアプリ構築講座</div><div class="s">集合研修　演習ページ</div></div><nav><a href="workshop.html">第1回</a><a href="workshop2.html">第2回</a><a href="index.html">← eラーニングに戻る</a></nav></header>
+    <main>
+    <h1>集合研修　第2回演習問題（予習用）</h1>
+    <p class="lead">ミニアプリ構築編（Google AI Studio）。集合研修の前に、内容の確認と予習ができます。</p>
+    <div class="card">
+    <b>📌 このページの使い方</b>
+    <p>・演習の手順・見本のプロンプト・操作画面を、ここで確認できます。見本のプロンプトは「📋 コピー」ボタンでコピーできます。</p>
+    <p>・黄色の記入欄に書いた内容は、このパソコン（ブラウザ）に自動で保存されます。ほかの端末には引き継がれません。</p>
+    <p>・集合研修の当日の成果物は、Googleドライブ「04集合研修用」フォルダの中の、自分の班のフォルダ（1班〜6班）に保存します。</p>
+    <p><a class="btn-drive" href="https://drive.google.com/drive/folders/1ZYJ6UYVccyekG3GPglT8_BlbRZYX6-t7?hl=ja" target="_blank" rel="noopener">📁 Googleドライブ「04集合研修用」フォルダを開く</a></p>
+    </div>
+    
+    
+    <div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📝 この資料の進め方</div><div class="ln" style="">① 各演習は「やること」→「手順」→「見本」→「確認ポイント」の順に書いてあります。上から順に進めてください。事前に読んでおくと、当日がスムーズです。</div><div class="ln" style="">② 8＋1の項目のうち、必ず書くのは「＃実行指示」だけです。ほかの項目は、必要だと思うものを選んで足します。</div><div class="ln" style="">③ 黄色の「✍️」の欄は下書き用です。いきなり画面に入力せず、まずここに書き出してから見直してください。</div><div class="ln" style="">④ 灰色の枠は「見本」です。先に自分で書いてみて、行き詰まったら参考にしてください。そのままコピーして使うこともできます。</div><div class="ln" style="">⑤ 赤い番号が付いた画像は操作画面です。番号の順にクリック・入力してください。</div><div class="ln" style="">⑥ 「任意」の演習は、時間があるときに取り組んでください。</div></div><div class="box" style="background:#F0FDF4;border-color:#16A34A"><div class="bt">📌 8＋1の法則 早見表（必須は実行指示だけ）</div><div class="ln" style="font-weight:700;">【入力設計】</div><div class="ln" style="">＃前提条件（どんな場面か）／＃役割定義（AIにどんな担当者として考えてほしいか）／＃対象者（誰向けか）／＃参考情報（使ってほしい材料）／＃実行指示（してほしい作業。★必須）</div><div class="ln" style="font-weight:700;">【出力設計】</div><div class="ln" style="">＃品質条件（文字数・項目数など）／＃出力形式（メール・箇条書き・表など）／＃文体・トーン（ていねい・簡潔など）</div><div class="ln" style="font-weight:700;">【＋1】</div><div class="ln" style="">＃禁止事項（避けてほしいこと）／＃専門視点／＃追加条件</div><div class="ln" style="font-weight:700;color:#c0392b;">★ 全部を書く必要はありません。必要だと思う項目だけを足します。</div></div>
+    <h2 id="sec1">〇 ミニアプリ構築編</h2>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">📌 第1回で終わらなかった演習について</div><div class="ln" style="">第1回の「Gemini Notebook 応用編」が終わらなかった場合は、第2回の最初に、第1回の演習問題の応用編の続きから行います。</div></div>
+<p class="">Google AI Studio（aistudio.google.com）の「Build」機能を使って、自社の「課題を解決できる作業」をAIミニアプリにします。成果物は、「04集合研修用」フォルダの中の、自分の班のフォルダに保存してください。</p>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📌 進め方（班の判断で決めてください）</div><div class="ln" style="">アプリを「メンバー1人ずつ個別に作る」か、「班で1つ（または複数）を共同で作る」かは、各班の判断にお任せします。発表は班単位で1つ選んで行うので、進めやすい形で構いません。</div></div>
+<h3>S1　アプリのアイデアを固める</h3>
+<p class="b">STEP1　まず、自社の課題からアプリを考える</p>
+<p class="">事前に考えてきたアプリの内容が自社の課題に合っていれば、STEP1はスキップして、STEP2に進んでください。</p>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">💡 事前に考えておくこと（確認）</div><div class="ln" style="">・自社で「毎回時間がかかる・面倒な」業務は何か</div><div class="ln" style="">・その業務をアプリにするなら、「何を入力して、何が出力されれば理想か」</div><div class="ln" style="">・アプリ名（仮）</div></div>
+<p class="b">アイデアが浮かばない場合は、次の手順を試してください。</p>
+<div class="step"><span class="n">①</span><div>下の見本をコピーして、「【　】」の部分を自社の内容に書き換え、Geminiに入力します。</div></div>
+<div class="prompt"><div class="ph"><span>見本のプロンプト（自社の課題から、アプリのアイデアを出してもらう）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
+私は【業種】の【役職】です。【自社の課題を具体的に。例：お客様からのクレーム対応にいつも時間がかかり、対応がスタッフによってバラバラ】という課題があります。
+＃実行指示
+この課題を解決する対策を3つ提案してください。それぞれの対策が、AIアプリ（入力すると自動でほしい結果が出るツール）にできそうかどうかも教えてください。"><span class="hd">＃前提条件</span>
+私は【業種】の【役職】です。【自社の課題を具体的に。例：お客様からのクレーム対応にいつも時間がかかり、対応がスタッフによってバラバラ】という課題があります。
+<span class="hd">＃実行指示</span>
+この課題を解決する対策を3つ提案してください。それぞれの対策が、AIアプリ（入力すると自動でほしい結果が出るツール）にできそうかどうかも教えてください。
+</pre></div>
+<div class="step"><span class="n">②</span><div>出てきた対策案の中から、「ミニアプリにできそうなもの」を選びます。</div></div>
+<div class="step"><span class="n">③</span><div>選んだ対策が、次の「アプリ化すべき業務の条件」に当てはまるかを確認します。</div></div>
+<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ アプリ化すべき業務の条件</div><div class="ln" style="">① 繰り返し：週1回以上、または月数回以上の頻度で発生するか</div><div class="ln" style="">② 複数人：自分以外にも使う人がいるか</div><div class="ln" style="">③ 定型：入力と出力のパターンが、ある程度決まっているか</div><div class="ln" style="color:#6b7280;">さらに、効果が大きいか（費用面・工数面）、誰でも使えるか、使いやすいか、も考えてみましょう。</div></div>
+<p class="b">STEP2　アプリの内容を掘り下げる（要件定義）</p>
+<p class="">STEP1で考えた対策（ミニアプリ）の概要ができたら、さらに具体的にします。次の「要件定義」（アプリの設計図にあたるもの）を、下の表に書いてください。</p>
+<div class="tw"><table><thead><tr><th>項目</th><th>書くこと</th><th>自分の記入欄</th></tr></thead><tbody><tr><td class=first>① 何をするアプリか</td><td>目的や、解決したい業務</td><td><textarea data-key="wb1" rows="2"></textarea></td></tr><tr><td class=first>② 入力する項目</td><td>氏名／日付／金額／カテゴリ など</td><td><textarea data-key="wb2" rows="2"></textarea></td></tr><tr><td class=first>③ 出力・結果</td><td>一覧表示／合計の計算／生成した文章・画像 など</td><td><textarea data-key="wb3" rows="2"></textarea></td></tr><tr><td class=first>④ 必要な機能</td><td>保存したい／AIに書かせたい／通知・メールを送りたい</td><td><textarea data-key="wb4" rows="2"></textarea></td></tr><tr><td class=first>⑤ 誰が・いつ・どこで使うか</td><td>利用シーン（使う人・場面）</td><td><textarea data-key="wb5" rows="2"></textarea></td></tr></tbody></table></div>
+<h3>S2　Google AI Studioでアプリを作る　80分</h3>
+<p class="">Googleが提供するAIアプリ開発ツールです（無料。Googleアカウントで使えます）。「Build」機能の入力欄に、作りたいアプリの要件定義の内容を入力します。</p>
+<p class="b">STEP1　Google AI Studioにアクセスする</p>
+<div class="step"><span class="n">①</span><div>aistudio.google.com にアクセスします（Googleアカウントでログインします）。</div></div>
+<div class="step"><span class="n">②</span><div>左側のメニューで「New app」（Build）が選ばれていることを確認します。</div></div>
+<div class="step"><span class="n">③</span><div>画面中央の入力欄（画像の①）が、作りたいアプリの内容を書く場所です。</div></div>
+<p class="gray">【画像】Google AI Studioのトップ画面。①の入力欄に、作りたいアプリの内容を入力します。</p>
+<figure><img src="img/workshop/as1.jpg" alt="【画像】Google AI Studioのトップ画面。①の入力欄に、作りたいアプリの内容を入力します。" loading="lazy"><figcaption>【画像】Google AI Studioのトップ画面。①の入力欄に、作りたいアプリの内容を入力します。</figcaption></figure>
+<p class="b">STEP2　Buildのプロンプトを書く</p>
+<p class="">Buildの入力欄が、アプリの頭脳になります。STEP2の要件定義で考えた内容を、文章にして入力します。8＋1の項目のうち、必須なのは「＃実行指示」（アプリがやること）です。ほかの項目は、必要なものを足してください。「＃」の見出しは、付けても付けなくても構いません。</p>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">📌 書く内容</div><div class="ln" style="">・＃実行指示（必須）：アプリがやること。ユーザーが何を入力して、アプリが何をするのかを、番号を付けて順番に書きます</div><div class="ln" style="">・＃前提条件：誰が使うか、どんな課題を解決するアプリか（課題は背景の説明にとどめます）</div><div class="ln" style="">・＃出力形式：結果の見せ方・見た目のイメージ（見出し、表、コピーボタンなど）</div><div class="ln" style="">・＃禁止事項：アプリにさせてはいけないこと・注意点（入力にない事実を付け足さない、など）</div></div>
+<div class="wb"><label>✍️ 自分で書いたBuildプロンプト</label><textarea data-key="wb6" style="min-height:208px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="prompt"><div class="ph"><span>見本のプロンプト（クレーム対応サポートアプリの例）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
+接客スタッフ全員が使う、クレーム対応サポートアプリです。クレーム対応に時間がかかり、対応がスタッフによってバラバラという課題があります。
+＃実行指示
+ユーザーは、クレームで聞いた内容のメモを入力します。アプリは次の3つを行ってください。　①要点を3行でまとめる　②初動対応を2〜3つ提示する　③上司への報告メッセージを作成する
+＃出力形式
+結果を、「要点」「初動対応」「報告メッセージ」の3つの見出しで画面に表示してください。報告メッセージには、コピーボタンを付けてください。
+＃禁止事項
+入力されていない事実を付け足さないでください。"><span class="hd">＃前提条件</span>
+接客スタッフ全員が使う、クレーム対応サポートアプリです。クレーム対応に時間がかかり、対応がスタッフによってバラバラという課題があります。
+<span class="hd">＃実行指示</span>
+ユーザーは、クレームで聞いた内容のメモを入力します。アプリは次の3つを行ってください。　①要点を3行でまとめる　②初動対応を2〜3つ提示する　③上司への報告メッセージを作成する
+<span class="hd">＃出力形式</span>
+結果を、「要点」「初動対応」「報告メッセージ」の3つの見出しで画面に表示してください。報告メッセージには、コピーボタンを付けてください。
+<span class="hd">＃禁止事項</span>
+入力されていない事実を付け足さないでください。
+</pre></div>
+<p class="gray">アイデアが出ない場合は、Geminiに「〇〇業の〇〇です。Google AI Studioで『〇〇』を作りたいです。入力：〇〇、出力：〇〇。Buildに入力するプロンプトを書いてください」と相談しても構いません。</p>
+<p class="b">書けたら：Buildを実行する</p>
+<div class="step"><span class="n">①</span><div>書いたプロンプトを、画面中央の入力欄（画像の①）に貼り付けます。</div></div>
+<div class="step"><span class="n">②</span><div>右下の「Build（Ctrl＋Enter）」ボタン（画像の②）をクリックして、アプリの生成を始めます（数分かかります）。</div></div>
+<p class="gray">【画像】プロンプトを貼り付けた状態。②の「Build」ボタンでアプリの生成を始めます。</p>
+<figure><img src="img/workshop/as2.jpg" alt="【画像】プロンプトを貼り付けた状態。②の「Build」ボタンでアプリの生成を始めます。" loading="lazy"><figcaption>【画像】プロンプトを貼り付けた状態。②の「Build」ボタンでアプリの生成を始めます。</figcaption></figure>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">💡 Buildの画面の見方</div><div class="ln" style="">最初は、中央に大きな入力欄（作りたいアプリの内容を、自然な文章で書く場所）が表示されます。</div><div class="ln" style="">Buildを実行すると、左側が「Gemini」との会話欄（アプリの追加・修正を指示する場所）、右側が「Preview」（実際に動くアプリの画面）になります。</div></div>
+<div class="step"><span class="n">③</span><div>生成の途中で「Design previews are ready」と表示されたら、右側の5つのデザインの中から、好きなものを選びます（画像の①）。選んだら「Select this design」（画像の②）をクリックします。</div></div>
+<p class="gray">【画像】デザインの選択画面。①でデザインを選び、②の「Select this design」をクリックします。</p>
+<figure><img src="img/workshop/as3.jpg" alt="【画像】デザインの選択画面。①でデザインを選び、②の「Select this design」をクリックします。" loading="lazy"><figcaption>【画像】デザインの選択画面。①でデザインを選び、②の「Select this design」をクリックします。</figcaption></figure>
+<div class="step"><span class="n">④</span><div>アプリの生成が終わると、右側にアプリの画面が表示されます。</div></div>
+<p class="gray">【画像】アプリが生成された画面。右側のPreviewで、実際に動かして確認します。</p>
+<figure><img src="img/workshop/as4.jpg" alt="【画像】アプリが生成された画面。右側のPreviewで、実際に動かして確認します。" loading="lazy"><figcaption>【画像】アプリが生成された画面。右側のPreviewで、実際に動かして確認します。</figcaption></figure>
+<p class="b">STEP3　テストして改善する</p>
+<div class="step"><span class="n">①</span><div>右側の「Preview」画面で、STEP2で決めた「入力するもの」に沿った入力例（架空のデータで構いません）を、実際にアプリに入力して、動作を確認します。</div></div>
+<div class="step"><span class="n">②</span><div>エラーになったり、出力が期待と違ったりした場合は、左側の「Gemini」との会話欄（「Make changes, add new features, ask for anything」と書かれた欄）に、日本語で修正を依頼します。</div></div>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">💡 エラーが出たときは</div><div class="ln" style="">エラーの画面（画像の①）が出たら、左側の会話欄に、「なぜ失敗したのか」「このエラーを直してください」のように送ります。画面のスクリーンショットを貼り付けて送ることもできます。</div><div class="ln" style="">Geminiが修正するので、アプリが思い通りに動くまで、会話欄に修正依頼を繰り返します。</div></div>
+<p class="gray">【画像】エラーが出た画面。①のエラーの内容を、左の会話欄でGeminiに伝えて直してもらいます。</p>
+<figure><img src="img/workshop/as5.jpg" alt="【画像】エラーが出た画面。①のエラーの内容を、左の会話欄でGeminiに伝えて直してもらいます。" loading="lazy"><figcaption>【画像】エラーが出た画面。①のエラーの内容を、左の会話欄でGeminiに伝えて直してもらいます。</figcaption></figure>
+<p class="b">STEP4　URLを発行して共有する</p>
+<p class="">アプリが完成して、社内や班で共有したいときは、次の手順で進めます。</p>
+<div class="step"><span class="n">①</span><div>画面右上の「Share」をクリックします。</div></div>
+<div class="step"><span class="n">②</span><div>「General access」を「Public: Anyone with the link can view」にします（画像の①）。</div></div>
+<div class="step"><span class="n">③</span><div>「Copy link」（画像の②）をクリックして、共有用のURLをコピーします。</div></div>
+<p class="gray">【画像】共有の設定画面。①で「Public」を選び、②の「Copy link」でURLをコピーします。</p>
+<figure><img src="img/workshop/as6.jpg" alt="【画像】共有の設定画面。①で「Public」を選び、②の「Copy link」でURLをコピーします。" loading="lazy"><figcaption>【画像】共有の設定画面。①で「Public」を選び、②の「Copy link」でURLをコピーします。</figcaption></figure>
+<div class="step"><span class="n">④</span><div>コピーしたURLを、共有する人のチャット（LINEなど）に送ります。受け取った人は、各自のパソコンでURLを開いて、動作を確認します。</div></div>
+<div class="step"><span class="n">⑤</span><div>スマートフォンで使うアプリの場合は、プレビューの画面サイズの切り替え（画像の①）で、「Mobile」の見え方を確認します。</div></div>
+<p class="gray">【画像】画面サイズの切り替えメニュー。①から「Mobile」「Tablet」を選んで、見え方を確認します。</p>
+<figure><img src="img/workshop/as7.jpg" alt="【画像】画面サイズの切り替えメニュー。①から「Mobile」「Tablet」を選んで、見え方を確認します。" loading="lazy"><figcaption>【画像】画面サイズの切り替えメニュー。①から「Mobile」「Tablet」を選んで、見え方を確認します。</figcaption></figure>
+<p class="gray">🚀 早く終わったら（班全員がSTEP4を完了した場合）：S1の企画で、ほかにも思いついた業務課題があれば、2つ目・3つ目のミニアプリも、STEP1〜4と同じ手順で作ってみましょう。1つ目より短い時間で作れるはずです。</p>
+<h3>S3　班内選考・発表準備　（任意：時間次第で短縮）</h3>
+<p class="b">STEP1　班内で全員のアプリをデモする</p>
+<p class="">班員が各自でアプリを作った場合は、各自が自分のアプリをメンバーにデモします。</p>
+<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 選考基準</div><div class="ln" style="">・実際の業務で使える「リアルさ」があるか</div><div class="ln" style="">・入力が簡単で、誰でもすぐ使えそうか</div><div class="ln" style="">・出力が、そのまま業務で使える成果物になっているか</div><div class="ln" style="">・アプリがあることで、時間・手間がどれだけ減るか</div></div>
+<p class="b">STEP2　班の代表アプリを1つ選ぶ</p>
+<p class="">班で話し合い、上の選考基準を使って、アプリを1つ選んでください。</p>
+<p class="b">STEP3　アプリ発表の準備・発表</p>
+<div class="tw"><table><thead><tr><th>発表の順番</th><th>内容</th><th>メモ（自分の記入欄）</th></tr></thead><tbody><tr><td class=first>① 会社・業種・課題（15秒）</td><td>どんな会社で、どんな課題があるか</td><td><textarea data-key="wb7" rows="2"></textarea></td></tr><tr><td class=first>② アプリの説明と実演（2分）</td><td>アプリの内容と、実際に動かして見せる</td><td><textarea data-key="wb8" rows="2"></textarea></td></tr><tr><td class=first>③ 期待する効果（30秒）</td><td>時間・手間・品質がどう良くなるか</td><td><textarea data-key="wb9" rows="2"></textarea></td></tr><tr><td class=first>④ 今後やりたいこと・感想（30秒）</td><td>これから取り組みたいこと、今日の感想</td><td><textarea data-key="wb10" rows="2"></textarea></td></tr></tbody></table></div>
+<div class="box" style="background:#F5F3FF;border-color:#8B5CF6"><div class="bt">✅ 発表チェックリスト（発表前に確認）</div><div class="ln" style="">・アプリのURL（またはAI Studioの画面）を、すぐ開ける状態にしている</div><div class="ln" style="">・デモ用のサンプル入力テキストを、手元に用意している</div><div class="ln" style="">・発表内容（①〜④）を頭に入れている</div><div class="ln" style="">・業務手順書がある場合は、見せる準備ができている</div></div>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📝 最後に</div><div class="ln" style="">お疲れさまでした。最後に、アンケートへのご記入をお願いします。</div></div>
+    </main>
+    <script>
+    (function(){
+      try{ if(sessionStorage.getItem('loggedIn')!=='1' && !localStorage.getItem('userEmail')) document.getElementById('gate').style.display='flex'; }catch(e){}
+      var SAMPLES = [];
+      function copy(text, btn){
+        function ok(){ if(!btn) return; var o=btn.textContent; btn.classList.add('done'); btn.textContent='✔ コピーしました'; setTimeout(function(){btn.textContent=o;btn.classList.remove('done');},1600); }
+        if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(ok,function(){fb()}); } else fb();
+        function fb(){ var t=document.createElement('textarea'); t.value=text; t.style.position='fixed'; t.style.opacity='0'; document.body.appendChild(t); t.select(); try{document.execCommand('copy');ok();}catch(e){} document.body.removeChild(t); }
+      }
+      document.addEventListener('click',function(e){
+        var b=e.target.closest('button'); if(!b) return;
+        if(b.classList.contains('cp2')){ var pre=b.closest('.prompt').querySelector('pre'); copy(pre.getAttribute('data-raw'), b); }
+        else if(b.classList.contains('cp') && b.dataset.sample!==undefined){ copy(SAMPLES[+b.dataset.sample].text, b); }
+        else if(b.classList.contains('dl') && b.dataset.sample!==undefined){
+          var s=SAMPLES[+b.dataset.sample]; var blob=new Blob(['\ufeff'+s.text],{type:'text/plain;charset=utf-8'});
+          var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=s.title.replace(/[（(].*$/,'').trim()+'.txt'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        }
+      });
+      document.querySelectorAll('textarea[data-key]').forEach(function(t){
+        var k='ws2_'+t.dataset.key;
+        try{ var v=localStorage.getItem(k); if(v) t.value=v; }catch(e){}
+        t.addEventListener('input',function(){ try{localStorage.setItem(k,t.value);}catch(e){} });
+      });
+    })();
+    </script></body></html>
