@@ -124,6 +124,7 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
 .point-chip{font-size:12px;background:var(--green-light);color:var(--green);padding:5px 12px;border-radius:20px;font-weight:500;}
 .prompt-box{background:#0f172a;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
 .prompt-label{font-size:11px;color:#64748b;margin-bottom:8px;font-weight:500;}
+.prompt-note{font-size:12px;color:#94a3b8;margin-top:8px;line-height:1.6;}
 .prompt-text{font-size:13px;color:#a5b4fc;line-height:1.75;white-space:pre-wrap;}
 .copy-btn{font-size:11px;background:#1e293b;color:#94a3b8;border:1px solid #334155;border-radius:4px;padding:4px 12px;cursor:pointer;font-family:inherit;}
 .copy-btn:hover{background:#334155;color:#fff;}
@@ -838,6 +839,7 @@ function renderPrompts(){
         <button class="copy-btn" onclick="copyP(${pi})">コピー</button>
       </div>
       <div class="prompt-text">${esc(p.text)}</div>
+      ${p.note?`<div class="prompt-note">💡 ${esc(p.note)}</div>`:''}
     </div>`).join('');
 }
 
