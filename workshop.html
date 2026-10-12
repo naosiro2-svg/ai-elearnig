@@ -1,360 +1,382 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIワークショップ専用ページ</title>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>集合研修 第1回演習（予習用）｜AIミニアプリ構築講座</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0F1923;
-    --surface: #1A2535;
-    --surface2: #212F42;
-    --accent: #1D9E75;
-    --accent2: #16B8F3;
-    --text: #E8EDF3;
-    --text2: #8FA3BC;
-    --border: rgba(255,255,255,0.08);
-    --radius: 12px;
-  }
-  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
-
-  /* ロック画面 */
-  #lockScreen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-  .lock-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 48px 40px; width: 90%; max-width: 420px; text-align: center; }
-  .lock-logo { width: 64px; height: 64px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 24px; }
-  .lock-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-  .lock-sub { font-size: 13px; color: var(--text2); margin-bottom: 32px; }
-  .lock-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; color: var(--text); font-size: 16px; font-family: inherit; text-align: center; letter-spacing: 4px; margin-bottom: 16px; outline: none; transition: border-color .2s; }
-  .lock-input:focus { border-color: var(--accent); }
-  .lock-btn { width: 100%; background: var(--accent); color: white; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; transition: opacity .2s; }
-  .lock-btn:hover { opacity: .85; }
-  .lock-error { color: #FF6B6B; font-size: 13px; margin-top: 12px; display: none; }
-  .lock-closed { color: var(--text2); font-size: 13px; margin-top: 16px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 8px; display: none; }
-
-  /* メインページ */
-  #mainPage { display: none; }
-
-  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; }
-  .header-badge { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: .05em; margin-right: 10px; }
-  .header-title { font-size: 15px; font-weight: 700; }
-  .header-right { font-size: 12px; color: var(--text2); }
-
-  /* パートヘッダー */
-  .part-wrap { max-width: 1100px; margin: 0 auto; padding: 48px 24px 0; }
-  .part-badge { display: inline-flex; align-items: center; gap: 10px; border-radius: 8px; padding: 8px 18px; margin-bottom: 12px; font-size: 13px; font-weight: 700; letter-spacing: .1em; }
-  .part-badge.green { background: rgba(29,158,117,.12); border: 1px solid rgba(29,158,117,.3); color: var(--accent); }
-  .part-badge.blue { background: rgba(22,184,243,.10); border: 1px solid rgba(22,184,243,.3); color: var(--accent2); }
-  .part-sub { font-size: 14px; color: var(--text2); margin-bottom: 24px; }
-
-  /* ロールプレイカード */
-  .rp-grid { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-  .rp-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 16px; }
-  .rp-card.a { border-top: 3px solid var(--accent); }
-  .rp-card.b { border-top: 3px solid var(--accent2); }
-  .rp-type-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
-  .rp-card.a .rp-type-badge { background: rgba(29,158,117,.15); color: var(--accent); }
-  .rp-card.b .rp-type-badge { background: rgba(22,184,243,.12); color: var(--accent2); }
-  .rp-letter { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: white; margin-bottom: 4px; }
-  .rp-card.a .rp-letter { background: linear-gradient(135deg,#1D9E75,#16B8F3); }
-  .rp-card.b .rp-letter { background: linear-gradient(135deg,#6E2F8A,#16B8F3); }
-  .rp-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-  .rp-desc { font-size: 13px; color: var(--text2); line-height: 1.7; flex: 1; }
-  .rp-btn { display: flex; align-items: center; justify-content: center; gap: 8px; color: white; text-decoration: none; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 700; transition: opacity .2s; margin-top: auto; }
-  .rp-card.a .rp-btn { background: var(--accent); }
-  .rp-card.b .rp-btn { background: #1A7FAF; }
-  .rp-btn:hover { opacity: .85; }
-
-  /* フォームバナー */
-  .form-wrap { max-width: 1100px; margin: 0 auto 48px; padding: 0 24px; }
-  .form-card { background: linear-gradient(135deg,#1A2030,#1A2A35); border: 1px solid rgba(22,184,243,.3); border-radius: var(--radius); padding: 24px 32px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-  .form-content { flex: 1; min-width: 200px; }
-  .form-label { font-size: 11px; font-weight: 700; color: var(--accent2); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 6px; }
-  .form-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-  .form-desc { font-size: 13px; color: var(--text2); line-height: 1.7; }
-  .form-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent2); color: #0F1923; text-decoration: none; border-radius: 10px; padding: 12px 24px; font-size: 14px; font-weight: 700; transition: opacity .2s; flex-shrink: 0; }
-  .form-btn:hover { opacity: .85; }
-
-  /* 仕切り */
-  .divider { max-width: 1100px; margin: 0 auto 0; padding: 0 24px; }
-  .divider hr { border: none; border-top: 2px dashed var(--border); margin: 8px 0; }
-
-  /* ミニアプリ手順 */
-  .steps-wrap { max-width: 1100px; margin: 0 auto 32px; padding: 0 24px; }
-  .steps { display: flex; gap: 0; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .step { display: flex; align-items: flex-start; gap: 12px; padding: 20px 24px; border-right: 1px solid var(--border); flex: 1; min-width: 160px; }
-  .step:last-child { border-right: none; }
-  .step-num { width: 30px; height: 30px; border-radius: 50%; background: var(--accent2); color: #0F1923; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-  .step-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
-  .step-text strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 2px; }
-
-  /* ミニアプリグリッド */
-  .section { max-width: 1100px; margin: 0 auto 60px; padding: 0 24px; }
-  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-  .section-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); }
-  .section-title { font-size: 18px; font-weight: 700; }
-  .section-count { font-size: 13px; color: var(--text2); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
-  .card:hover { border-color: rgba(22,184,243,.35); transform: translateY(-2px); }
-  .card-head { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
-  .card-num { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
-  .card-name { font-size: 17px; font-weight: 700; margin-bottom: 2px; }
-  .card-author { font-size: 12px; color: var(--text2); }
-  .card-body { padding: 16px 20px; flex: 1; display: flex; flex-direction: column; }
-  .card-desc { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 14px; flex: 1; }
-  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-  .tag { font-size: 11px; font-weight: 500; background: rgba(22,184,243,.12); color: var(--accent2); padding: 3px 10px; border-radius: 20px; }
-  .drive-link { display: block; font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; padding: 8px 12px; background: rgba(29,158,117,.08); border-radius: 8px; }
-  .drive-link:hover { background: rgba(29,158,117,.15); }
-  .app-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--surface2); border: 1px solid rgba(22,184,243,.3); color: var(--accent2); text-decoration: none; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 700; transition: all .2s; width: 100%; }
-  .app-btn:hover { background: var(--accent2); color: #0F1923; border-color: var(--accent2); }
-
-  footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; font-size: 12px; color: var(--text2); }
-
-  @media (max-width: 700px) {
-    .rp-grid { grid-template-columns: 1fr; }
-    .steps { flex-direction: column; }
-    .step { border-right: none; border-bottom: 1px solid var(--border); }
-    .step:last-child { border-bottom: none; }
-    .form-card { flex-direction: column; }
-  }
-</style>
-</head>
-<body>
-
-<!-- ロック画面 -->
-<div id="lockScreen">
-  <div class="lock-box">
-    <div class="lock-logo">🤖</div>
-    <div class="lock-title">AIワークショップ専用ページ</div>
-    <div class="lock-sub">参加者専用ページです<br>講師からお伝えしたパスワードを入力してください</div>
-    <input class="lock-input" type="password" id="pwInput" placeholder="パスワードを入力" maxlength="20" onkeydown="if(event.key==='Enter')tryUnlock()">
-    <button class="lock-btn" onclick="tryUnlock()">入室する →</button>
-    <div class="lock-error" id="lockError">パスワードが違います。講師にご確認ください。</div>
-    <div class="lock-closed" id="lockClosed">本日のワークショップは終了しました。<br>ご参加ありがとうございました。</div>
-  </div>
+:root{--navy:#1e3a5f;--blue:#1d4ed8;--bg:#f4f6fb;--ink:#1f2937;--mut:#6b7280;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Meiryo","Hiragino Sans","Yu Gothic",sans-serif;line-height:1.75;font-size:15px}
+header{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+header .t{font-weight:700;font-size:15px} header .s{font-size:11px;opacity:.7}
+header a{margin-left:auto;color:#fff;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.35);padding:5px 12px;border-radius:6px}
+header a:hover{background:rgba(255,255,255,.15)}
+main{max-width:920px;margin:0 auto;padding:20px 16px 80px}
+h1{font-size:22px;color:var(--navy);margin:8px 0 4px} .lead{color:var(--mut);margin:0 0 16px}
+h2{background:var(--navy);color:#fff;font-size:17px;padding:10px 14px;border-radius:8px;margin:36px 0 12px;scroll-margin-top:70px}
+h3{font-size:15.5px;color:var(--navy);border-bottom:2px solid #3b82f6;padding-bottom:3px;margin:26px 0 10px}
+p{margin:8px 0} p.red{color:#c0392b;font-weight:700;font-size:13.5px} p.gray{color:var(--mut);font-size:13.5px} p.b{font-weight:700}
+.box{border:1.5px solid;border-radius:10px;padding:12px 16px;margin:14px 0;background:#fff}
+.box .bt{font-weight:700;color:var(--navy);margin-bottom:4px} .box .ln{margin:2px 0}
+.acts{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+button{font-family:inherit;cursor:pointer;border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:6px 12px;font-size:12.5px}
+button:hover{background:#eef2ff;border-color:#6366f1} button.done{background:#dcfce7;border-color:#16a34a}
+.step{display:flex;gap:10px;margin:8px 0} .step .n{font-weight:700;color:var(--blue);min-width:2.2em} .step ul{margin:4px 0 0;padding-left:1.2em;color:var(--mut);font-size:13.5px}
+figure{margin:12px 0;text-align:center} figure img{width:100%;max-width:100%;border:1px solid #d1d5db;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+figcaption{font-size:12.5px;color:var(--mut);margin-top:4px}
+.prompt{background:#f3f4f6;border:1.5px solid #6b7280;border-radius:10px;margin:14px 0;overflow:hidden}
+.prompt .ph{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:#e5e7eb;font-size:12.5px;font-weight:700;color:#4b5563}
+.prompt pre{margin:0;padding:12px 16px;white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:14px;line-height:1.7}
+.prompt .hd{color:var(--blue);font-weight:700}
+.wb{margin:14px 0;border:1.5px solid #6b7280;border-radius:10px;overflow:hidden;background:#fff}
+.wb label{display:block;background:#fef3c7;color:#92400e;font-weight:700;padding:8px 14px;font-size:13.5px}
+.wb .hint{background:#fef3c7;padding:0 14px 8px;font-size:12px;color:var(--mut)}
+textarea{width:100%;border:0;padding:10px 14px;font:inherit;font-size:14px;resize:vertical;display:block;background:#fff}
+textarea:focus{outline:2px solid #6366f1}
+.tw{overflow-x:auto;margin:12px 0} table{border-collapse:collapse;width:100%;background:#fff;font-size:13.5px} th,td{border:1px solid #9ca3af;padding:7px 10px;vertical-align:top} th{background:#dbeafe;color:var(--navy);text-align:left} td.first{font-weight:700;background:#f8fafc;white-space:nowrap}
+td textarea{padding:4px 6px;font-size:13px;border:0;min-height:48px}
+.card{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.srow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px dashed #d1d5db;flex-wrap:wrap}.srow:last-child{border:0}
+.srow .st{font-weight:700;font-size:13.5px}.srow .sa{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.srow a{font-size:12.5px}
+a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}.toc a{background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:8px 12px;text-decoration:none;color:var(--navy);font-weight:700;font-size:13.5px}.toc a span{display:block;font-weight:400;color:var(--mut);font-size:12px}
+.btn-drive{display:inline-block;background:var(--blue);color:#fff!important;text-decoration:none;padding:9px 16px;border-radius:8px;font-weight:700;font-size:14px}
+#gate{position:fixed;inset:0;background:#0f172a;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;z-index:99;padding:20px}
+#gate a{color:#93c5fd}
+@media(max-width:600px){main{padding:14px 10px 60px}.step .n{min-width:2.6em}}
+@media print{header,.acts,button{display:none}}
+</style></head><body>
+<div id="gate"><div><h2 style="background:none">ログインが必要です</h2><p>eラーニングのトップでログインしてから、もう一度開いてください。</p><p><a href="index.html">▶ eラーニングのトップへ</a></p></div></div>
+<header><div><div class="t">AIミニアプリ構築講座</div><div class="s">集合研修　演習ページ</div></div><a href="index.html">← eラーニングに戻る</a></header>
+<main>
+<h1>集合研修　第1回演習問題（予習用）</h1>
+<p class="lead">実践応用編（プロンプト・GEM・Gemini Notebook）。集合研修の前に、内容の確認と予習ができます。</p>
+<div class="card">
+<b>📌 このページの使い方</b>
+<p>・演習の手順・見本のプロンプト・操作画面を、ここで確認できます。見本のプロンプトは「📋 コピー」ボタンでコピーできます。</p>
+<p>・黄色の記入欄に書いた内容は、このパソコン（ブラウザ）に自動で保存されます。ほかの端末には引き継がれません。</p>
+<p>・集合研修の当日の成果物は、講師が用意する班ごとのGoogleドライブ共有フォルダに保存します。</p>
+<p><a class="btn-drive" href="https://drive.google.com/drive/folders/XXXXXXXXXXXX" target="_blank" rel="noopener">📁 Googleドライブ共有フォルダを開く</a></p>
 </div>
-
-<!-- メインページ -->
-<div id="mainPage">
-  <header>
-    <div>
-      <span class="header-badge">WS専用</span>
-      <span class="header-title">AI経営参謀ワークショップ</span>
-    </div>
-    <div class="header-right">株式会社ストラテジーエイド</div>
-  </header>
-
-  <!-- ========== PART 1：ロールプレイ ========== -->
-  <div class="part-wrap">
-    <div class="part-badge green">🎯 &nbsp;PART 1　経営課題ロールプレイ</div>
-    <p class="part-sub">グループで1台のPCを使用します。AとBの2種類があります。講師の指示に従って選択してください。</p>
-  </div>
-
-  <div class="rp-grid">
-    <div class="rp-card a">
-      <div>
-        <div class="rp-letter">A</div>
-        <span class="rp-type-badge">経営者課題提案型</span>
-      </div>
-      <div class="rp-name">経営者課題提案：課題解決シミュレーター</div>
-      <div class="rp-desc">与えられた課題・選択した課題の詳細に経営者が回答するタイプ。AIが課題を提示し、経営者が回答しながら深掘りします。</div>
-      <a href="https://a-969769004178.us-west1.run.app" target="_blank" class="rp-btn">🚀 アプリを開く</a>
-    </div>
-
-    <div class="rp-card b">
-      <div>
-        <div class="rp-letter">B</div>
-        <span class="rp-type-badge">経営者自由提案型</span>
-      </div>
-      <div class="rp-name">経営課題を経営者が提案ロールプレイ</div>
-      <div class="rp-desc">経営者が自ら課題を選択し、課題の詳細を説明してAIと共に深掘りしていくタイプ。業種・課題・伴走者タイプを選んで開始します。</div>
-      <a href="https://b-969769004178.us-west1.run.app" target="_blank" class="rp-btn">🚀 アプリを開く</a>
-    </div>
-  </div>
-
-  <!-- 結果提出フォーム -->
-  <div class="form-wrap">
-    <div class="form-card">
-      <div class="form-content">
-        <div class="form-label">A・B 共通 · ロールプレイ終了後 · 必須</div>
-        <div class="form-title">📋 結果提出フォーム</div>
-        <div class="form-desc">
-          ロールプレイ終了後、会話内容とAIフィードバックをコピーして送信してください。講師がコメントを準備します。<br>
-          <span style="font-size:12px;color:#8FA3BC;margin-top:4px;display:block;">Ctrl+A（全選択）→ Ctrl+C（コピー）→ フォームに Ctrl+V（貼付）→ 送信</span>
-        </div>
-      </div>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfkU-PQQcrsOvAfacy6ph2TTJidTUFPn8FA12KpWN91mv8nkQ/viewform" target="_blank" class="form-btn">📤 フォームを開く</a>
-    </div>
-  </div>
-
-  <!-- 仕切り -->
-  <div class="divider"><hr></div>
-
-  <!-- ========== PART 2：ミニアプリ ========== -->
-  <div class="part-wrap">
-    <div class="part-badge blue">⚡ &nbsp;PART 2　AIミニアプリ体験</div>
-    <p class="part-sub">各自のPCで体験してください。デモ用データはQRコードから共有フォルダを開いてダウンロードできます。</p>
-  </div>
-
-  <div class="steps-wrap">
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-text"><strong>使いたいアプリを選ぶ</strong>「アプリを開く」をクリック</div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-text"><strong>デモデータを取得</strong>カード内のリンクから共有フォルダを開いてダウンロード</div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-text"><strong>ダウンロードしたファイルを選択</strong>「ファイルを選択」→「ダウンロード」フォルダ内を選ぶ</div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-text"><strong>AIが自動処理</strong>結果を確認・ダウンロード</div>
-      </div>
-    </div>
-    <div style="margin-top:14px;background:rgba(22,184,243,.08);border:1px solid rgba(22,184,243,.25);border-radius:10px;padding:14px 18px;font-size:13px;color:#B8D4E8;line-height:1.8;">
-      ⚠ <strong style="color:#E8EDF3;">先にデモデータをダウンロードしてから</strong>アプリの「ファイルを選択」を押してください。アップロード画面はPC内のファイルしか選べません（共有フォルダを直接指定することはできません）。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-dot"></div>
-      <div class="section-title">ミニアプリ一覧</div>
-      <div class="section-count">全5アプリ · 各自のPCで体験</div>
-    </div>
-    <div class="grid">
-
-      <div class="card">
-        <div class="card-head">
-          <div class="card-num">作品 1</div>
-          <div class="card-name">営業研修アプリ公開版</div>
-          <div class="card-author">株式会社ストラテジーエイド</div>
-        </div>
-        <div class="card-body">
-          <div class="card-desc">営業スキルの向上を支援するAI対話型ロールプレイ練習ツールです。商材や顧客タイプを設定して、リアルな商談練習と具体的なフィードバックを受けられます。</div>
-          <div class="card-tags"><span class="tag">Build</span><span class="tag">営業研修</span><span class="tag">ロールプレイ</span><span class="tag">AI対話</span></div>
-          <a href="https://service-1006509308450.us-west1.run.app" target="_blank" class="app-btn">🚀 アプリを開く</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <div class="card-num">作品 2</div>
-          <div class="card-name">経理伝票抽出くん</div>
-          <div class="card-author">株式会社ストラテジーエイド</div>
-        </div>
-        <div class="card-body">
-          <div class="card-desc">紙またはPDFの領収書・請求書を読み込んで、会計システムに渡せるCSVデータを自動作成します。手入力の手間を大幅に削減できます。</div>
-          <div class="card-tags"><span class="tag">Build</span><span class="tag">経理</span><span class="tag">OCR</span><span class="tag">CSV出力</span></div>
-          <a id="drive2" href="#" target="_blank" class="drive-link">📁 ①まずデモ用データをダウンロード →</a>
-          <div style="font-size:11px;color:var(--text2);margin-bottom:12px;padding-left:4px;">②ダウンロード後「ファイルを選択」→「ダウンロード」フォルダから選ぶ</div>
-          <a href="https://remix-smart-invoice-extractor-969769004178.us-west1.run.app/" target="_blank" class="app-btn">🚀 アプリを開く</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <div class="card-num">作品 3</div>
-          <div class="card-name">Document to Word OCR</div>
-          <div class="card-author">株式会社ストラテジーエイド</div>
-        </div>
-        <div class="card-body">
-          <div class="card-desc">紙またはPDFの各種書類を読み込んで、Word形式に変換するOCRツールです。手書き書類のデジタル化や書類整理の効率化に活用できます。</div>
-          <div class="card-tags"><span class="tag">Build</span><span class="tag">OCR</span><span class="tag">Word変換</span><span class="tag">書類デジタル化</span></div>
-          <a id="drive3" href="#" target="_blank" class="drive-link">📁 ①まずデモ用データをダウンロード →</a>
-          <div style="font-size:11px;color:var(--text2);margin-bottom:12px;padding-left:4px;">②ダウンロード後「ファイルを選択」→「ダウンロード」フォルダから選ぶ</div>
-          <a href="https://document-to-word-ocr-969769004178.us-west1.run.app" target="_blank" class="app-btn">🚀 アプリを開く</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <div class="card-num">作品 4</div>
-          <div class="card-name">議事録作成アシスタント</div>
-          <div class="card-author">株式会社ストラテジーエイド</div>
-        </div>
-        <div class="card-body">
-          <div class="card-desc">動画録画ファイルや音声録音ファイルから、詳細な議事録と決定事項を抽出した要約版を自動生成します。Word形式での書き出しも可能です。</div>
-          <div class="card-tags"><span class="tag">Build</span><span class="tag">議事録</span><span class="tag">音声認識</span><span class="tag">Word出力</span></div>
-          <a id="drive4" href="#" target="_blank" class="drive-link">📁 ①まずデモ用データをダウンロード →</a>
-          <div style="font-size:11px;color:var(--text2);margin-bottom:12px;padding-left:4px;">②ダウンロード後「ファイルを選択」→「ダウンロード」フォルダから選ぶ</div>
-          <a href="https://service-969769004178.us-west1.run.app" target="_blank" class="app-btn">🚀 アプリを開く</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <div class="card-num">作品 5</div>
-          <div class="card-name">チラシ・店頭POP生成ツール</div>
-          <div class="card-author">株式会社ストラテジーエイド</div>
-        </div>
-        <div class="card-body">
-          <div class="card-desc">店頭POP・チラシ・お知らせの文章とレイアウトをAIが瞬時に生成します。A4デザインのプレビュー表示とWord出力に対応。商品名・強み・ターゲットを入力するだけで完成します。</div>
-          <div class="card-tags"><span class="tag">Build</span><span class="tag">チラシ</span><span class="tag">店頭POP</span><span class="tag">デザイン</span></div>
-          <a href="https://pop-969769004178.us-west1.run.app" target="_blank" class="app-btn">🚀 アプリを開く</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <footer>© 株式会社ストラテジーエイド｜AI経営参謀ワークショップ参加者専用ページ</footer>
+<div class="card">
+<b>📥 サンプルデータ置き場（Googleドライブが開けない場合はここから）</b>
+<p class="gray">演習で使うサンプルデータです。Googleドライブの共有フォルダが開けない場合は、ここからコピーするか、テキストファイルとして保存して使ってください。</p>
+<div class="srow"><div class="st">サンプル文章</div><div class="sa"><button class="cp" data-sample="0">📋 コピー</button><button class="dl" data-sample="0">⬇ テキストで保存</button><a href="#sample1">本文を見る</a></div></div><div class="srow"><div class="st">サンプル会議メモ</div><div class="sa"><button class="cp" data-sample="1">📋 コピー</button><button class="dl" data-sample="1">⬇ テキストで保存</button><a href="#sample2">本文を見る</a></div></div><div class="srow"><div class="st">各候補のサンプル入力例</div><div class="sa"><button class="cp" data-sample="2">📋 コピー</button><button class="dl" data-sample="2">⬇ テキストで保存</button><a href="#sample3">本文を見る</a></div></div><div class="srow"><div class="st">サンプル資料</div><div class="sa"><button class="cp" data-sample="3">📋 コピー</button><button class="dl" data-sample="3">⬇ テキストで保存</button><a href="#sample4">本文を見る</a></div></div><div class="srow"><div class="st">サンプル契約書</div><div class="sa"><button class="cp" data-sample="4">📋 コピー</button><button class="dl" data-sample="4">⬇ テキストで保存</button><a href="#sample5">本文を見る</a></div></div>
 </div>
-
+<div class="toc"><a href="#sec1">準備<span>Gemini（ジェミニ）を開きましょう</span></a><a href="#sec2">S1<span>プロンプト実践（動画②の応用）　30分</span></a><a href="#sec3">S2<span>議事録 → 要約 → 調査 → Googleスライド（動画④の応用）　40分</span></a><a href="#sec4">S3<span>GEM作成実践（動画⑤の応用）　45分</span></a><a href="#sec5">S4<span>Gemini Notebookで資料をAI化する（動画⑥の応用）　35分</span></a><a href="#sec6">時間があれば<span>Gemini Notebook 応用編　20分</span></a></div>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📝 この資料の進め方</div><div class="ln" style="">① 各演習は「やること」→「手順」→「見本」→「確認ポイント」の順に書いてあります。上から順に進めてください。</div><div class="ln" style="">② 8＋1の項目のうち、必ず書くのは「＃実行指示」だけです。ほかは、必要だと思うものを選んで足します。</div><div class="ln" style="">③ 黄色の「✍️ 自分で書いたプロンプト」欄は下書き用です。いきなり画面に入力せず、まずここに書き出してから、抜けている要素がないか見直してください。</div><div class="ln" style="">④ 灰色の枠は「見本のプロンプト」です。先に自分で書いてみて、行き詰まったら見本を参考にしてください。そのままコピーして使うこともできます。</div><div class="ln" style="">⑤ 赤い番号が付いた画像は、操作画面です。番号の順にクリック・入力してください。</div><div class="ln" style="">⑥ 時間が足りないときは「必須」と書かれた演習だけ進めれば大丈夫です。「任意」の演習は余裕があるときに取り組んでください。</div></div><div class="box" style="background:#F0FDF4;border-color:#16A34A"><div class="bt">📌 8＋1の法則 早見表（必須は実行指示だけ。見ながら進めましょう）</div><div class="ln" style="font-weight:700;">【入力設計】AIに渡す材料を決めます</div><div class="ln" style="">＃前提条件　どんな場面で、何のために使うか</div><div class="ln" style="">＃役割定義　AIにどんな担当者・専門家として考えてほしいか</div><div class="ln" style="">＃対象者　誰に向けた文章か（年齢・立場・知識レベル）</div><div class="ln" style="">＃参考情報　AIに使ってほしい材料（文章・資料・調べる範囲）</div><div class="ln" style="">＃実行指示　してほしい作業を、動詞（〜してください）で書きます（★必須）</div><div class="ln" style="font-weight:700;">【出力設計】受け取る形を決めます</div><div class="ln" style="">＃品質条件　文字数・項目数・必ず入れたい内容</div><div class="ln" style="">＃出力形式　メール・箇条書き・表など、使う場面に合わせた形</div><div class="ln" style="">＃文体・トーン　ていねい、親しみやすい、簡潔など</div><div class="ln" style="font-weight:700;">【＋1】仕上げに整えます</div><div class="ln" style="">＃禁止事項　AIに避けてほしいこと（もっともらしい間違いを防ぎます）</div><div class="ln" style="">＃専門視点・＃追加条件　誰の視点で見るか／どの基準で整えるか（必要に応じて）</div><div class="ln" style="font-weight:700;color:#c0392b;">★ 必須なのは「＃実行指示」だけです。ほかの項目は、出力をよくするために必要だと思うものだけを足します。全部を書く必要はありません。「＃」で始まる見出し行は、消さずにそのままAIに入力して大丈夫です。</div></div>
+<h2 id="sec1">準備　Gemini（ジェミニ）を開きましょう</h2>
+<p class="">この演習ではAIとして「Gemini」を使います。次の手順でGeminiを開き、プロンプトを入力する場所を確認してください。Googleアカウントでログインしておきます。</p>
+<div class="step"><span class="n">①</span><div>ブラウザ（Chrome）の検索欄に「ジェミニ」と入力して検索します。</div></div>
+<div class="step"><span class="n">②</span><div>検索結果の中から「Google Gemini」をクリックします（画像の①）。</div></div>
+<p class="gray">【画像】「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。</p>
+<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/g1.jpg" alt="【画像】「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。" loading="lazy"><figcaption>【画像】「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。</figcaption></figure>
+<div class="step"><span class="n">③</span><div>Geminiが開きます。「何から始めますか？」の下にある入力欄（画像の①）が、プロンプトを入力する場所です。</div></div>
+<p class="gray">【画像】Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。</p>
+<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/g2.jpg" alt="【画像】Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。" loading="lazy"><figcaption>【画像】Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。</figcaption></figure>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">💡 入力のコツ</div><div class="ln" style="">・入力欄の中で改行したいときは「Shift＋Enter」を押します。Enterだけを押すと、その時点で送信されてしまうので注意してください。</div><div class="ln" style="">・見本のプロンプトをコピーして貼り付けるときは「Ctrl＋V」で貼り付けます。</div><div class="ln" style="">・前の会話と混ざらないように、新しい演習を始めるときは、画面左上の「チャットを新規作成」をクリックして、新しいチャットで始めます。</div></div>
+<h2 id="sec2">S1　プロンプト実践（動画②の応用）　30分</h2>
+<p class="red b">🔖 必須：演習1-1・1-2　／　演習1-3・1-4は時間があれば</p>
+<p class="">プロンプトの書き方で、AIの出力が大きく変わることを体験します。同じ文章を使って、「書き方を変える前」と「変えた後」を比べます。</p>
+<h3>⭐必須　演習1-1　書き方で出力はどう変わる？（Before / After の比較）　10分</h3>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">🎯 この演習でやること</div><div class="ln" style="">同じサンプル文章を、①「いい感じに書き直して」という短い依頼と、②8＋1の型で書いた依頼の2通りでGeminiに依頼し、出力を比べます。</div></div>
+<div class="box" id="sample1" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 サンプル文章（全員この文章を使います）</div><div class="ln" style="">10月より、下記の通り営業時間を変更いたします。</div><div class="ln" style="">平日は9時から18時まで、土日は10時から17時までとなります。</div><div class="ln" style="">祝日は休業とさせていただきます。</div><div class="ln" style="">ご不便をおかけしますが、よろしくお願いいたします。</div><div class="acts"><button class="cp" data-sample="0">📋 コピー</button><button class="dl" data-sample="0">⬇ テキストで保存</button></div></div>
+<div class="step"><span class="n">①</span><div>Geminiの入力欄に、次のプロンプトAを入力して送信します。「（サンプル文章）」の部分には、上のサンプル文章を貼り付けます。</div></div>
+<div class="prompt"><div class="ph"><span>プロンプトA（比較用の短い依頼）</span><button class="cp2">📋 コピー</button></div><pre data-raw="いい感じに書き直して。
+（ここに上のサンプル文章を貼り付ける）">いい感じに書き直して。
+（ここに上のサンプル文章を貼り付ける）
+</pre></div>
+<div class="step"><span class="n">②</span><div>出力された文章を読み、「そのままお客様に出せるか」「長さは適切か」を確認します。</div></div>
+<div class="step"><span class="n">③</span><div>画面左上の「チャットを新規作成」をクリックして、新しいチャットを開きます。</div></div>
+<div class="step"><span class="n">④</span><div>下の黄色の欄に、8＋1の型を使って自分のプロンプトを書き出します。「＃実行指示」は必ず書き、ほかの項目は、出力がよくなりそうなものを選んで足します。次のヒントを参考にしてください。<ul><li>＃実行指示（必須）：サンプル文章を何に書き直すのか（例：お客様向けのお知らせ文に書き直してください）</li><li>＃前提条件：どんな場面で使う文章か（例：飲食店が営業時間の変更をお知らせする場面）</li><li>＃対象者：誰に読んでもらう文章か</li><li>＃品質条件：文字数など（例：150字以内）</li><li>＃禁止事項：サンプルにない情報を付け足さない、など</li><li>余裕があれば、＃役割定義（どんな担当者として書くか）や＃文体・トーンも足してみましょう</li><li>最後に「＃元の文章」の見出しを付けて、サンプル文章を貼り付けます</li></ul></div></div>
+<div class="wb"><label>✍️ 自分で書いたプロンプト（演習1-1）</label><div class="hint">＃実行指示は必ず書きましょう。ほかの項目は、必要なものだけで構いません。</div><textarea data-key="wb1" style="min-height:169px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="step"><span class="n">⑤</span><div>書けたら、新しいチャットの入力欄に入力して送信し、①の出力と比べます。</div></div>
+<div class="prompt"><div class="ph"><span>見本のプロンプト（行き詰まったときに参考にしてください）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
+飲食店が、10月からの営業時間の変更をお客様にお知らせする場面です。
+＃対象者
+来店されるお客様です（年齢は幅広く、常連の方も初めての方もいます）。
+＃実行指示
+下の「＃元の文章」を、お客様向けのお知らせ文に書き直してください。
+＃品質条件
+全体で150字以内にしてください。営業時間の変更点が一目でわかるようにしてください。
+＃禁止事項
+元の文章にない情報（日付・時間など）を付け足さないでください。
+＃元の文章
+（ここにサンプル文章を貼り付ける）"><span class="hd">＃前提条件</span>
+飲食店が、10月からの営業時間の変更をお客様にお知らせする場面です。
+<span class="hd">＃対象者</span>
+来店されるお客様です（年齢は幅広く、常連の方も初めての方もいます）。
+<span class="hd">＃実行指示</span>
+下の「＃元の文章」を、お客様向けのお知らせ文に書き直してください。
+<span class="hd">＃品質条件</span>
+全体で150字以内にしてください。営業時間の変更点が一目でわかるようにしてください。
+<span class="hd">＃禁止事項</span>
+元の文章にない情報（日付・時間など）を付け足さないでください。
+<span class="hd">＃元の文章</span>
+（ここにサンプル文章を貼り付ける）
+</pre></div>
+<p class="b">📊 比べてみましょう（出力を見て、○△×などで記入）</p>
+<div class="tw"><table><thead><tr><th>見る観点</th><th>①「いい感じに」の出力</th><th>②8＋1の出力</th></tr></thead><tbody><tr><td class=first>そのままお客様に出せるか</td><td><textarea data-key="wb2" rows="2"></textarea></td></tr><tr><td class=first>長さ・形は使いやすいか</td><td><textarea data-key="wb3" rows="2"></textarea></td></tr><tr><td class=first>営業時間の内容は正確か</td><td><textarea data-key="wb4" rows="2"></textarea></td></tr></tbody></table></div>
+<div class="box" style="background:#F5F3FF;border-color:#8B5CF6"><div class="bt">🗣 グループで話し合うこと</div><div class="ln" style="">・①と②で、出力はどう違いましたか？</div><div class="ln" style="">・8＋1の見出しのうち、どの項目を入れたことが一番効いたと思いますか？</div><div class="ln" style="">・自社の業務なら、AIに担当してほしい役割（＃役割定義）は何ですか？</div></div>
+<h3>⭐必須　演習1-2　自社向けのプロンプトを自分で書く　12分</h3>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">🎯 この演習でやること</div><div class="ln" style="">自社（または身近なお店・会社）の業務で使う文章を1つ選び、8＋1の型でプロンプトを書いて、Geminiで実際に動かします。架空の内容でも構いません。</div></div>
+<div class="step"><span class="n">STEP1</span><div>題材を1つ選び、「元の文章」を1〜2文だけ書きます。</div></div>
+<div class="tw"><table><thead><tr><th>題材（1つ選ぶ）</th><th>元の文章の例（思いつかない場合はこのまま使えます）</th></tr></thead><tbody><tr><td class=first>お客様へのお知らせ文</td><td>来月から、ランチメニューの価格を100円値上げします。</td></tr><tr><td class=first>社内連絡メール</td><td>明日の定例会議は、14時から15時に変更になりました。</td></tr><tr><td class=first>SNS投稿文</td><td>今週末限定で、季節限定のいちごパフェを販売します。800円です。</td></tr><tr><td class=first>求人票の一部</td><td>接客スタッフ募集。時給1,100円。週3日から。未経験歓迎。</td></tr></tbody></table></div>
+<div class="wb"><label>✍️ 選んだ題材と、自分で書いた元の文章（1〜2文）</label><textarea data-key="wb5" style="min-height:62px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="step"><span class="n">STEP2</span><div>プロンプト設計シートを埋めます。「＃実行指示」は必ず書きます。ほかの項目は、入れると良くなりそうなものを2〜3個選んで書いてください（全部を埋める必要はありません）。</div></div>
+<div class="tw"><table><thead><tr><th>8＋1の要素</th><th>何を書くか（ヒント）</th><th>自分の記入欄</th></tr></thead><tbody><tr><td class=first>★＃実行指示（必須）</td><td>元の文章を何にしてほしいか（〜に書き直してください）</td><td><textarea data-key="wb6" rows="2"></textarea></td></tr><tr><td class=first>＃前提条件</td><td>どんな場面で、何のために使う文章か</td><td><textarea data-key="wb7" rows="2"></textarea></td></tr><tr><td class=first>＃対象者</td><td>誰に向けた文章か（お客様・スタッフ・応募者など）</td><td><textarea data-key="wb8" rows="2"></textarea></td></tr><tr><td class=first>＃品質条件</td><td>文字数・必ず入れたい内容など</td><td><textarea data-key="wb9" rows="2"></textarea></td></tr><tr><td class=first>＃出力形式</td><td>メール・掲示文・投稿文など、使う場面に合わせた形</td><td><textarea data-key="wb10" rows="2"></textarea></td></tr><tr><td class=first>＃文体・トーン</td><td>ていねい・親しみやすい・簡潔など</td><td><textarea data-key="wb11" rows="2"></textarea></td></tr><tr><td class=first>＃役割定義</td><td>AIにどんな担当者・専門家として考えてほしいか</td><td><textarea data-key="wb12" rows="2"></textarea></td></tr><tr><td class=first>＃禁止事項</td><td>AIに避けてほしいこと（事実にないことを書かない、など）</td><td><textarea data-key="wb13" rows="2"></textarea></td></tr></tbody></table></div>
+<p class="gray">うまく書けない場合は、Geminiに「〇〇業の〇〇担当者です。〇〇の文章を作るためのプロンプトを、＃前提条件・＃役割定義などの見出しを使って作ってください」と相談しても構いません。</p>
+<div class="step"><span class="n">STEP3</span><div>STEP2で書いた項目を、「＃見出し＋内容」の形でつなげ、最後に「＃元の文章」とSTEP1の文章を付けて、Geminiに入力します。</div></div>
+<div class="step"><span class="n">STEP4</span><div>出力を確認します。「もっと短く」「もう少しやわらかく」など、追加の条件（＋1の仕上げ）を同じチャットで送って整えてみましょう。</div></div>
+<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 確認ポイント</div><div class="ln" style="">・そのまま使えそうな文章が出力されましたか？</div><div class="ln" style="">・追加条件を送ったら、思った通りに直りましたか？</div></div>
+<h3>演習1-3　グループ共有　3分</h3>
+<p class="">作ったプロンプトと出力結果を、同じ班の人に見せます。「このプロンプトの工夫はどこか」を、1人30秒で紹介してください。</p>
+<h3>演習1-4　プロンプトをテンプレート化する　5分　（時間があれば）</h3>
+<p class="">プロンプトの中で、毎回書き換えたい部分を { } で囲みます。そうすると、{ } の中身だけを入れ替えれば、同じ型のプロンプトを何度でも使い回せて、誰が使っても同じ品質の出力を得られます。</p>
+<div class="prompt"><div class="ph"><span>テンプレートの例</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
+{業種}の{店名}が、{お知らせの内容}を伝える場面です。
+＃対象者
+{対象者}
+＃実行指示
+下の元の文章を、{文書の種類}に書き直してください。
+＃文体・トーン
+{文体}
+＃元の文章
+{元の文章}
+--- 変数の入れ方の例 ---
+{業種}＝飲食店　{店名}＝自店　{お知らせの内容}＝価格改定　{対象者}＝来店客　{文書の種類}＝掲示文　{文体}＝ていねい"><span class="hd">＃前提条件</span>
+{業種}の{店名}が、{お知らせの内容}を伝える場面です。
+<span class="hd">＃対象者</span>
+{対象者}
+<span class="hd">＃実行指示</span>
+下の元の文章を、{文書の種類}に書き直してください。
+<span class="hd">＃文体・トーン</span>
+{文体}
+<span class="hd">＃元の文章</span>
+{元の文章}
+--- 変数の入れ方の例 ---
+{業種}＝飲食店　{店名}＝自店　{お知らせの内容}＝価格改定　{対象者}＝来店客　{文書の種類}＝掲示文　{文体}＝ていねい
+</pre></div>
+<div class="step"><span class="n">①</span><div>演習1-2で作ったプロンプトのうち、毎回変わりそうな部分を { } に置き換えて、下の欄に書きます。</div></div>
+<div class="step"><span class="n">②</span><div>{ } の中身を別の業種・別の内容に入れ替えて、もう一度Geminiで試します。</div></div>
+<div class="wb"><label>✍️ テンプレート化したプロンプト</label><textarea data-key="wb14" style="min-height:130px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="wb"><label>✍️ 使った変数と意味（例：{業種}＝自社の業種）</label><textarea data-key="wb15" style="min-height:57px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 確認ポイント</div><div class="ln" style="">・{ } の中身だけを変えれば、来月・来年も同じプロンプトを使い回せそうですか？</div><div class="ln" style="">・班のメンバーの業種に合わせて { } を書き換えても、同じ品質の出力が得られましたか？</div></div>
+<h2 id="sec3">S2　議事録 → 要約 → 調査 → Googleスライド（動画④の応用）　40分</h2>
+<p class="red b">🔖 必須：STEP1　／　STEP2・STEP3は時間があれば</p>
+<p class="">会議メモをもとに、①要約 ②関連する調査 ③スライドの下書き、までをGemini1本で行います。STEP1〜3は、同じチャットの続きで進めます（前の出力をGeminiが覚えているので、「先ほどの要約」と書くだけで伝わります）。</p>
+<h3>⭐必須　STEP1　議事録を要約する　8分</h3>
+<div class="box" id="sample2" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 サンプル会議メモ（全員この会議メモを使います）</div><div class="ln" style="">2026年7月10日（木）14:00〜15:00</div><div class="ln" style="">参加者：田中（店長）、山田（副店長）、佐藤・鈴木（スタッフ）</div><div class="ln" style="">■今月の売上について</div><div class="ln" style="">先月比で売上が8%減少。客数は変わっていないが客単価が下がっている。</div><div class="ln" style="">→原因として「ランチメニューが3年変わっていない」という意見が出た。</div><div class="ln" style="">→山田から「競合のB店が新メニューを週替わりで出している」という情報あり。</div><div class="ln" style="">■夏のイベントについて</div><div class="ln" style="">お盆期間（8/10〜8/16）に特別コースを出してはどうか（田中提案）。</div><div class="ln" style="">価格帯は3,500円〜5,000円を想定。地元食材を使ったコースが差別化になる。</div><div class="ln" style="">佐藤：「SNSで映える料理にしないと集客が難しい」と指摘。</div><div class="ln" style="">■次回会議：7月17日（木）14:00</div><div class="acts"><button class="cp" data-sample="1">📋 コピー</button><button class="dl" data-sample="1">⬇ テキストで保存</button></div></div>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">🎯 この演習でやること</div><div class="ln" style="">上のサンプル会議メモを、次の条件で要約するプロンプトを自分で書き、Geminiに入力します。</div></div>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">📌 プロンプトに入れる条件（＃実行指示は必須。ほかは必要なものを選びます）</div><div class="ln" style="">・＃実行指示（必須）：会議メモを要約するよう指示してください</div><div class="ln" style="">・＃出力形式：「全体要約（3文以内）」「主な議題（箇条書き）」「次回までの課題（箇条書き）」「次回会議の日時」の順に出力するよう書いてください</div><div class="ln" style="">・＃文体・トーン：前置き・挨拶は不要と書いてください</div><div class="ln" style="">・＃禁止事項：メモにない内容を付け足さないと書いてください</div></div>
+<div class="wb"><label>✍️ 自分で書いたプロンプト（STEP1）</label><div class="hint">最後に「＃会議メモ」の見出しを付けて、サンプル会議メモを貼り付けます。</div><textarea data-key="wb16" style="min-height:182px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="prompt"><div class="ph"><span>見本のプロンプト</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
+飲食店の店長が、会議に出られなかったスタッフに内容を共有するために、議事録を整理する場面です。
+＃実行指示
+下の「＃会議メモ」を要約してください。
+＃出力形式
+次の順で出力してください。①全体要約（3文以内）　②主な議題（箇条書き）　③次回までの課題（箇条書き）　④次回会議の日時
+＃文体・トーン
+簡潔な「です・ます」調にしてください。前置きや挨拶は不要です。
+＃禁止事項
+会議メモに書かれていない内容を付け足さないでください。
+＃会議メモ
+（ここにサンプル会議メモを貼り付ける）"><span class="hd">＃前提条件</span>
+飲食店の店長が、会議に出られなかったスタッフに内容を共有するために、議事録を整理する場面です。
+<span class="hd">＃実行指示</span>
+下の「＃会議メモ」を要約してください。
+<span class="hd">＃出力形式</span>
+次の順で出力してください。①全体要約（3文以内）　②主な議題（箇条書き）　③次回までの課題（箇条書き）　④次回会議の日時
+<span class="hd">＃文体・トーン</span>
+簡潔な「です・ます」調にしてください。前置きや挨拶は不要です。
+<span class="hd">＃禁止事項</span>
+会議メモに書かれていない内容を付け足さないでください。
+<span class="hd">＃会議メモ</span>
+（ここにサンプル会議メモを貼り付ける）
+</pre></div>
+<h3>STEP2　議題に関連する調査をする　12分　（時間があれば）</h3>
+<p class="">サンプル会議メモには、課題になりそうな話題が複数出てきます。まず、次の3つの中から1つだけ選びます（どれを選んでも正解です。複数を同時に扱うと調査結果がぼやけるので、1つに絞ってください）。</p>
+<div class="tw"><table><thead><tr><th>番号</th><th>課題の候補</th></tr></thead><tbody><tr><td class=first>①</td><td>ランチメニューが3年変わっていない（マンネリ化・客単価の低下）</td></tr><tr><td class=first>②</td><td>競合のB店が新メニューを週替わりで出している（競合への対策）</td></tr><tr><td class=first>③</td><td>SNSで映える料理にしないと集客が難しい（情報発信・見た目の工夫）</td></tr></tbody></table></div>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">📌 プロンプトに入れる条件</div><div class="ln" style="">・＃前提条件：選んだ課題を具体的に書く（例：「ランチメニューが3年変わっておらず、客単価が下がっている」）。自分の業種も書いてください</div><div class="ln" style="">・＃実行指示（必須）：次の3点を調べてもらいます　1. 一般的な原因と対策（中小企業向け・実践的なもの）　2. 同業他社の成功事例（2〜3つ）　3. 今すぐ取り組める、費用をかけない改善アクション</div><div class="ln" style="">・＃出力形式：3つの見出しごとの箇条書きにします。前置きは不要です</div><div class="ln" style="">・＃禁止事項：出典が確認できない数字や事例は書かないよう指示してください</div></div>
+<div class="wb"><label>✍️ 選んだ課題（①〜③のどれか）</label><textarea data-key="wb17" style="min-height:41px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="wb"><label>✍️ 自分で書いたプロンプト（STEP2）</label><textarea data-key="wb18" style="min-height:182px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="prompt"><div class="ph"><span>見本のプロンプト（課題①を選んだ場合）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
+地域密着のレストランの店長です。会議で「ランチメニューが3年変わっておらず、客単価が下がっている」という課題が出ました。
+＃役割定義
+中小飲食店の売上改善に詳しい経営コンサルタントとして考えてください。
+＃実行指示
+インターネット上の公開情報を調べて、次の3点をまとめてください。出典（サイト名またはURL）も示してください。　1. 一般的な原因と対策（中小企業向け・実践的なもの）　2. 同業他社の成功事例（2〜3つ）　3. 今すぐ取り組める、費用をかけない改善アクション
+＃出力形式
+3つの見出しごとに、箇条書きでまとめてください。前置きは不要です。
+＃禁止事項
+出典が確認できない数字や事例は書かないでください。"><span class="hd">＃前提条件</span>
+地域密着のレストランの店長です。会議で「ランチメニューが3年変わっておらず、客単価が下がっている」という課題が出ました。
+<span class="hd">＃役割定義</span>
+中小飲食店の売上改善に詳しい経営コンサルタントとして考えてください。
+<span class="hd">＃実行指示</span>
+インターネット上の公開情報を調べて、次の3点をまとめてください。出典（サイト名またはURL）も示してください。　1. 一般的な原因と対策（中小企業向け・実践的なもの）　2. 同業他社の成功事例（2〜3つ）　3. 今すぐ取り組める、費用をかけない改善アクション
+<span class="hd">＃出力形式</span>
+3つの見出しごとに、箇条書きでまとめてください。前置きは不要です。
+<span class="hd">＃禁止事項</span>
+出典が確認できない数字や事例は書かないでください。
+</pre></div>
+<p class="red">確認：出力に出典（サイト名やURL）が付いているか、リンクを開いて確かめましょう。AIの調査結果は、必ず人の目で裏付けを確認します。</p>
+<h3>STEP3　Googleスライドの構成をGeminiに下書きさせる　20分　（時間があれば）</h3>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">📌 プロンプトに入れる条件（＃実行指示は必須。ほかは必要なものを選びます）</div><div class="ln" style="">・＃実行指示（必須）：同じチャットのSTEP1の要約とSTEP2の調査結果をもとに、スライドの構成案を作るよう指示してください</div><div class="ln" style="">・＃品質条件：スライドは5〜6枚。最後のスライドは「次のアクション（誰が・何を・いつまでに）」にしてください</div><div class="ln" style="">・＃出力形式：各スライドを「タイトル＋箇条書き3点以内」にしてください</div><div class="ln" style="">・＃対象者：社内スタッフと書いてください</div></div>
+<p class="gray">「次のアクション」とは、STEP2の調査結果（改善アクションの提案）をふまえて、自分たちの班で「誰が・何を・いつまでに」やるかを考えたものです。実在の担当者名でなくても構いません（例：店長、スタッフA、のように役割名でOKです）。</p>
+<div class="wb"><label>✍️ 自分で書いたプロンプト（STEP3）</label><textarea data-key="wb19" style="min-height:156px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="prompt"><div class="ph"><span>見本のプロンプト</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃対象者
+社内スタッフです。
+＃実行指示
+この会話の中の「会議の要約」と「調査結果」をもとに、共有スライドの構成案を作ってください。
+＃品質条件
+スライドは5〜6枚にしてください。最後のスライドは「次のアクション（誰が・何を・いつまでに）」にしてください。
+＃出力形式
+各スライドを「タイトル＋箇条書き3点以内」で出力してください。"><span class="hd">＃対象者</span>
+社内スタッフです。
+<span class="hd">＃実行指示</span>
+この会話の中の「会議の要約」と「調査結果」をもとに、共有スライドの構成案を作ってください。
+<span class="hd">＃品質条件</span>
+スライドは5〜6枚にしてください。最後のスライドは「次のアクション（誰が・何を・いつまでに）」にしてください。
+<span class="hd">＃出力形式</span>
+各スライドを「タイトル＋箇条書き3点以内」で出力してください。
+</pre></div>
+<p class="b">スライドにするまでの手順</p>
+<div class="step"><span class="n">①</span><div>Geminiが出力したスライド構成をコピーします。</div></div>
+<div class="step"><span class="n">②</span><div>Googleスライド（slides.google.com）で、新しいプレゼンテーションを作成します。</div></div>
+<div class="step"><span class="n">③</span><div>各スライドに、Geminiの出力内容を貼り付けて整えます。</div></div>
+<div class="step"><span class="n">④</span><div>完成したスライドを、班で見せ合います。</div></div>
+<div class="box" style="background:#F5F3FF;border-color:#8B5CF6"><div class="bt">⚡ 時短のヒント（有料プランの方）</div><div class="ln" style="">Google AI Proなどの有料プランをお使いの方は、Geminiに直接「Googleスライド形式で作成してください」と指示すると、コピー＆貼り付けなしでスライドができる場合があります。無料アカウントの方や、うまくいかない場合は、上の手順で進めてください。</div></div>
+<h2 id="sec4">S3　GEM作成実践（動画⑤の応用）　45分</h2>
+<p class="red b">🔖 全て必須</p>
+<div class="box" style="background:#F0FDF4;border-color:#16A34A"><div class="bt">👨‍🏫 GEMを使うメリット</div><div class="ln" style="">・一度作れば、次からは入力するだけです（プロンプトを打ち直す手間がなくなります）</div><div class="ln" style="">・チームで共有できます（ベテランのノウハウをGEMにすれば、新人でも同じ品質で対応できます）</div><div class="ln" style="">・毎回同じ品質の出力が得られます（担当者による差が出にくくなります）</div></div>
+<p class="">「毎回同じような文章を作っている業務」があれば、それがGEM化のチャンスです。</p>
+<h3>⭐必須　STEP1　自社業務の棚卸し　10分</h3>
+<p class="">「毎週・毎日、同じようなプロンプトを入力している作業」はGEM化に向いています。下の候補から選ぶか、自社独自のGEMを考えてください。</p>
+<div class="tw"><table><thead><tr><th>GEM名（例）</th><th>入力するもの</th><th>出力されるもの</th><th>向いている業種</th></tr></thead><tbody><tr><td class=first>クレーム返信文</td><td>クレーム内容のメモ</td><td>丁寧な返信文案（3パターン）</td><td>飲食・宿泊・小売・サービス</td></tr><tr><td class=first>求人票ライター</td><td>雇用条件の箇条書き</td><td>応募者の心に響く求人票</td><td>全業種</td></tr><tr><td class=first>要約専門家</td><td>長い資料・メール</td><td>経営者向け300字の要約</td><td>全業種</td></tr><tr><td class=first>作業完了報告書</td><td>当日作業のメモ書き</td><td>取引先に送れる完了報告書</td><td>建設・製造・設備</td></tr><tr><td class=first>SNS投稿文メーカー</td><td>伝えたい内容の箇条書き</td><td>Instagram・X用の投稿文</td><td>飲食・小売・観光</td></tr><tr><td class=first>自社オリジナル</td><td>毎回入力している内容</td><td>毎回ほしい出力</td><td>自社に合わせる</td></tr></tbody></table></div>
+<p>入力するデータの作り方に迷ったら、班の共有ドライブフォルダの「GEMサンプル入力例集」を開いてください → <a class="drive" href="https://drive.google.com/drive/folders/XXXXXXXXXXXX" target="_blank" rel="noopener">GEMサンプル入力例集（共有フォルダを開く）</a></p>
+<p class="gray">うまく開けない場合は、下の入力例をコピーして使ってください。</p>
+<div class="box" id="sample3" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 各候補のサンプル入力例</div><div class="ln" style="font-weight:700;">【クレーム返信文】用</div><div class="ln" style="">注文した商品が届いたら傷がついていた。すぐ交換してほしいとの連絡。お客様は少し怒り気味。</div><div class="ln" style="font-weight:700;">【求人票ライター】用</div><div class="ln" style="">募集職種：接客スタッフ／時給1,100円／週3日〜・1日4時間〜／未経験可／土日勤務できる方歓迎</div><div class="ln" style="font-weight:700;">【要約専門家】用</div><div class="ln" style="">S2のサンプル会議メモ、または別の長めのメール・資料をそのまま使えます。</div><div class="ln" style="font-weight:700;">【作業完了報告書】用</div><div class="ln" style="">本日、A社様の空調フィルター交換作業完了。使用部材：フィルター2枚。所要時間45分。特記事項なし。</div><div class="ln" style="font-weight:700;">【SNS投稿文メーカー】用</div><div class="ln" style="">今週末限定で季節限定パフェを販売。地元産いちご使用。価格は800円。</div><div class="acts"><button class="cp" data-sample="2">📋 コピー</button><button class="dl" data-sample="2">⬇ テキストで保存</button></div></div>
+<div class="wb"><label>✍️ よく繰り返す業務を3つ書き出す</label><textarea data-key="wb20" style="min-height:67px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="wb"><label>✍️ その中から、今回GEMにする業務を1つ選ぶ</label><textarea data-key="wb21" style="min-height:36px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<h3>⭐必須　STEP2　カスタム指示（プロンプト）を書く　15分</h3>
+<p class="">選んだ業務について、GEMの「カスタム指示」になるプロンプトを書きます。GEMには毎回同じ指示が働くので、「＃実行指示」（入力されたものに何をするか）は必ず書きます。ほかの項目は、必要なものを選んで足してください。</p>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">📌 書く内容（＃実行指示は必須）</div><div class="ln" style="">・＃実行指示（必須）：入力された内容に対して、何をするか</div><div class="ln" style="">・＃前提条件：どんな場面で使うGEMか。「このチャットには〇〇が入力されます」と、入力されるものも書く</div><div class="ln" style="">・＃役割定義：誰の・どんな専門家として振る舞うか</div><div class="ln" style="">・＃出力形式：メールにそのまま貼れる形、箇条書きなど</div><div class="ln" style="">・＃禁止事項：やってはいけないこと</div></div>
+<div class="wb"><label>✍️ 自分で書いたカスタム指示</label><textarea data-key="wb22" style="min-height:208px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="prompt"><div class="ph"><span>見本のカスタム指示（クレーム返信文メーカーの例）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
+飲食店や小売店などの接客の現場で、お客様からのクレーム内容のメモを受け取り、返信文案を作る場面です。このチャットには、クレームの内容のメモが入力されます。
+＃役割定義
+クレーム対応に慣れた、接客のベテラン担当者として考えてください。
+＃実行指示
+入力されたメモをもとに、お客様への返信文案を作成してください。お詫び・状況の確認・今後の対応の3点を必ず含め、「ていねい型」「簡潔型」「やわらかい型」の3パターンを作ってください。
+＃出力形式
+パターンごとに見出しを付け、メールにそのまま貼り付けられる本文にしてください。前置きや挨拶は不要です。
+＃禁止事項
+メモにない事実を書かないでください。返金額や日時など、確定していない約束は書かないでください。"><span class="hd">＃前提条件</span>
+飲食店や小売店などの接客の現場で、お客様からのクレーム内容のメモを受け取り、返信文案を作る場面です。このチャットには、クレームの内容のメモが入力されます。
+<span class="hd">＃役割定義</span>
+クレーム対応に慣れた、接客のベテラン担当者として考えてください。
+<span class="hd">＃実行指示</span>
+入力されたメモをもとに、お客様への返信文案を作成してください。お詫び・状況の確認・今後の対応の3点を必ず含め、「ていねい型」「簡潔型」「やわらかい型」の3パターンを作ってください。
+<span class="hd">＃出力形式</span>
+パターンごとに見出しを付け、メールにそのまま貼り付けられる本文にしてください。前置きや挨拶は不要です。
+<span class="hd">＃禁止事項</span>
+メモにない事実を書かないでください。返金額や日時など、確定していない約束は書かないでください。
+</pre></div>
+<p class="gray">書けない場合は、Geminiに「〇〇業の〇〇担当者向けの、〇〇業務を自動化するGEMのカスタム指示を、＃前提条件・＃役割定義などの見出しを使って書いてください」と相談しても構いません。</p>
+<h3>⭐必須　STEP3　GEMを作成・動作確認・追加指示・共有　20分</h3>
+<div class="box" style="background:#FEF2F2;border-color:#EF4444"><div class="bt">⚠️ 間違えやすいポイント：「カスタム指示」と「入力例」は別の場所です</div><div class="ln" style="">・「カスタム指示」欄（Gem作成画面の左側）＝GEMの振る舞いを決める指示文です。STEP2で書いたプロンプトを、1回だけ入力する場所です。</div><div class="ln" style="">・チャット欄「Geminiに相談」（作成画面の右側のプレビュー）＝実際のデータを入れて使う場所です。クレーム内容のメモなどの入力例は、こちらに入力します。</div><div class="ln" style="">・入力例をカスタム指示欄に入れてしまうと、GEMがうまく動きません。</div></div>
+<div class="step"><span class="n">①</span><div>画面左側のメニューの「Gem」をクリックして、Gemマネージャーを開きます。右上の「＋ Gemを作成」ボタンをクリックします（画像の①）。</div></div>
+<p class="gray">【画像】Gemマネージャー。①の「＋ Gemを作成」をクリックします。</p>
+<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/g3.jpg" alt="【画像】Gemマネージャー。①の「＋ Gemを作成」をクリックします。" loading="lazy"><figcaption>【画像】Gemマネージャー。①の「＋ Gemを作成」をクリックします。</figcaption></figure>
+<div class="step"><span class="n">②</span><div>「新しいGem」の画面が開きます。画像の番号の順に入力します。</div></div>
+<p class="gray">【画像】新しいGemの作成画面。①〜⑤の順に入力・操作します。</p>
+<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/g4.jpg" alt="【画像】新しいGemの作成画面。①〜⑤の順に入力・操作します。" loading="lazy"><figcaption>【画像】新しいGemの作成画面。①〜⑤の順に入力・操作します。</figcaption></figure>
+<div class="tw"><table><thead><tr><th>画像の番号</th><th>入力する内容</th></tr></thead><tbody><tr><td class=first>①　名前</td><td>例：「クレーム返信文メーカー」（GEM候補表の「GEM名」をそのまま使えます）</td></tr><tr><td class=first>②　説明</td><td>このGEMが何をするかを一言で。例：「クレーム内容を入力すると、丁寧な返信文案を作成します」</td></tr><tr><td class=first>③　カスタム指示</td><td>STEP2で書いたプロンプトを貼り付けます</td></tr><tr><td class=first>④　知識（任意）</td><td>いつも参照させたい資料があれば追加します。今回は空欄のままで大丈夫です</td></tr><tr><td class=first>⑤　保存</td><td>①〜③を入力したら、右上の「保存」をクリックします</td></tr></tbody></table></div>
+<div class="step"><span class="n">③</span><div>保存すると、右側のチャット欄（「Geminiに相談」）に、自分で考えた入力例を入力して送信し、動作を確認します。サンプル入力例（STEP1）をそのまま使っても構いません。</div></div>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">💡 保存しただけでは終わりません：チャット欄には何を入れる？</div><div class="ln" style="">GEMは、保存しただけでは何も生み出しません。チャット欄に、実際のデータを入力して初めて動きます。</div><div class="ln" style="">チャット欄に入れるのは「指示」ではなく、「生のデータ」そのものです。指示はカスタム指示欄にすでに書いてあるので、チャットに書き直す必要はありません。</div><div class="ln" style="">例（クレーム返信文メーカーの場合）：「先週購入した商品が届いたら傷がついていました。すぐ交換してほしいです。かなり困っています。」のように、本物のお客様から連絡が来たかのような文章を、そのまま貼り付けるだけで大丈夫です。</div><div class="ln" style="">思った出力にならない場合は、入力例を変えて何度か試してみましょう。</div></div>
+<div class="step"><span class="n">④</span><div>出力に対して、追加の条件を送ります（例：「もっと簡潔にしてください」「別のパターンも出してください」「もっとやわらかい言い方にしてください」）。</div></div>
+<div class="box" style="background:#F5F3FF;border-color:#8B5CF6"><div class="bt">💡 ＋1を体験する</div><div class="ln" style="">＋1は「仕上げに整える」ための要素です。1回で完璧な出力を狙うのではなく、出力を見てから追加条件を送って整えます。新しいチャットを開き直す必要はありません。同じ会話の続きで「もっと〇〇にしてください」と送れば、GEMは前の回答をふまえて直してくれます。</div></div>
+<div class="step"><span class="n">⑤</span><div>作ったGEMを共有します。Gem作成画面（またはGemマネージャー）の「共有」ボタンを押し、表示されたリンクを班のチャットに送ります。</div></div>
+<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 完成の確認基準</div><div class="ln" style="">・自分で考えた入力例を貼り付けて、すぐ使える出力が得られましたか？</div><div class="ln" style="">・毎回同じ形式で出力されますか？</div><div class="ln" style="">・追加条件を送ったら、ねらい通りに出力が改善されましたか？</div><div class="ln" style="">・班のメンバーにリンクを共有できましたか？</div></div>
+<p class="gray">🚀 早く終わったら（班全員がSTEP3を完了した場合）：STEP1のGEM候補表から、まだ作っていない別の業務のGEMをもう1つ作ってみましょう。手順はSTEP1〜3と同じです。2つ目を作ると、「どんな業務がGEM化しやすいか」の感覚がさらにつかめます。</p>
+<h2 id="sec5">S4　Gemini Notebookで資料をAI化する（動画⑥の応用）　35分</h2>
+<p class="red b">🔖 必須：STEP1・STEP2　／　STEP3は話し合い</p>
+<p class="">Gemini Notebook（旧NotebookLM）は、自分が読み込ませた資料だけを根拠にAIが答えてくれるツールです。就業規則や業務マニュアルを読み込ませて、質問に答えてもらいます。</p>
+<h3>⭐必須　STEP1　資料を読み込ませる　10分</h3>
+<p>共通サンプル資料2点（就業規則の抜粋・業務マニュアルの抜粋）を、全員が使います。班の共有ドライブフォルダに、「サンプル資料_就業規則抜粋」と「業務マニュアル抜粋（新入社員向け）」の2ファイルが入っています。→ <a class="drive" href="https://drive.google.com/drive/folders/XXXXXXXXXXXX" target="_blank" rel="noopener">サンプル資料（共有フォルダを開く）</a></p>
+<div class="step"><span class="n">①</span><div>ブラウザの検索欄に「Gemini Notebook」と入力して検索し、「AI リサーチツール＆思考パートナー - Gemini Notebook」をクリックします（画像の①）。</div></div>
+<p class="gray">【画像】「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）</p>
+<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/n1.jpg" alt="【画像】「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）" loading="lazy"><figcaption>【画像】「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）</figcaption></figure>
+<div class="step"><span class="n">②</span><div>Gemini Notebookのホーム画面が開きます。右上の「＋ 新しいノートブック」をクリックします（画像の①）。</div></div>
+<p class="gray">【画像】Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。</p>
+<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/n2.jpg" alt="【画像】Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。" loading="lazy"><figcaption>【画像】Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。</figcaption></figure>
+<div class="step"><span class="n">③</span><div>「ソースを追加」をクリックし、「Googleドライブ」を選んで、共有フォルダの2ファイルを両方選択して追加します（Gemini Notebookは複数の資料をまとめて読み込めます）。</div></div>
+<p class="gray">【画像】ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。</p>
+<figure><img src="img/workshop//tmp/claude-0/-home-claude/a8b16f9b-e679-5a42-8801-1480cff67580/scratchpad/b1/n3.jpg" alt="【画像】ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。" loading="lazy"><figcaption>【画像】ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。</figcaption></figure>
+<div class="box" id="sample4" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 サンプル資料（就業規則・業務マニュアル抜粋）</div><div class="ln" style="color:#6b7280;">Googleドライブから読み込めない場合は、「ソースを追加」から「コピーしたテキスト」を選び、下の資料本文をコピーして貼り付けてください。</div><div class="ln" style="font-weight:700;">【就業規則（抜粋）】</div><div class="ln" style="">第1条（勤務時間）　勤務時間は午前9時から午後6時までとする（休憩1時間を含む）。</div><div class="ln" style="">第2条（有給休暇）　入社6ヶ月経過後、年10日の有給休暇を付与する。取得を希望する場合は、原則として3営業日前までに上長へ申請すること。緊急の場合はこの限りではない。</div><div class="ln" style="">第3条（慶弔休暇）　本人結婚時5日、配偶者・実父母・子の死亡時5日、祖父母・兄弟姉妹の死亡時2日の休暇を付与する。</div><div class="ln" style="">第4条（経費精算）　交通費・接待費等の経費は、領収書を添付の上、利用月の翌月10日までに経理担当へ提出すること。1万円を超える経費は事前に上長の承認を得ること。</div><div class="ln" style="">第5条（服装・身だしなみ）　清潔感のある服装を心がけ、来客対応時はジャケット着用を基本とする。</div><div class="ln" style="">第6条（情報セキュリティ）　顧客情報・取引先情報を含む資料は社外へ持ち出し禁止とする。社外での作業が必要な場合は上長の承認を得ること。</div><div class="ln" style="font-weight:700;">【新入社員向け業務マニュアル（抜粋）】</div><div class="ln" style="">■電話対応　「お電話ありがとうございます、〇〇（会社名）でございます」と応答し、相手の会社名・氏名を復唱して確認する。</div><div class="ln" style="">■来客対応　来客があった際は速やかに立ち上がり、担当者に取り次ぐ。お茶出しは来客後5分以内を目安とする。</div><div class="ln" style="">■クレーム対応の初動　まずお客様の話を最後まで遮らずに聞く。その場での即答は避け、「担当者に確認の上、〇分以内に折り返します」と伝える。個人の判断で謝罪の範囲を確約しない。</div><div class="ln" style="">■社用車の利用　使用前後に運転日報へ記入し、給油は満タン返却を原則とする。事故発生時は速やかに上長へ報告する。</div><div class="acts"><button class="cp" data-sample="3">📋 コピー</button><button class="dl" data-sample="3">⬇ テキストで保存</button></div></div>
+<h3>⭐必須　STEP2　Q&amp;Aで使ってみる　15分</h3>
+<div class="step"><span class="n">①</span><div>画面中央のチャット欄（画像の②）に、次の質問を順番に入力します。</div></div>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📋 試してみる質問</div><div class="ln" style="">【質問1】この資料の内容を3つのポイントで要約してください。</div><div class="ln" style="">【質問2】新入社員が最初に覚えるべきことは何ですか？</div><div class="ln" style="">【質問3】よくある質問（FAQ）を10個作ってください。</div><div class="ln" style="">【質問4】サンプル資料の内容について、自分で考えた質問を入力してみましょう。</div><div class="ln" style="">　　例：「有給休暇の申請期限は？」「クレームが来たときの初動対応は？」「経費精算はいつまでに提出すればいい？」</div></div>
+<div class="step"><span class="n">②</span><div>回答の中に、番号付きの引用（資料のどの部分から答えたか）が付いているか確認します。番号をクリックすると、根拠となった資料の箇所が表示されます。</div></div>
+<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 確認ポイント</div><div class="ln" style="">・読み込ませた資料の内容に基づいた回答が得られましたか？</div><div class="ln" style="">・回答の根拠となる資料の箇所が引用されていますか？</div><div class="ln" style="">・この機能があれば、社内のどんな問題が解決しそうか、班で話してみましょう。</div></div>
+<h3>STEP3　班で活用アイデアを共有する　10分</h3>
+<div class="box" style="background:#F5F3FF;border-color:#8B5CF6"><div class="bt">💬 班で話し合うこと</div><div class="ln" style="">・自社のどの資料をGemini Notebookに入れると一番役立ちそうですか？</div><div class="ln" style="">・社内のどんな質問が減りそうですか？</div><div class="ln" style="">・新人研修にどう使えそうですか？</div></div>
+<div class="tw"><table><thead><tr><th>話し合いの結果</th><th>記入欄</th></tr></thead><tbody><tr><td class=first>うまくいった点</td><td><textarea data-key="wb23" rows="2"></textarea></td></tr><tr><td class=first>改善したい点</td><td><textarea data-key="wb24" rows="2"></textarea></td></tr><tr><td class=first>自社での活用アイデア</td><td><textarea data-key="wb25" rows="2"></textarea></td></tr></tbody></table></div>
+<p class="gray">🚀 早く終わったら：画面右側の「Studio」から、まだ試していない機能（音声解説・マインドマップ・インフォグラフィックなど）を作ってみましょう。就業規則・業務マニュアルが、それぞれどんな形に変わるか比べてみてください。</p>
+<h2 id="sec6">時間があれば　Gemini Notebook 応用編　20分</h2>
+<p class="red b">🔖 任意（丸ごとスキップできます）</p>
+<p class="">S4で使ったGemini Notebookの基本操作に加えて、契約書の一次チェックと、資料のスライド化・外部調査という、より実務的な使い方を体験します。</p>
+<h3>STEP1　契約書の一次確認　10分</h3>
+<div class="box" id="sample5" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 サンプル契約書（業務委託契約書・抜粋）（全員この契約書を使います）</div><div class="ln" style="font-weight:700;">第3条（委託料）</div><div class="ln" style="">甲は乙に対し、委託料として月額30万円（税別）を、乙の請求書発行日から起算して45日以内に支払うものとする。</div><div class="ln" style="font-weight:700;">第5条（契約期間）</div><div class="ln" style="">本契約の有効期間は契約締結日より1年間とする。期間満了の1ヶ月前までに甲乙いずれからも書面による解約の申し出がない場合、本契約は自動的に同一条件でさらに1年間更新されるものとし、以後も同様とする。</div><div class="ln" style="font-weight:700;">第7条（損害賠償）</div><div class="ln" style="">乙は、本契約の履行に関連して甲に損害を与えた場合、その理由の如何を問わず、一切の損害（逸失利益を含む）を賠償する責任を負うものとする。賠償額の上限は設けない。</div><div class="ln" style="font-weight:700;">第8条（秘密保持）</div><div class="ln" style="">乙は、本契約に関連して知り得た甲の営業上・技術上の秘密を、契約終了後も第三者に開示してはならない。</div><div class="ln" style="font-weight:700;">第9条（中途解約）</div><div class="ln" style="">甲は、本契約期間中であっても、乙に対し30日前の書面通知により本契約を中途解約できるものとする。この場合、乙は甲に対して違約金等を請求できないものとする。</div><div class="acts"><button class="cp" data-sample="4">📋 コピー</button><button class="dl" data-sample="4">⬇ テキストで保存</button></div></div>
+<div class="step"><span class="n">①</span><div>Gemini Notebookのホーム画面で「＋ 新しいノートブック」をクリックし、ノートブックの名前を「契約書チェック」などにします。</div></div>
+<div class="step"><span class="n">②</span><div>「ソースを追加」→「コピーしたテキスト」を選び、上のサンプル契約書を貼り付けて追加します。</div></div>
+<div class="step"><span class="n">③</span><div>画面中央のチャット欄に、プロンプトを入力して送信します。まず、下の欄に自分で書いてみましょう。</div></div>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">📌 プロンプトに入れる条件（＃実行指示は必須。ほかは必要なものを選びます）</div><div class="ln" style="">・＃実行指示（必須）：次の3つを指示してください　①「金額」「期間」「解約条件」に関する記載を抜き出す　②受託側（乙）にとってリスクが高い条項を3つ、理由つきで挙げる　③契約前に相手方に確認・交渉すべき点を、箇条書きで挙げる</div><div class="ln" style="">・＃役割定義：「中小企業の経営者側に立つ、契約リスクの一次チェック担当者」として考えてもらいます</div><div class="ln" style="">・＃禁止事項：法的な判断を断定しないこと、ソースにない内容を推測で補わないことを書いてください</div></div>
+<div class="wb"><label>✍️ 自分で書いたプロンプト（契約書チェック）</label><textarea data-key="wb26" style="min-height:182px" placeholder="ここに書き込めます（この端末のブラウザに自動保存されます）"></textarea></div>
+<div class="prompt"><div class="ph"><span>見本のプロンプト</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
+業務委託契約を結ぶ前に、契約書の問題点を一次確認する場面です。自社は受託側（乙）です。
+＃役割定義
+中小企業の経営者側に立つ、契約リスクの一次チェック担当者として考えてください。
+＃実行指示
+ソースに追加した「サンプル契約書」について、次の3つを行ってください。　①「金額」「期間」「解約条件」に関する記載を抜き出す　②受託側（乙）にとってリスクが高い条項を3つ、理由つきで挙げる　③契約前に相手方に確認・交渉すべき点を、箇条書きで挙げる
+＃禁止事項
+法的な判断を断定しないでください。ソースにない内容を推測で補わないでください。"><span class="hd">＃前提条件</span>
+業務委託契約を結ぶ前に、契約書の問題点を一次確認する場面です。自社は受託側（乙）です。
+<span class="hd">＃役割定義</span>
+中小企業の経営者側に立つ、契約リスクの一次チェック担当者として考えてください。
+<span class="hd">＃実行指示</span>
+ソースに追加した「サンプル契約書」について、次の3つを行ってください。　①「金額」「期間」「解約条件」に関する記載を抜き出す　②受託側（乙）にとってリスクが高い条項を3つ、理由つきで挙げる　③契約前に相手方に確認・交渉すべき点を、箇条書きで挙げる
+<span class="hd">＃禁止事項</span>
+法的な判断を断定しないでください。ソースにない内容を推測で補わないでください。
+</pre></div>
+<div class="box" style="background:#FEF2F2;border-color:#EF4444"><div class="bt">⚠️ ご注意</div><div class="ln" style="">AIによる契約書チェックは「見落としを減らす一次確認」です。最終的な法的判断の代わりにはなりません。重要な契約は、必ず専門家（弁護士など）に確認してください。</div></div>
+<h3>STEP2　資料のスライド化・外部調査　10分</h3>
+<p class="">S4で読み込ませたサンプル資料（就業規則・業務マニュアル）を使って、画面右側の「Studio」の新機能を試します。</p>
+<div class="step"><span class="n">①</span><div>S4で作ったノートブックを開きます（同じソースを使い回せます）。</div></div>
+<div class="step"><span class="n">②</span><div>画面右側の「Studio」の中の「スライド資料」を選び、就業規則の内容から、社内説明用のスライドを自動作成します（画像の③）。</div></div>
+<div class="step"><span class="n">③</span><div>画面左側の「ソース」の「ウェブで新しいソースを検索」の欄に、「同業種の就業規則の一般的な相場」など、資料にない情報を入力して検索します。検索モードは「Fast Research」を選びます（プランによっては「Deep Research」も選べます）。</div></div>
+<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 確認ポイント</div><div class="ln" style="">・自動作成されたスライドは、そのまま社内説明会に使えそうですか？</div><div class="ln" style="">・ウェブ調査の結果に、出典（引用元）が書かれていますか？</div><div class="ln" style="">・自社なら、契約書・マニュアル以外に、どんな資料をGemini Notebookに読み込ませたいですか？</div></div>
+</main>
 <script>
-  const PASSWORD      = "ws0807";
-  const TEST_PASSWORD = "maeda0617";
-  const DRIVE_URL     = "https://drive.google.com/drive/folders/10duSj-asZjtD8xd543ZKR_j8oWNeu89F";
-  const ALLOWED_DATES = ["2026-06-17", "2026-06-21", "2026-08-07"];
-
-  // ドライブURLをセット
-  document.querySelectorAll('#drive2,#drive3,#drive4').forEach(a => a.href = DRIVE_URL);
-
-  function getTodayStr() {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+(function(){
+  try{ if(sessionStorage.getItem('loggedIn')!=='1' && !localStorage.getItem('userEmail')) document.getElementById('gate').style.display='flex'; }catch(e){}
+  var SAMPLES = [{"title": "サンプル文章（全員この文章を使います）", "text": "10月より、下記の通り営業時間を変更いたします。\n平日は9時から18時まで、土日は10時から17時までとなります。\n祝日は休業とさせていただきます。\nご不便をおかけしますが、よろしくお願いいたします。"}, {"title": "サンプル会議メモ（全員この会議メモを使います）", "text": "2026年7月10日（木）14:00〜15:00\n参加者：田中（店長）、山田（副店長）、佐藤・鈴木（スタッフ）\n■今月の売上について\n先月比で売上が8%減少。客数は変わっていないが客単価が下がっている。\n→原因として「ランチメニューが3年変わっていない」という意見が出た。\n→山田から「競合のB店が新メニューを週替わりで出している」という情報あり。\n■夏のイベントについて\nお盆期間（8/10〜8/16）に特別コースを出してはどうか（田中提案）。\n価格帯は3,500円〜5,000円を想定。地元食材を使ったコースが差別化になる。\n佐藤：「SNSで映える料理にしないと集客が難しい」と指摘。\n■次回会議：7月17日（木）14:00"}, {"title": "各候補のサンプル入力例", "text": "【クレーム返信文】用\n注文した商品が届いたら傷がついていた。すぐ交換してほしいとの連絡。お客様は少し怒り気味。\n【求人票ライター】用\n募集職種：接客スタッフ／時給1,100円／週3日〜・1日4時間〜／未経験可／土日勤務できる方歓迎\n【要約専門家】用\nS2のサンプル会議メモ、または別の長めのメール・資料をそのまま使えます。\n【作業完了報告書】用\n本日、A社様の空調フィルター交換作業完了。使用部材：フィルター2枚。所要時間45分。特記事項なし。\n【SNS投稿文メーカー】用\n今週末限定で季節限定パフェを販売。地元産いちご使用。価格は800円。"}, {"title": "サンプル資料（就業規則・業務マニュアル抜粋）", "text": "Googleドライブから読み込めない場合は、「ソースを追加」から「コピーしたテキスト」を選び、下の資料本文をコピーして貼り付けてください。\n【就業規則（抜粋）】\n第1条（勤務時間）　勤務時間は午前9時から午後6時までとする（休憩1時間を含む）。\n第2条（有給休暇）　入社6ヶ月経過後、年10日の有給休暇を付与する。取得を希望する場合は、原則として3営業日前までに上長へ申請すること。緊急の場合はこの限りではない。\n第3条（慶弔休暇）　本人結婚時5日、配偶者・実父母・子の死亡時5日、祖父母・兄弟姉妹の死亡時2日の休暇を付与する。\n第4条（経費精算）　交通費・接待費等の経費は、領収書を添付の上、利用月の翌月10日までに経理担当へ提出すること。1万円を超える経費は事前に上長の承認を得ること。\n第5条（服装・身だしなみ）　清潔感のある服装を心がけ、来客対応時はジャケット着用を基本とする。\n第6条（情報セキュリティ）　顧客情報・取引先情報を含む資料は社外へ持ち出し禁止とする。社外での作業が必要な場合は上長の承認を得ること。\n【新入社員向け業務マニュアル（抜粋）】\n■電話対応　「お電話ありがとうございます、〇〇（会社名）でございます」と応答し、相手の会社名・氏名を復唱して確認する。\n■来客対応　来客があった際は速やかに立ち上がり、担当者に取り次ぐ。お茶出しは来客後5分以内を目安とする。\n■クレーム対応の初動　まずお客様の話を最後まで遮らずに聞く。その場での即答は避け、「担当者に確認の上、〇分以内に折り返します」と伝える。個人の判断で謝罪の範囲を確約しない。\n■社用車の利用　使用前後に運転日報へ記入し、給油は満タン返却を原則とする。事故発生時は速やかに上長へ報告する。"}, {"title": "サンプル契約書（業務委託契約書・抜粋）（全員この契約書を使います）", "text": "第3条（委託料）\n甲は乙に対し、委託料として月額30万円（税別）を、乙の請求書発行日から起算して45日以内に支払うものとする。\n第5条（契約期間）\n本契約の有効期間は契約締結日より1年間とする。期間満了の1ヶ月前までに甲乙いずれからも書面による解約の申し出がない場合、本契約は自動的に同一条件でさらに1年間更新されるものとし、以後も同様とする。\n第7条（損害賠償）\n乙は、本契約の履行に関連して甲に損害を与えた場合、その理由の如何を問わず、一切の損害（逸失利益を含む）を賠償する責任を負うものとする。賠償額の上限は設けない。\n第8条（秘密保持）\n乙は、本契約に関連して知り得た甲の営業上・技術上の秘密を、契約終了後も第三者に開示してはならない。\n第9条（中途解約）\n甲は、本契約期間中であっても、乙に対し30日前の書面通知により本契約を中途解約できるものとする。この場合、乙は甲に対して違約金等を請求できないものとする。"}];
+  function copy(text, btn){
+    function ok(){ if(!btn) return; var o=btn.textContent; btn.classList.add('done'); btn.textContent='✔ コピーしました'; setTimeout(function(){btn.textContent=o;btn.classList.remove('done');},1600); }
+    if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(ok,function(){fb()}); } else fb();
+    function fb(){ var t=document.createElement('textarea'); t.value=text; t.style.position='fixed'; t.style.opacity='0'; document.body.appendChild(t); t.select(); try{document.execCommand('copy');ok();}catch(e){} document.body.removeChild(t); }
   }
-  function isAllowedDate() { return ALLOWED_DATES.includes(getTodayStr()); }
-
-  function tryUnlock() {
-    const input = document.getElementById('pwInput').value.trim();
-    // テスト用PW：日付制限なし
-    if (input === TEST_PASSWORD) { unlock(); return; }
-    // 日付チェック
-    if (!isAllowedDate()) {
-      document.getElementById('lockClosed').style.display = 'block';
-      document.getElementById('lockError').style.display = 'none';
-      return;
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    if(b.classList.contains('cp2')){ var pre=b.closest('.prompt').querySelector('pre'); copy(pre.getAttribute('data-raw'), b); }
+    else if(b.classList.contains('cp') && b.dataset.sample!==undefined){ copy(SAMPLES[+b.dataset.sample].text, b); }
+    else if(b.classList.contains('dl') && b.dataset.sample!==undefined){
+      var s=SAMPLES[+b.dataset.sample]; var blob=new Blob(['\ufeff'+s.text],{type:'text/plain;charset=utf-8'});
+      var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=s.title.replace(/[（(].*$/,'').trim()+'.txt'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
-    if (input === PASSWORD) {
-      unlock();
-    } else {
-      document.getElementById('lockError').style.display = 'block';
-      document.getElementById('lockClosed').style.display = 'none';
-      document.getElementById('pwInput').value = '';
-      document.getElementById('pwInput').focus();
-    }
-  }
-
-  function unlock() {
-    document.getElementById('lockScreen').style.display = 'none';
-    document.getElementById('mainPage').style.display = 'block';
-    sessionStorage.setItem('ws_unlocked','1');
-  }
-
-  window.addEventListener('load', () => {
-    if (!isAllowedDate() && sessionStorage.getItem('ws_unlocked') !== '1') {
-      document.getElementById('lockClosed').style.display = 'block';
-    }
-    if (sessionStorage.getItem('ws_unlocked') === '1') { unlock(); return; }
-    document.getElementById('pwInput').focus();
   });
-</script>
-</body>
-</html>
+  document.querySelectorAll('textarea[data-key]').forEach(function(t){
+    var k='ws1_'+t.dataset.key;
+    try{ var v=localStorage.getItem(k); if(v) t.value=v; }catch(e){}
+    t.addEventListener('input',function(){ try{localStorage.setItem(k,t.value);}catch(e){} });
+  });
+})();
+</script></body></html>
