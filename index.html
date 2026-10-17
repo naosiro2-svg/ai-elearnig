@@ -524,7 +524,7 @@ function sendLog(type, detail, image, imageMime) {
 }
 
 // ── 集合研修 事前アンケート（Googleフォーム）──
-const SURVEY_URL = "https://docs.google.com/forms/d/e/1FAIpQLScC6e5wgNd4uwfU5HOGaX_WM4Si3WOjNTQEpthbOrUlKr5M9g/viewform";
+const SURVEY_URL = "https://forms.gle/EY7BY6RhXJ4At6f3A";
 function openSurvey(){
   window.open(SURVEY_URL, '_blank', 'noopener');
   const email = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || '';
