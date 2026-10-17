@@ -203,6 +203,13 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
 .howto-start-btn:hover{background:var(--green);}
 .howto-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;padding:5px 14px;border-radius:5px;cursor:pointer;font-family:inherit;text-decoration:none;margin-left:4px;}
 .howto-btn:hover{background:rgba(255,255,255,.2);}
+/* 集合研修 事前アンケート */
+.survey-link{background:#F59E0B!important;color:#fff!important;border-color:#F59E0B!important;font-weight:700;}
+.survey-banner{background:#FEF3C7;border-bottom:2px solid #F59E0B;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;font-size:14px;color:#78350F;line-height:1.6;}
+.survey-banner strong{color:#B45309;}
+.survey-banner .sv-go{background:#F59E0B;color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;}
+.survey-banner .sv-go:hover{background:#D97706;}
+.survey-banner .sv-done{background:none;border:1px solid #B45309;border-radius:6px;padding:5px 12px;font-size:12px;color:#92400E;cursor:pointer;font-family:inherit;}
 </style>
 </head>
 <body>
@@ -354,11 +361,13 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
     <span class="prog-text" id="progText">0 / 7 完了</span>
     <div class="pbar-outer"><div class="pbar-fill" id="globalBar" style="width:0%"></div></div>
     <button class="howto-btn" onclick="openHowto()">📋 講座の進め方</button>
+    <a href="#" class="gallery-link survey-link" onclick="openSurvey();return false;">📝 事前アンケート</a>
     <a href="workshop.html" class="gallery-link">📘 集合研修 演習</a>
     <a href="gallery.html" class="gallery-link">🚀 ミニアプリ展示</a>
     <div class="user-icon">前</div>
   </div>
 </header>
+
 
 <div class="layout">
   <aside>
@@ -367,6 +376,12 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
   </aside>
 
   <main id="mainArea">
+  <!-- 集合研修 事前アンケートの案内（「回答済み」を押すまで表示） -->
+  <div class="survey-banner" id="surveyBanner" style="display:none">
+    <span>📝 <strong>集合研修の事前アンケート</strong>にご回答ください（約3分）。グループ編成と研修内容の調整に使います。</span>
+    <a href="#" class="sv-go" onclick="openSurvey();return false;">アンケートに回答する</a>
+    <button class="sv-done" onclick="markSurveyDone()">回答済み（この案内を閉じる）</button>
+  </div>
     <div class="video-selector">
       <button class="vsel-btn active" id="vsel0" onclick="selectVideoType(0)">
         <span class="vsel-icon">🎧</span>
@@ -507,6 +522,24 @@ function sendLog(type, detail, image, imageMime) {
     body: JSON.stringify(body)
   }).catch(() => {});
 }
+
+// ── 集合研修 事前アンケート（Googleフォーム）──
+const SURVEY_URL = "https://docs.google.com/forms/d/e/1FAIpQLScC6e5wgNd4uwfU5HOGaX_WM4Si3WOjNTQEpthbOrUlKr5M9g/viewform";
+function openSurvey(){
+  window.open(SURVEY_URL, '_blank', 'noopener');
+  const email = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || '';
+  sendLog('事前アンケート表示', 'アンケートを開いた|||' + email);
+}
+function markSurveyDone(){
+  try{ localStorage.setItem('survey_done','1'); }catch(e){}
+  document.getElementById('surveyBanner').style.display = 'none';
+}
+function updateSurveyBanner(){
+  let done = false;
+  try{ done = localStorage.getItem('survey_done') === '1'; }catch(e){}
+  document.getElementById('surveyBanner').style.display = done ? 'none' : 'flex';
+}
+updateSurveyBanner();
 
 function showPwError(msg, ms){
   document.getElementById('pwError').textContent = msg;
