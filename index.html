@@ -440,40 +440,9 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
 <script>
 const PASSWORD = "nagasaki2026";
 
-// ── 登録受講者メアドリスト ──
-const ALLOWED_EMAILS = [
-  "ccc489803@vir.bbiq.jp",
-  "a.shimada5151@gmail.com",
-  "radiall0506@icloud.com",
-  "watanabe.kougyou.k@silk.ocn.ne.jp",
-  "matsumura@kjk-p.co.jp",
-  "arakim1206@gmail.com",
-  "gyo@nisi-umi.net",
-  "info@ide-office.net",
-  "nagasaki-riha@k9.dion.ne.jp",
-  "nkobato@bronze.ocn.ne.jp",
-  "kk.morita@himawarinet.ne.jp",
-  "sakamoto@peck.co.jp",
-  "ino.3031@beach.ocn.ne.jp",
-  "ruka0828@bb.tvs12.jp",
-  "huangyishanxia991@gmail.com",
-  "y.oyamada@urakensou.com",
-  "chips7mary4@nifty.com",
-  "stella@taiankaku.com",
-  "kurodakoumuten@leo.bbiq.jp",
-  "t.marquis1887@gmail.com",
-  "yofukunaga@f-smec.com",
-  "nekkonotobira@gmail.com",
-  "rfmfy665@ybb.ne.jp",
-  "0909yoco@gmail.com",
-  "furukawa_y@akagikosei.co.jp",
-  "info@seki-crane.com",
-  "naosiro2@gmail.com",
-  "hamasaki.ryunosuke@think-nagasaki.or.jp",
-  "bfd483221@phe.bbiq.jp",
-  "wataru616161@gmail.com",
-  "s-fujiyama@choko.co.jp",
-];
+// ── 登録受講者の判定 ──
+// 受講者名簿はスプレッドシート「受講者リスト」シートで一元管理（GASの ?action=check で照合）。
+// 受講者の追加・削除はシートを編集するだけでよく、このファイルの修正は不要。
 // ── ログ記録先（GASのWebアプリURL）──
 // ★ GASをデプロイ後、以下のURLを書き換えてください
 const LOG_URL = "https://script.google.com/macros/s/AKfycbz1462f4KTlo_odm3PE1A0GAzwHQW0Hj4ENYTIWcefYpA416iBV8udCNii3wfRi2XWK/exec";
@@ -539,46 +508,75 @@ function sendLog(type, detail, image, imageMime) {
   }).catch(() => {});
 }
 
+function showPwError(msg, ms){
+  document.getElementById('pwError').textContent = msg;
+  setTimeout(()=>document.getElementById('pwError').textContent='', ms || 3000);
+}
+
+// GASの受講者リストで登録済みか確認する
+// 戻り値：true=登録あり / false=登録なし / null=確認できなかった（通信エラー等）
+function checkMember(email){
+  if(!LOG_URL || LOG_URL === "YOUR_GAS_WEB_APP_URL_HERE") return Promise.resolve(null);
+  const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  const timer = ctrl ? setTimeout(()=>ctrl.abort(), 10000) : null;
+  return fetch(LOG_URL + '?action=check&email=' + encodeURIComponent(email), { method:'GET', signal: ctrl ? ctrl.signal : undefined })
+    .then(r => r.json())
+    .then(d => (d && typeof d.allowed === 'boolean') ? d.allowed : null)
+    .catch(() => null)
+    .finally(() => { if(timer) clearTimeout(timer); });
+}
+
+let checkingLogin = false;
 function checkPw(){
+  if(checkingLogin) return;
   const val = document.getElementById('pwInput').value;
   const name = document.getElementById('nameInput').value.trim();
   // メアド未入力チェック
   if(!name){
-    document.getElementById('pwError').textContent = 'メールアドレスを入力してください';
+    showPwError('メールアドレスを入力してください', 3000);
     document.getElementById('nameInput').focus();
-    setTimeout(()=>document.getElementById('pwError').textContent='', 3000);
     return;
   }
-  // 登録メアドチェック
-  if(!ALLOWED_EMAILS.includes(name.toLowerCase())){
-    document.getElementById('pwError').textContent = '登録されていないメールアドレスです。事務局にお問い合わせください。';
-    setTimeout(()=>document.getElementById('pwError').textContent='', 4000);
-    sendLog('ログイン拒否', '未登録メアド|||' + name);
-    return;
-  }
-  if(val === PASSWORD){
-    document.getElementById('loginScreen').classList.add('hidden');
-    sessionStorage.setItem('loggedIn','1');
-    sessionStorage.setItem('userEmail', name);
-    // メルアドをlocalStorageに保存（次回自動入力用）
-    localStorage.setItem('userEmail', name);
-    // GA: ログイン成功イベント
-    if(typeof gtag !== 'undefined') gtag('event', 'login', { method: 'password', event_category: 'engagement' });
-    // スプレッドシートに記録（名前付き）
-    sendLog('ログイン成功', 'eラーニング|||' + name);
-    // GASから進捗を復元
-    restoreProgress(name);
-    if(localStorage.getItem('howto_skip') !== '1'){
-      setTimeout(openHowto, 600);
-    }
-  } else {
-    document.getElementById('pwError').textContent = 'パスワードが違います';
+  // パスワードチェック
+  if(val !== PASSWORD){
+    showPwError('パスワードが違います', 2000);
     document.getElementById('pwInput').value = '';
-    setTimeout(()=>document.getElementById('pwError').textContent='', 2000);
     // GA: ログイン失敗イベント
     if(typeof gtag !== 'undefined') gtag('event', 'login_failed', { event_category: 'security' });
     // スプレッドシートに記録（不正アクセス検知・名前付き）
     sendLog('ログイン失敗', 'パスワード不一致|||' + name);
+    return;
+  }
+  // 登録メアドチェック（受講者リストシートと照合）
+  checkingLogin = true;
+  document.getElementById('pwError').textContent = '確認中…';
+  checkMember(name.toLowerCase()).then(allowed => {
+    checkingLogin = false;
+    document.getElementById('pwError').textContent = '';
+    if(allowed === false){
+      showPwError('登録されていないメールアドレスです。事務局にお問い合わせください。', 4000);
+      sendLog('ログイン拒否', '未登録メアド|||' + name);
+      return;
+    }
+    // allowed===null（通信エラー等で確認できない）の場合は、受講を止めないためログインを許可する
+    loginSuccess(name);
+  });
+}
+
+function loginSuccess(name){
+  document.getElementById('loginScreen').classList.add('hidden');
+  sessionStorage.setItem('loggedIn','1');
+  sessionStorage.setItem('userEmail', name);
+  // メルアドをlocalStorageに保存（次回自動入力用）
+  localStorage.setItem('userEmail', name);
+  // GA: ログイン成功イベント
+  if(typeof gtag !== 'undefined') gtag('event', 'login', { method: 'password', event_category: 'engagement' });
+  // スプレッドシートに記録（名前付き）
+  sendLog('ログイン成功', 'eラーニング|||' + name);
+  // GASから進捗を復元
+  restoreProgress(name);
+  if(localStorage.getItem('howto_skip') !== '1'){
+    setTimeout(openHowto, 600);
   }
 }
 if(sessionStorage.getItem('loggedIn')==='1'){
