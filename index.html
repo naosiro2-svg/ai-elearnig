@@ -378,8 +378,8 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
   <main id="mainArea">
   <!-- 集合研修 事前アンケートの案内（「回答済み」を押すまで表示） -->
   <div class="survey-banner" id="surveyBanner" style="display:none">
-    <span>📝 <strong>集合研修の事前アンケート</strong>にご回答ください（約3分）。グループ編成と研修内容の調整に使います。</span>
-    <a href="#" class="sv-go" onclick="openSurvey();return false;">アンケートに回答する</a>
+    <span>📝 <strong>【研修前】集合研修の事前アンケート</strong>にご回答ください（約3分）。グループ編成と研修内容の調整に使います。</span>
+    <a href="#" class="sv-go" onclick="openSurvey();return false;">事前アンケートに回答する</a>
     <button class="sv-done" onclick="markSurveyDone()">回答済み（この案内を閉じる）</button>
   </div>
     <div class="video-selector">
@@ -528,7 +528,7 @@ const SURVEY_URL = "https://forms.gle/EY7BY6RhXJ4At6f3A";
 function openSurvey(){
   window.open(SURVEY_URL, '_blank', 'noopener');
   const email = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || '';
-  sendLog('事前アンケート表示', 'アンケートを開いた|||' + email);
+  sendLog('事前アンケート表示', '事前アンケートを開いた|||' + email);
 }
 function markSurveyDone(){
   try{ localStorage.setItem('survey_done','1'); }catch(e){}
