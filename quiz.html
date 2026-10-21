@@ -845,6 +845,25 @@ let current = 0;
 let answers = new Array(questions.length).fill(null);
 let answered = new Array(questions.length).fill(false);
 let userName = "";
+
+// ── テスト結果の記録先（eラーニングと同じGAS）──
+const LOG_URL = "https://script.google.com/macros/s/AKfycbz1462f4KTlo_odm3PE1A0GAzwHQW0Hj4ENYTIWcefYpA416iBV8udCNii3wfRi2XWK/exec";
+function saveQuizResult(score, correct, total, passed){
+  try{
+    let email = '';
+    try{ email = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || ''; }catch(e){}
+    const now = new Date();
+    const jst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+    const dateStr = jst.toISOString().replace('T', ' ').substring(0, 19);
+    const summary = '総合確認テスト ' + score + '点（' + correct + '/' + total + '）' + (passed ? '合格' : '不合格')
+      + '／修了証氏名：' + userName + '／受験日：' + dateStr.substring(0, 10);
+    fetch(LOG_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: '総合確認テスト', detail: summary + '|||' + email, datetime: dateStr, ua: navigator.userAgent.substring(0, 80) })
+    }).catch(()=>{});
+  }catch(e){}
+}
 let startTime;
 
 // ═══════════════════════════════════════
@@ -962,6 +981,10 @@ function showResult() {
   document.getElementById('wrong-card').textContent = questions.length - correctCount;
   document.getElementById('pct-card').textContent = score + '点';
   setTimeout(() => { document.getElementById('score-bar').style.width = score + '%'; }, 100);
+
+  // テスト結果をスプレッドシート（アクセスログ）に記録
+  // C列（サイト）に「点数・正解数・合否・修了証の氏名・受験日」、D列にメールアドレスが入る
+  saveQuizResult(score, correctCount, questions.length, passed);
 
   // 修了証
   if (passed) {
