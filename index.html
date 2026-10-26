@@ -361,7 +361,7 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
     <span class="prog-text" id="progText">0 / 7 完了</span>
     <div class="pbar-outer"><div class="pbar-fill" id="globalBar" style="width:0%"></div></div>
     <button class="howto-btn" onclick="openHowto()">📋 講座の進め方</button>
-    <a href="#" class="gallery-link survey-link" onclick="openSurvey();return false;">📝 事前アンケート</a>
+    <a href="#" class="gallery-link survey-link" id="surveyHeaderBtn" style="display:none" onclick="openSurvey();return false;">📝 事前アンケート</a>
     <a href="workshop.html" class="gallery-link">📘 集合研修 演習</a>
     <a href="gallery.html" class="gallery-link">🚀 ミニアプリ展示</a>
     <div class="user-icon">前</div>
@@ -524,20 +524,27 @@ function sendLog(type, detail, image, imageMime) {
 }
 
 // ── 集合研修 事前アンケート（Googleフォーム）──
-const SURVEY_URL = "https://forms.gle/EY7BY6RhXJ4At6f3A";
+// ★ 事前アンケートのURL。空（""）にするとヘッダーのボタンと案内帯が非表示になる
+//   第2次：https://forms.gle/EY7BY6RhXJ4At6f3A（2026/10/26 終了）
+//   第3次：研修1週間前（11月下旬）に短縮URLを設定する
+const SURVEY_URL = "";
+// 案内帯の「回答済み」記録は回ごとに分ける（URLが変わると再表示される）
+const SURVEY_DONE_KEY = 'survey_done_' + SURVEY_URL;
 function openSurvey(){
   window.open(SURVEY_URL, '_blank', 'noopener');
   const email = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || '';
   sendLog('事前アンケート表示', '事前アンケートを開いた|||' + email);
 }
 function markSurveyDone(){
-  try{ localStorage.setItem('survey_done','1'); }catch(e){}
+  try{ localStorage.setItem(SURVEY_DONE_KEY,'1'); }catch(e){}
   document.getElementById('surveyBanner').style.display = 'none';
 }
 function updateSurveyBanner(){
   let done = false;
-  try{ done = localStorage.getItem('survey_done') === '1'; }catch(e){}
-  document.getElementById('surveyBanner').style.display = done ? 'none' : 'flex';
+  try{ done = localStorage.getItem(SURVEY_DONE_KEY) === '1'; }catch(e){}
+  const on = !!SURVEY_URL;
+  document.getElementById('surveyBanner').style.display = (on && !done) ? 'flex' : 'none';
+  document.getElementById('surveyHeaderBtn').style.display = on ? '' : 'none';
 }
 updateSurveyBanner();
 
