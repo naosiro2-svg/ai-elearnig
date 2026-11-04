@@ -42,8 +42,13 @@ body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-se
 .terms-lead{font-size:13px;color:#475569;margin-bottom:14px;line-height:1.7;}
 .terms-list{margin:0 0 16px 1.3em;padding:0;font-size:14px;line-height:1.8;color:#1e293b;}
 .terms-list li{margin-bottom:6px;}
-.terms-check{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--dark);margin-bottom:14px;cursor:pointer;}
-.terms-check input{width:18px;height:18px;cursor:pointer;}
+.terms-list label{display:flex;gap:8px;align-items:flex-start;cursor:pointer;}
+.terms-list input.terms-item{width:18px;height:18px;margin-top:5px;flex-shrink:0;cursor:pointer;}
+.terms-box.view-mode .terms-list input.terms-item{display:none;}
+.terms-box.view-mode .terms-list label{cursor:default;}
+.terms-count{font-size:13px;color:#64748b;text-align:center;margin-bottom:10px;}
+.terms-reminder{background:#EFF6FF;border-bottom:2px solid #3B82F6;padding:8px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#1E3A8A;line-height:1.6;}
+.terms-reminder button{background:none;border:1px solid #3B82F6;border-radius:6px;padding:3px 10px;font-size:12px;color:#1D4ED8;cursor:pointer;font-family:inherit;}
 .terms-btn{width:100%;background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
 .terms-btn:disabled{background:#cbd5e1;cursor:not-allowed;}
 .terms-close{width:100%;background:#fff;color:#475569;border:1px solid #cbd5e1;border-radius:8px;padding:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-top:8px;}
@@ -367,17 +372,17 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
 <div id="termsScreen" class="hidden">
   <div class="terms-box">
     <div class="terms-title">📄 教材の取扱いについて</div>
-    <div class="terms-lead">生成AIで作成した教材や成果物の著作権の扱いは、まだ明確になっていない部分があります。そのため、本講座の教材の使い方を次のとおり定めています。ご確認のうえ、同意をお願いします。</div>
+    <div class="terms-lead" id="termsLead">生成AIで作成した教材や成果物の著作権の扱いは、まだ明確になっていない部分があります。そのため、本講座の教材の使い方を次のとおり定めています。各項目をお読みのうえ、チェックを入れてください。</div>
     <ol class="terms-list">
-      <li>本講座（eラーニング及び集合研修）の動画・スライド・演習問題・演習用データ等（以下「教材」）の著作権は、株式会社ストラテジーエイドに帰属します。</li>
-      <li>教材は、ご自身の学習と自社の業務にご活用ください。演習で作成したプロンプトやアプリは、皆さまが自由にお使いいただけます。</li>
-      <li>教材の転載・再配布・第三者への提供、講義の録画・録音、ログイン情報の共有はできません。</li>
-      <li>教材やそれをもとに作成した資料を、他のセミナー・研修・講座（有償・無償を問いません）で使用することはできません。受講終了後も同様です。</li>
-      <li>上記以外の利用はご相談ください（s.maeda@stra-aid.com）。違反があった場合は、受講の停止等の措置をとることがあります。</li>
+      <li><label><input type="checkbox" class="terms-item" onchange="updateTermsBtn()"><span>本講座（eラーニング及び集合研修）の動画・スライド・演習問題・演習用データ等（以下「教材」）の著作権は、株式会社ストラテジーエイドに帰属します。</span></label></li>
+      <li><label><input type="checkbox" class="terms-item" onchange="updateTermsBtn()"><span>教材は、ご自身の学習と自社の業務にご活用ください。演習で作成したプロンプトやアプリは、皆さまが自由にお使いいただけます。</span></label></li>
+      <li><label><input type="checkbox" class="terms-item" onchange="updateTermsBtn()"><span>教材の転載・再配布・第三者への提供、講義の録画・録音、ログイン情報の共有はできません。</span></label></li>
+      <li><label><input type="checkbox" class="terms-item" onchange="updateTermsBtn()"><span>教材やそれをもとに作成した資料を、他のセミナー・研修・講座（有償・無償を問いません）で使用することはできません。受講終了後も同様です。</span></label></li>
+      <li><label><input type="checkbox" class="terms-item" onchange="updateTermsBtn()"><span>上記以外の利用はご相談ください（s.maeda@stra-aid.com）。違反があった場合は、受講の停止等の措置をとることがあります。</span></label></li>
     </ol>
     <div id="termsAgreeArea">
-      <label class="terms-check"><input type="checkbox" id="termsCheck" onchange="document.getElementById('termsBtn').disabled=!this.checked">上記の内容に同意します</label>
-      <button class="terms-btn" id="termsBtn" disabled onclick="agreeTerms()">同意して進む</button>
+      <div class="terms-count" id="termsCount">各項目を読んで、5項目すべてにチェックを入れてください（0 / 5）</div>
+      <button class="terms-btn" id="termsBtn" disabled onclick="agreeTerms()">上記に同意して進む</button>
     </div>
     <button class="terms-close" id="termsCloseBtn" style="display:none" onclick="document.getElementById('termsScreen').classList.add('hidden')">閉じる</button>
   </div>
@@ -413,6 +418,11 @@ main{margin-left:var(--sidebar-w);flex:1;min-height:calc(100vh - var(--header-h)
   </aside>
 
   <main id="mainArea">
+  <!-- 教材の取扱いの注意書き（同意済みの人に毎回表示） -->
+  <div class="terms-reminder" id="termsReminder" style="display:none">
+    <span>📄 教材の転載・再配布、他のセミナー・研修での使用はできません。</span>
+    <button onclick="viewTerms()">内容を確認</button>
+  </div>
   <!-- 集合研修 事前アンケートの案内（「回答済み」を押すまで表示） -->
   <div class="survey-banner" id="surveyBanner" style="display:none">
     <span>📝 <strong>【研修前】集合研修の事前アンケート</strong>にご回答ください（約3分）。グループ編成と研修内容の調整に使います。</span>
@@ -653,6 +663,7 @@ function loginSuccess(name){
   // GASから進捗を復元
   restoreProgress(name);
   // 教材の取扱いに未同意なら同意画面を先に出す（同意後に講座の進め方を表示）
+  updateTermsReminder();
   ensureTerms(name, function(){
     if(localStorage.getItem('howto_skip') !== '1'){
       setTimeout(openHowto, 600);
@@ -671,25 +682,46 @@ let afterTerms = null;
 function ensureTerms(email, next){
   if(hasAgreedTerms(email)){ if(next) next(); return; }
   afterTerms = next || null;
-  document.getElementById('termsCheck').checked = false;
-  document.getElementById('termsBtn').disabled = true;
+  document.querySelectorAll('.terms-item').forEach(c => c.checked = false);
+  updateTermsBtn();
+  document.querySelector('.terms-box').classList.remove('view-mode');
   document.getElementById('termsAgreeArea').style.display = '';
   document.getElementById('termsCloseBtn').style.display = 'none';
   document.getElementById('termsScreen').classList.remove('hidden');
 }
 function agreeTerms(){
-  if(!document.getElementById('termsCheck').checked) return;
+  if(!allTermsChecked()) return;
   const email = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || '';
   try{ localStorage.setItem(termsKey(email), '1'); }catch(e){}
   sendLog('規約同意', '教材の取扱い' + TERMS_VERSION + '|||' + email);
   document.getElementById('termsScreen').classList.add('hidden');
+  updateTermsReminder();
   const next = afterTerms; afterTerms = null;
   if(next) next();
+}
+function allTermsChecked(){
+  const cs = document.querySelectorAll('.terms-item');
+  return cs.length > 0 && Array.from(cs).every(c => c.checked);
+}
+function updateTermsBtn(){
+  const cs = document.querySelectorAll('.terms-item');
+  const n = Array.from(cs).filter(c => c.checked).length;
+  document.getElementById('termsBtn').disabled = n < cs.length;
+  document.getElementById('termsCount').textContent = n < cs.length
+    ? '各項目を読んで、5項目すべてにチェックを入れてください（' + n + ' / ' + cs.length + '）'
+    : 'すべての項目にチェックしました';
+}
+// 同意済みの人には、画面上部に1行の注意書きを出す
+function updateTermsReminder(){
+  const email = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || '';
+  const on = sessionStorage.getItem('loggedIn') === '1' && hasAgreedTerms(email);
+  document.getElementById('termsReminder').style.display = on ? 'flex' : 'none';
 }
 // ヘッダーから内容だけを確認する（同意済みの人向け）
 function viewTerms(){
   const email = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || '';
   if(!hasAgreedTerms(email)){ ensureTerms(email, null); return; }
+  document.querySelector('.terms-box').classList.add('view-mode');
   document.getElementById('termsAgreeArea').style.display = 'none';
   document.getElementById('termsCloseBtn').style.display = '';
   document.getElementById('termsScreen').classList.remove('hidden');
@@ -700,6 +732,7 @@ if(sessionStorage.getItem('loggedIn')==='1'){
   // ログイン済みのまま開いた場合も、未同意なら同意画面を出す
   ensureTerms(sessionStorage.getItem('userEmail') || '', null);
 }
+updateTermsReminder();
 // 保存済みメルアドを自動入力
 (function(){
   const saved = localStorage.getItem('userEmail');
