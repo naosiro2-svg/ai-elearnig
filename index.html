@@ -37,21 +37,21 @@ body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-se
 /* 教材の取扱い（同意画面） */
 #termsScreen{position:fixed;inset:0;background:rgba(15,23,42,.75);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px;}
 #termsScreen.hidden{display:none;}
-.terms-box{background:#fff;border-radius:16px;padding:28px 28px 24px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
-.terms-title{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:6px;}
-.terms-lead{font-size:13px;color:#475569;margin-bottom:14px;line-height:1.7;}
-.terms-list{margin:0 0 16px 1.3em;padding:0;font-size:14px;line-height:1.8;color:#1e293b;}
-.terms-list li{margin-bottom:6px;}
+.terms-box{background:#fff;border-radius:16px;padding:28px 28px 24px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.terms-title{font-size:22px;font-weight:700;color:var(--dark);margin-bottom:6px;}
+.terms-lead{font-size:16px;color:#475569;margin-bottom:14px;line-height:1.7;}
+.terms-list{margin:0 0 16px 1.3em;padding:0;font-size:17px;line-height:1.8;color:#1e293b;}
+.terms-list li{margin-bottom:10px;}
 .terms-list label{display:flex;gap:8px;align-items:flex-start;cursor:pointer;}
-.terms-list input.terms-item{width:18px;height:18px;margin-top:5px;flex-shrink:0;cursor:pointer;}
+.terms-list input.terms-item{width:22px;height:22px;margin-top:6px;flex-shrink:0;cursor:pointer;}
 .terms-box.view-mode .terms-list input.terms-item{display:none;}
 .terms-box.view-mode .terms-list label{cursor:default;}
-.terms-count{font-size:13px;color:#64748b;text-align:center;margin-bottom:10px;}
-.terms-reminder{background:#EFF6FF;border-bottom:2px solid #3B82F6;padding:8px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#1E3A8A;line-height:1.6;}
-.terms-reminder button{background:none;border:1px solid #3B82F6;border-radius:6px;padding:3px 10px;font-size:12px;color:#1D4ED8;cursor:pointer;font-family:inherit;}
-.terms-btn{width:100%;background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.terms-count{font-size:15px;color:#64748b;text-align:center;margin-bottom:10px;}
+.terms-reminder{background:#EFF6FF;border-bottom:2px solid #3B82F6;padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:16px;color:#1E3A8A;line-height:1.6;}
+.terms-reminder button{background:none;border:1px solid #3B82F6;border-radius:6px;padding:4px 12px;font-size:14px;color:#1D4ED8;cursor:pointer;font-family:inherit;}
+.terms-btn{width:100%;background:var(--green-mid);color:#fff;border:none;border-radius:8px;padding:14px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;}
 .terms-btn:disabled{background:#cbd5e1;cursor:not-allowed;}
-.terms-close{width:100%;background:#fff;color:#475569;border:1px solid #cbd5e1;border-radius:8px;padding:10px;font-size:13px;cursor:pointer;font-family:inherit;margin-top:8px;}
+.terms-close{width:100%;background:#fff;color:#475569;border:1px solid #cbd5e1;border-radius:8px;padding:12px;font-size:16px;cursor:pointer;font-family:inherit;margin-top:8px;}
 /* ── ヘッダー ── */
 header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:var(--dark);display:flex;align-items:center;padding:0 20px;gap:14px;z-index:100;}
 .logo-text{color:#fff;font-size:15px;font-weight:700;}
