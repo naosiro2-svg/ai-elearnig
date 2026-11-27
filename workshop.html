@@ -47,7 +47,7 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <header><div><div class="t">AIミニアプリ構築講座</div><div class="s">集合研修　演習ページ</div></div><nav><a href="workshop.html">第1回</a><a href="workshop2.html">第2回</a><a href="index.html">← eラーニングに戻る</a></nav></header>
 <main>
 <h1>集合研修　第1回演習問題（予習用）</h1>
-<p class="lead">実践応用編（プロンプト・GEM・Gemini Notebook）。集合研修の前に、内容の確認と予習ができます。</p>
+<p class="lead">実践応用編（プロンプト・スキル・Gemini Notebook）。集合研修の前に、内容の確認と予習ができます。</p>
 <div class="card">
 <b>📌 このページの使い方</b>
 <p>・演習の手順・見本のプロンプト・操作画面を、ここで確認できます。見本のプロンプトは「📋 コピー」ボタンでコピーできます。最初から見本をコピーして使うと早く進められます。最初から見本をコピーして使うと早く進められます。最初から見本をコピーして使うと早く進められます。最初から見本をコピーして使うと早く進められます。</p>
@@ -60,26 +60,28 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <p class="gray">演習で使うサンプルデータです。Googleドライブのフォルダが開けない場合は、ここからコピーするか、テキストファイルとして保存して使ってください。</p>
 <div class="srow"><div class="st">サンプル文章</div><div class="sa"><button class="cp" data-sample="0">📋 コピー</button><button class="dl" data-sample="0">⬇ テキストで保存</button><a href="#sample1">本文を見る</a></div></div><div class="srow"><div class="st">サンプル会議メモ</div><div class="sa"><button class="cp" data-sample="1">📋 コピー</button><button class="dl" data-sample="1">⬇ テキストで保存</button><a href="#sample2">本文を見る</a></div></div><div class="srow"><div class="st">各スキルの入力例</div><div class="sa"><button class="cp" data-sample="2">📋 コピー</button><button class="dl" data-sample="2">⬇ テキストで保存</button><a href="#sample3">本文を見る</a></div></div><div class="srow"><div class="st">サンプル資料</div><div class="sa"><button class="cp" data-sample="3">📋 コピー</button><button class="dl" data-sample="3">⬇ テキストで保存</button><a href="#sample4">本文を見る</a></div></div>
 </div>
-<div class="toc"><a href="#sec1">準備<span>Gemini（ジェミニ）を開きましょう</span></a><a href="#sec2">S1<span>プロンプト実践（動画②の応用）　30分</span></a><a href="#sec3">S2<span>議事録 → 要約 → 調査 → Googleスライド（動画④の応用）　40分</span></a><a href="#sec4">S3<span>スキル作成実践（旧GEM・動画⑤の応用）　30分</span></a><a href="#sec5">S4<span>Gemini Notebookで資料をAI化する（動画⑥の応用）　30分</span></a><a href="#sec6">最後に<span>情報漏えい・サイバー攻撃対策についてのお話　約30分</span></a></div>
-<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📝 この資料の進め方</div><div class="ln" style="">① 各演習は「やること」→「見本のプロンプト」→「手順」→「確認ポイント」の順に書いてあります。上から順に進めてください。</div><div class="ln" style="">② 灰色の枠の「見本のプロンプト」は、最初からコピーしてそのまま使って構いません。そのほうが早く進められます。慣れてきたら、【　】の部分や業種・場面を自社向けに書き換えてみましょう。</div><div class="ln" style="">③ 8＋1の項目のうち、必ず書くのは「＃実行指示」だけです。ほかは、必要だと思うものを選んで足します。</div><div class="ln" style="">④ 赤い番号が付いた画像は、操作画面です。番号の順にクリック・入力してください。</div><div class="ln" style="">⑤ 時間が足りないときは「必須」と書かれた演習だけ進めれば大丈夫です。「時間があれば」の演習は、余裕があるときに取り組んでください。</div></div>
-<div class="box" style="background:#F0FDF4;border-color:#16A34A"><div class="bt">📌 8＋1の法則 早見表（必須は実行指示だけ。見ながら進めましょう）</div><div class="ln" style="font-weight:700;">【入力設計】AIに渡す材料を決めます</div><div class="ln" style="">＃前提条件　どんな場面で、何のために使うか</div><div class="ln" style="">＃役割定義　AIにどんな担当者・専門家として考えてほしいか</div><div class="ln" style="">＃対象者　誰に向けた文章か（年齢・立場・知識レベル）</div><div class="ln" style="">＃参考情報　AIに使ってほしい材料（文章・資料・調べる範囲）</div><div class="ln" style="">＃実行指示　してほしい作業を、動詞（〜してください）で書きます（★必須）</div><div class="ln" style="font-weight:700;">【出力設計】受け取る形を決めます</div><div class="ln" style="">＃品質条件（＋制約条件）　文字数・項目数・必ず入れたい内容／守る範囲・避ける内容（断定しすぎない、専門用語を控える など）</div><div class="ln" style="">＃出力形式　メール・箇条書き・表など、使う場面に合わせた形</div><div class="ln" style="">＃文体・トーン　ていねい、親しみやすい、簡潔など</div><div class="ln" style="font-weight:700;">【＋1】仕上げに整えます</div><div class="ln" style="">＃禁止事項　AIに避けてほしいこと（もっともらしい間違いを防ぎます）</div><div class="ln" style="">＃専門視点・＃追加条件　誰の視点で見るか／どの基準で整えるか（例：「矛盾があれば最後に指摘して」）。プロンプトの中に書いておきます</div><div class="ln" style="font-weight:700;">★ 必須なのは「＃実行指示」だけです。ほかの項目は、出力をよくするために必要だと思うものだけを足します。全部を書く必要はありません。「＃」で始まる見出し行は、消さずにそのままAIに入力して大丈夫です。出力を見てから「もっと短く」などと送るのは「修正の依頼」で、＋1とは別のものです。</div></div>
-<h2 id="sec1">準備　Gemini（ジェミニ）を開きましょう</h2>
-<p class="">この演習ではAIとして「Gemini」を使います。次の手順でGeminiを開き、プロンプトを入力する場所を確認してください。Googleアカウントでログインしておきます。</p>
-<div class="step"><span class="n">①</span><div>ブラウザ（Chrome）の検索欄に「ジェミニ」と入力して検索します。</div></div>
+<div class="toc"><a href="#sec1">準備<span>Gemini（ジェミニ）を開きましょう</span></a><a href="#sec2">S1<span>プロンプト実践（動画②の応用） 30分</span></a><a href="#sec3">S2<span>議事録 → 要約 → 調査 → Googleスライド（動画④の応用） 40分</span></a><a href="#sec4">S3<span>スキル作成実践（旧GEM・動画⑤の応用） 30分</span></a><a href="#sec5">S4<span>Gemini Notebookで資料をAI化する（動画⑥の応用） 30分</span></a><a href="#sec6">最後に<span>情報漏えい・サイバー攻撃対策についてのお話 約30分</span></a></div>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📝 この資料の進め方</div><div class="ln">① 各演習は「やること」→「見本のプロンプト」→「手順」→「確認ポイント」の順に書いてあります。上から順に進めてください。</div><div class="ln">② 灰色の枠の「見本のプロンプト」は、最初からコピーしてそのまま使って構いません。そのほうが早く進められます。慣れてきたら、【 】の部分や業種・場面を自社向けに書き換えてみましょう。</div><div class="ln">③ 8＋1の項目のうち、必ず書くのは「＃実行指示」だけです。ほかは、必要だと思うものを選んで足します。</div><div class="ln">④ 赤い番号が付いた画像は、操作画面です。番号の順にクリック・入力してください。</div><div class="ln">⑤ 時間が足りないときは「必須」と書かれた演習だけ進めれば大丈夫です。「時間があれば」の演習は、余裕があるときに取り組んでください。</div></div>
+<div class="box" style="background:#F8FAFC;border-color:#64748B"><div class="bt">📌 8＋1の法則 早見表（必須は実行指示だけ。見ながら進めましょう）</div><div class="ln" style=font-weight:700>【入力設計】AIに渡す材料を決めます</div><div class="ln">＃前提条件：どんな場面で、何のために使うか</div><div class="ln">＃役割定義：AIにどんな担当者・専門家として考えてほしいか</div><div class="ln">＃対象者：誰に向けた文章か（年齢・立場・知識レベル）</div><div class="ln">＃参考情報：AIに使ってほしい材料（文章・資料・調べる範囲）</div><div class="ln">＃実行指示：してほしい作業を、動詞（〜してください）で書きます（★必須）</div><div class="ln" style=font-weight:700>【出力設計】受け取る形を決めます</div><div class="ln">＃品質条件（＋制約条件）：文字数・項目数・必ず入れたい内容／守る範囲・避ける内容（断定しすぎない、専門用語を控える など）</div><div class="ln">＃出力形式：メール・箇条書き・表など、使う場面に合わせた形</div><div class="ln">＃文体・トーン：ていねい、親しみやすい、簡潔など</div><div class="ln" style=font-weight:700>【＋1】仕上げに整えます</div><div class="ln">＃禁止事項：AIに避けてほしいこと（もっともらしい間違いを防ぎます）</div><div class="ln">＃専門視点・＃追加条件：誰の視点で見るか／どの基準で整えるか（例：「矛盾があれば最後に指摘して」）。プロンプトの中に書いておきます</div><div class="ln">★ 必須なのは「＃実行指示」だけです。ほかの項目は、出力をよくするために必要だと思うものだけを足します。全部を書く必要はありません。「＃」で始まる見出し行は、消さずにそのままAIに入力して大丈夫です。出力を見てから「もっと短く」などと送るのは「修正の依頼」で、＋1とは別のものです。</div></div>
+<h2 id="sec1">準備 Gemini（ジェミニ）を開きましょう</h2>
+<p>この演習ではAIとして「Gemini」を使います。次の手順でGeminiを開き、プロンプトを入力する場所を確認してください。Googleアカウントでログインしておきます。</p>
+<div class="step"><span class="n">①</span><div>ブラウザ（Chrome）のアドレスバー（またはGoogle検索窓）に「ジェミニ」と入力して検索します。</div></div>
 <div class="step"><span class="n">②</span><div>検索結果の中から「Google Gemini」をクリックします（画像の①）。</div></div>
 <figure><img src="img/workshop/w1_1.jpg" alt="「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。" loading="lazy"><figcaption>【画像】「ジェミニ」で検索した画面。①の「Google Gemini」をクリックします。</figcaption></figure>
 <div class="step"><span class="n">③</span><div>Geminiが開きます。「何から始めますか？」の下にある入力欄（画像の①）が、プロンプトを入力する場所です。</div></div>
 <figure><img src="img/workshop/w1_2.jpg" alt="Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。" loading="lazy"><figcaption>【画像】Geminiの入力画面。①の入力欄にプロンプトを入力して、右端の送信ボタン（またはEnterキー）で送ります。</figcaption></figure>
-<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">💡 入力のコツ</div><div class="ln" style="">・入力欄の中で改行したいときは「Shift＋Enter」を押します。Enterだけを押すと、その時点で送信されてしまうので注意してください。</div><div class="ln" style="">・見本のプロンプトをコピーして貼り付けるときは「Ctrl＋V」で貼り付けます。</div><div class="ln" style="">・前の会話と混ざらないように、新しい演習を始めるときは、画面左上の「チャットを新規作成」をクリックして、新しいチャットで始めます。</div></div>
-<h2 id="sec2">S1　プロンプト実践（動画②の応用）　30分</h2>
-<p class="red b">🔖 必須：演習1-1・1-2　／　演習1-4は時間があれば</p>
-<p class="">プロンプトの書き方で、AIの出力が大きく変わることを体験します。同じ文章を使って、「書き方を変える前」と「変えた後」を比べます。</p>
-<h3>⭐必須　演習1-1　書き方で出力はどう変わる？（Before / After の比較）　10分</h3>
-<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">🎯 この演習でやること</div><div class="ln" style="">同じサンプル文章を、①「いい感じに書き直して」という短い依頼と、②8＋1の型で書いた見本のプロンプトの2通りでGeminiに依頼し、出力を比べます。</div></div>
-<div class="box" id="sample1" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 サンプル文章（全員この文章を使います）</div><div class="ln" style="">10月より、下記の通り営業時間を変更いたします。</div><div class="ln" style="">平日は9時から18時まで、土日は10時から17時までとなります。</div><div class="ln" style="">祝日は休業とさせていただきます。</div><div class="ln" style="">ご不便をおかけしますが、よろしくお願いいたします。</div><div class="acts"><button class="cp" data-sample="0">📋 コピー</button><button class="dl" data-sample="0">⬇ テキストで保存</button></div></div>
-<div class="step"><span class="n">①</span><div>Geminiの入力欄に、次のプロンプトAを入力して送信します。「（サンプル文章）」の部分には、上のサンプル文章を貼り付けます。</div></div>
+<div class="box" style="background:#FEFCE8;border-color:#EAB308"><div class="bt">💡 入力のコツ</div><div class="ln">入力欄の中で改行したいときは「Shift＋Enter」を押します。Enterだけを押すと、その時点で送信されてしまうので注意してください。</div><div class="ln">見本のプロンプトをコピーして貼り付けるときは「Ctrl＋V」で貼り付けます。</div><div class="ln">前の会話と混ざらないように、新しい演習を始めるときは、画面左上の「チャットを新規作成」をクリックして、新しいチャットで始めます。</div></div>
+<h2 id="sec2">S1 プロンプト実践（動画②の応用） 30分</h2>
+<p class="red b">🔖 必須：演習1-1・1-2 ／ 演習1-3は時間があれば</p>
+<p>プロンプトの書き方で、AIの出力が大きく変わることを体験します。同じ文章を使って、「書き方を変える前」と「変えた後」を比べます。</p>
+<h3>⭐必須 演習1-1 書き方で出力はどう変わる？（Before / After の比較） 10分</h3>
+<div class="box" style="background:#FFF7ED;border-color:#F97316"><div class="bt">🎯 この演習でやること</div><div class="ln">同じサンプル文章を、①「いい感じに書き直して」という短い依頼と、②8＋1の型で書いた見本のプロンプトの2通りでGeminiに依頼し、出力を比べます。</div></div>
+<div class="box" id="sample1" style="background:#F0F9FF;border-color:#0EA5E9"><div class="bt">📄 サンプル文章（全員この文章を使います）</div><div class="ln">10月より、下記の通り営業時間を変更いたします。</div><div class="ln">平日は9時から18時まで、土日は10時から17時までとなります。</div><div class="ln">祝日は休業とさせていただきます。</div><div class="ln">ご不便をおかけしますが、よろしくお願いいたします。</div><div class="acts"><button class="cp" data-sample="0">📋 コピー</button><button class="dl" data-sample="0">⬇ テキストで保存</button></div></div>
+<div class="step"><span class="n">①</span><div>Geminiの入力欄に、次のプロンプトAを入力して送信します。「（ここに上のサンプル文章を貼り付ける）」の部分には、上のサンプル文章を貼り付けます。</div></div>
 <div class="prompt"><div class="ph"><span>プロンプトA（比較用の短い依頼）</span><button class="cp2">📋 コピー</button></div><pre data-raw="いい感じに書き直して。
+
 （ここに上のサンプル文章を貼り付ける）">いい感じに書き直して。
+
 （ここに上のサンプル文章を貼り付ける）
 </pre></div>
 <div class="step"><span class="n">②</span><div>出力された文章を読み、「そのままお客様に出せるか」「長さは適切か」を確認します。</div></div>
@@ -111,13 +113,13 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 </pre></div>
 <div class="step"><span class="n">⑤</span><div>①の出力と比べて、下の表に○△×を記入します。余裕があれば、＃役割定義や＃文体・トーンを足して、出力がどう変わるか試してみましょう。</div></div>
 <p class="b">📊 比べてみましょう（出力を見て、○△×などで記入）</p>
-<div class="tw"><table><thead><tr><th>見る観点</th><th>①「いい感じに」の出力</th><th>②8＋1の出力</th></tr></thead><tbody><tr><td class=first>そのままお客様に出せるか</td><td><textarea data-key="v3_1" rows="2"></textarea></td><td><textarea data-key="v3_2" rows="2"></textarea></td></tr><tr><td class=first>長さ・形は使いやすいか</td><td><textarea data-key="v3_3" rows="2"></textarea></td><td><textarea data-key="v3_4" rows="2"></textarea></td></tr><tr><td class=first>営業時間の内容は正確か</td><td><textarea data-key="v3_5" rows="2"></textarea></td><td><textarea data-key="v3_6" rows="2"></textarea></td></tr></tbody></table></div>
-<h3>⭐必須　演習1-2　自社向けのプロンプトを作る　12分</h3>
-<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">🎯 この演習でやること</div><div class="ln" style="">下の見本のプロンプトをコピーし、【　】の部分を自社（または身近なお店・会社）の内容に書き換えて、Geminiで動かします。架空の内容でも構いません。</div></div>
+<div class="tw"><table><thead><tr><th>見る観点</th><th>①「いい感じに」の出力</th><th>②8＋1の出力</th></tr></thead><tbody><tr><td class=first>そのままお客様に出せるか</td><td><textarea data-key="v4_1" rows="2"></textarea></td><td><textarea data-key="v4_2" rows="2"></textarea></td></tr><tr><td class=first>長さ・形は使いやすいか</td><td><textarea data-key="v4_3" rows="2"></textarea></td><td><textarea data-key="v4_4" rows="2"></textarea></td></tr><tr><td class=first>営業時間の内容は正確か</td><td><textarea data-key="v4_5" rows="2"></textarea></td><td><textarea data-key="v4_6" rows="2"></textarea></td></tr></tbody></table></div>
+<h3>⭐必須 演習1-2 自社向けのプロンプトを作る 12分</h3>
+<div class="box" style="background:#FFF7ED;border-color:#F97316"><div class="bt">🎯 この演習でやること</div><div class="ln">下の見本のプロンプトをコピーし、【 】の部分を自社（または身近なお店・会社）の内容に書き換えて、Geminiで動かします。架空の内容でも構いません。</div></div>
 <div class="step"><span class="n">STEP1</span><div>題材を1つ選びます。「元の文章」は、下の例をそのまま使っても、自社の文章（1〜2文）に変えても構いません。</div></div>
 <div class="tw"><table><thead><tr><th>題材（1つ選ぶ）</th><th>元の文章の例（思いつかない場合はこのまま使えます）</th></tr></thead><tbody><tr><td class=first>お客様へのお知らせ文</td><td>来月から、ランチメニューの価格を100円値上げします。</td></tr><tr><td class=first>社内連絡メール</td><td>明日の定例会議は、14時から15時に変更になりました。</td></tr><tr><td class=first>SNS投稿文</td><td>今週末限定で、季節限定のいちごパフェを販売します。800円です。</td></tr><tr><td class=first>求人票の一部</td><td>接客スタッフ募集。時給1,100円。週3日から。未経験歓迎。</td></tr></tbody></table></div>
-<div class="step"><span class="n">STEP2</span><div>下の見本のプロンプトをコピーし、【　】の部分を書き換えます。「＃実行指示」は必ず残します。</div></div>
-<div class="prompt"><div class="ph"><span>見本のプロンプト（【　】を書き換えて使います）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
+<div class="step"><span class="n">STEP2</span><div>下の見本のプロンプトをコピーし、【 】の部分を書き換えます。「＃実行指示」は必ず残します。</div></div>
+<div class="prompt"><div class="ph"><span>見本のプロンプト（【 】を書き換えて使います）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
 【業種（例：飲食店）】が、【伝えたい内容（例：ランチの値上げ）】を知らせる場面です。
 ＃対象者
 【読む人（例：来店される常連のお客様）】です。
@@ -143,9 +145,9 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 </pre></div>
 <div class="step"><span class="n">STEP3</span><div>書き換えたプロンプトを、新しいチャットに入力して送信します。</div></div>
 <div class="step"><span class="n">STEP4</span><div>出力を確認し、「もっと短く」「もう少しやわらかく」など、修正の依頼を同じチャットで送って整えてみましょう。</div></div>
-<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 確認ポイント</div><div class="ln" style="">・そのまま使えそうな文章が出力されましたか？</div><div class="ln" style="">・修正を依頼したら、思った通りに直りましたか？</div></div>
-<h3>演習1-4　プロンプトをテンプレート化する　5分　（時間があれば）</h3>
-<p class="">プロンプトの中で、毎回書き換えたい部分を { } で囲みます。そうすると、{ } の中身だけを入れ替えれば、同じ型のプロンプトを何度でも使い回せて、誰が使っても同じ形式の出力を得やすくなります。</p>
+<div class="box" style="background:#F0FDF4;border-color:#22C55E"><div class="bt">✅ 確認ポイント</div><div class="ln">そのまま使えそうな文章が出力されましたか？</div><div class="ln">修正を依頼したら、思った通りに直りましたか？</div></div>
+<h3>演習1-3 プロンプトをテンプレート化する 5分 （時間があれば）</h3>
+<p>プロンプトの中で、毎回書き換えたい部分を { } で囲みます。そうすると、{ } の中身だけを入れ替えれば、同じ型のプロンプトを何度でも使い回せて、誰が使っても同じ形式の出力を得やすくなります。</p>
 <div class="prompt"><div class="ph"><span>テンプレートの例</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
 {業種}の{店名}が、{お知らせの内容}を伝える場面です。
 ＃対象者
@@ -155,9 +157,7 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 ＃文体・トーン
 {文体}
 ＃元の文章
-{元の文章}
---- 変数の入れ方の例 ---
-{業種}＝飲食店　{店名}＝自店　{お知らせの内容}＝価格改定　{対象者}＝来店客　{文書の種類}＝掲示文　{文体}＝ていねい"><span class="hd">＃前提条件</span>
+{元の文章}"><span class="hd">＃前提条件</span>
 {業種}の{店名}が、{お知らせの内容}を伝える場面です。
 <span class="hd">＃対象者</span>
 {対象者}
@@ -167,24 +167,30 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 {文体}
 <span class="hd">＃元の文章</span>
 {元の文章}
---- 変数の入れ方の例 ---
-{業種}＝飲食店　{店名}＝自店　{お知らせの内容}＝価格改定　{対象者}＝来店客　{文書の種類}＝掲示文　{文体}＝ていねい
 </pre></div>
-<div class="step"><span class="n">①</span><div>演習1-2の見本で【　】にした部分が、そのまま { } （変数）になります。上の例のように { } に置き換えたものを、Googleドキュメントなどに保存しておきます。</div></div>
+<p>--- 変数の入れ方の例 ---</p>
+<p>{業種}＝飲食店 {店名}＝自店 {お知らせの内容}＝価格改定 {対象者}＝来店客 {文書の種類}＝掲示文 {文体}＝ていねい</p>
+<div class="step"><span class="n">①</span><div>演習1-2の見本で【 】にした部分が、そのまま { } （変数）になります。上の例のように { } に置き換えたものを、Googleドキュメントなどに保存しておきます。</div></div>
 <div class="step"><span class="n">②</span><div>{ } の中身を別の業種・別の内容に入れ替えて、もう一度Geminiで試します。</div></div>
-<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 確認ポイント</div><div class="ln" style="">・{ } の中身だけを変えれば、来月・来年も同じプロンプトを使い回せそうですか？</div><div class="ln" style="">・班のメンバーの業種に合わせて { } を書き換えても、同じ形式の出力が得られましたか？</div></div>
-<h2 id="sec3">S2　議事録 → 要約 → 調査 → Googleスライド（動画④の応用）　40分</h2>
-<p class="red b">🔖 必須：STEP1　／　STEP2・STEP3は時間があれば</p>
-<p class="">会議メモをもとに、①要約 ②関連する調査 ③スライドの下書き、までをGemini1本で行います。STEP1〜3は、同じチャットの続きで進めます（前の出力をGeminiが覚えているので、「先ほどの要約」と書くだけで伝わります）。</p>
-<h3>⭐必須　STEP1　議事録を要約する　8分</h3>
-<div class="box" id="sample2" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 サンプル会議メモ（全員この会議メモを使います）</div><div class="ln" style="">2026年7月10日（木）14:00〜15:00</div><div class="ln" style="">参加者：田中（店長）、山田（副店長）、佐藤・鈴木（スタッフ）</div><div class="ln" style="">■今月の売上について</div><div class="ln" style="">先月比で売上が8%減少。客数は変わっていないが客単価が下がっている。</div><div class="ln" style="">→原因として「ランチメニューが3年変わっていない」という意見が出た。</div><div class="ln" style="">→山田から「競合のB店が新メニューを週替わりで出している」という情報あり。</div><div class="ln" style="">■夏のイベントについて</div><div class="ln" style="">お盆期間（8/10〜8/16）に特別コースを出してはどうか（田中提案）。</div><div class="ln" style="">価格帯は3,500円〜5,000円を想定。地元食材を使ったコースが差別化になる。</div><div class="ln" style="">佐藤：「SNSで映える料理にしないと集客が難しい」と指摘。</div><div class="ln" style="">■次回会議：7月17日（木）14:00</div><div class="acts"><button class="cp" data-sample="1">📋 コピー</button><button class="dl" data-sample="1">⬇ テキストで保存</button></div></div>
-<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">🎯 この演習でやること</div><div class="ln" style="">下の見本のプロンプトをコピーし、「（ここにサンプル会議メモを貼り付ける）」の部分に上の会議メモを貼り付けて、Geminiに入力します。出力が「全体要約・主な議題・次回までの課題・次回会議の日時」の順になっているか確認します。</div></div>
+<div class="box" style="background:#F0FDF4;border-color:#22C55E"><div class="bt">✅ 確認ポイント</div><div class="ln">{ } の中身だけを変えれば、来月・来年も同じプロンプトを使い回せそうですか？</div><div class="ln">班のメンバーの業種に合わせて { } を書き換えても、同じ形式の出力が得られましたか？</div></div>
+<h2 id="sec3">S2 議事録 → 要約 → 調査 → Googleスライド（動画④の応用） 40分</h2>
+<p class="red b">🔖 必須：STEP1 ／
+STEP2・STEP3は時間があれば</p>
+<p>会議メモをもとに、①要約</p>
+<div class="step"><span class="n">②</span><div>関連する調査</div></div>
+<div class="step"><span class="n">③</span><div>スライドの下書き、までをGemini1本で行います。STEP1〜3は、同じチャットの続きで進めます（前の出力をGeminiが覚えているので、「先ほどの要約」と書くだけで伝わります）。</div></div>
+<h3>⭐必須　STEP1 議事録を要約する 8分</h3>
+<div class="box" id="sample2" style="background:#F0F9FF;border-color:#0EA5E9"><div class="bt">📄 サンプル会議メモ（全員この会議メモを使います）</div><div class="ln">2026年7月10日（金）14:00〜15:00 参加者：田中（店長）、山田（副店長）、佐藤・鈴木（スタッフ）。</div><div class="ln">■今月の売上について 先月比で売上が8%減少。客数は変わっていないが客単価が下がっている。 →原因として「ランチメニューが3年変わっていない」という意見が出た。 →山田から「競合のB店が新メニューを週替わりで出している」という情報あり。</div><div class="ln">■夏のイベントについて お盆期間（8/10〜8/16）に特別コースを出してはどうか（田中提案）。 価格帯は3,500円〜5,000円を想定。地元食材を使ったコースが差別化になる。 佐藤：「SNSで映える料理にしないと集客が難しい」と指摘。</div><div class="ln">■次回会議：7月17日（金）14:00</div><div class="acts"><button class="cp" data-sample="1">📋 コピー</button><button class="dl" data-sample="1">⬇ テキストで保存</button></div></div>
+<div class="box" style="background:#FFF7ED;border-color:#F97316"><div class="bt">🎯 この演習でやること</div><div class="ln">下の見本のプロンプトをコピーし、「（ここにサンプル会議メモを貼り付ける）」の部分に上の会議メモを貼り付けて、Geminiに入力します。出力が「全体要約・主な議題・次回までの課題・次回会議の日時」の順になっているか確認します。</div></div>
 <div class="prompt"><div class="ph"><span>見本のプロンプト（コピーしてそのまま使えます）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
 飲食店の店長が、会議に出られなかったスタッフに内容を共有するために、議事録を整理する場面です。
 ＃実行指示
 下の「＃会議メモ」を要約してください。
 ＃出力形式
-次の順で出力してください。①全体要約（3文以内）　②主な議題（箇条書き）　③次回までの課題（箇条書き）　④次回会議の日時
+次の順で出力してください。①全体要約（3文以内）
+②主な議題（箇条書き）
+③次回までの課題（箇条書き）
+④次回会議の日時
 ＃文体・トーン
 簡潔な「です・ます」調にしてください。前置きや挨拶は不要です。
 ＃禁止事項
@@ -195,7 +201,10 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <span class="hd">＃実行指示</span>
 下の「＃会議メモ」を要約してください。
 <span class="hd">＃出力形式</span>
-次の順で出力してください。①全体要約（3文以内）　②主な議題（箇条書き）　③次回までの課題（箇条書き）　④次回会議の日時
+次の順で出力してください。①全体要約（3文以内）
+②主な議題（箇条書き）
+③次回までの課題（箇条書き）
+④次回会議の日時
 <span class="hd">＃文体・トーン</span>
 簡潔な「です・ます」調にしてください。前置きや挨拶は不要です。
 <span class="hd">＃禁止事項</span>
@@ -203,15 +212,18 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <span class="hd">＃会議メモ</span>
 （ここにサンプル会議メモを貼り付ける）
 </pre></div>
-<h3>STEP2　議題に関連する調査をする　12分　（時間があれば）</h3>
-<p class="">サンプル会議メモには、課題になりそうな話題が複数出てきます。次の3つから1つだけ選びます（複数を同時に扱うと調査結果がぼやけます）。見本のプロンプトは①の場合なので、迷ったら①を選べば、見本をそのまま同じチャットの続きに貼り付けて使えます。</p>
+<h3>STEP2 議題に関連する調査をする 12分 （時間があれば）</h3>
+<p>サンプル会議メモには、課題になりそうな話題が複数出てきます。次の3つから1つだけ選びます（複数を同時に扱うと調査結果がぼやけます）。見本のプロンプトは①の場合なので、迷ったら①を選べば、見本をそのまま同じチャットの続きに貼り付けて使えます。</p>
 <div class="tw"><table><thead><tr><th>番号</th><th>課題の候補</th></tr></thead><tbody><tr><td class=first>①</td><td>ランチメニューが3年変わっていない（マンネリ化・客単価の低下）</td></tr><tr><td class=first>②</td><td>競合のB店が新メニューを週替わりで出している（競合への対策）</td></tr><tr><td class=first>③</td><td>SNSで映える料理にしないと集客が難しい（情報発信・見た目の工夫）</td></tr></tbody></table></div>
 <div class="prompt"><div class="ph"><span>見本のプロンプト（課題①の場合。コピーしてそのまま使えます）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
 地域密着のレストランの店長です。会議で「ランチメニューが3年変わっておらず、客単価が下がっている」という課題が出ました。
 ＃役割定義
 中小飲食店の売上改善に詳しい経営コンサルタントとして考えてください。
 ＃実行指示
-インターネット上の公開情報を調べて、次の3点をまとめてください。出典（サイト名またはURL）も示してください。　1. 一般的な原因と対策（中小企業向け・実践的なもの）　2. 同業他社の成功事例（2〜3つ）　3. 今すぐ取り組める、費用をかけない改善アクション
+インターネット上の公開情報を調べて、次の3点をまとめてください。出典（サイト名またはURL）も示してください。
+1. 一般的な原因と対策（中小企業向け・実践的なもの）
+2. 同業他社の成功事例（2〜3つ）
+3. 今すぐ取り組める、費用をかけない改善アクション
 ＃出力形式
 3つの見出しごとに、箇条書きでまとめてください。前置きは不要です。
 ＃禁止事項
@@ -220,15 +232,18 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <span class="hd">＃役割定義</span>
 中小飲食店の売上改善に詳しい経営コンサルタントとして考えてください。
 <span class="hd">＃実行指示</span>
-インターネット上の公開情報を調べて、次の3点をまとめてください。出典（サイト名またはURL）も示してください。　1. 一般的な原因と対策（中小企業向け・実践的なもの）　2. 同業他社の成功事例（2〜3つ）　3. 今すぐ取り組める、費用をかけない改善アクション
+インターネット上の公開情報を調べて、次の3点をまとめてください。出典（サイト名またはURL）も示してください。
+1. 一般的な原因と対策（中小企業向け・実践的なもの）
+2. 同業他社の成功事例（2〜3つ）
+3. 今すぐ取り組める、費用をかけない改善アクション
 <span class="hd">＃出力形式</span>
 3つの見出しごとに、箇条書きでまとめてください。前置きは不要です。
 <span class="hd">＃禁止事項</span>
 出典が確認できない数字や事例は書かないでください。
 </pre></div>
-<p class="">確認：出力に出典（サイト名やURL）が付いているか、リンクを開いて確かめましょう。AIの調査結果は、必ず人の目で裏付けを確認します。</p>
-<h3>STEP3　Googleスライドの構成をGeminiに下書きさせる　20分　（時間があれば）</h3>
-<p class="">見本のプロンプトを、同じチャットの続きにそのまま貼り付けます（前の要約と調査結果をGeminiが覚えています）。「次のアクション」は、調査結果をふまえて「誰が・何を・いつまでに」やるかです。担当者は役割名（店長、スタッフAなど）で構いません。</p>
+<p>確認：出力に出典（サイト名やURL）が付いているか、リンクを開いて確かめましょう。AIの調査結果は、必ず人の目で裏付けを確認します。</p>
+<h3>STEP3 Googleスライドの構成をGeminiに下書きさせる 20分 （時間があれば）</h3>
+<p>見本のプロンプトを、同じチャットの続きにそのまま貼り付けます（前の要約と調査結果をGeminiが覚えています）。「次のアクション」は、調査結果をふまえて「誰が・何を・いつまでに」やるかです。担当者は役割名（店長、スタッフAなど）で構いません。</p>
 <div class="prompt"><div class="ph"><span>見本のプロンプト（コピーしてそのまま使えます）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃対象者
 社内スタッフです。
 ＃実行指示
@@ -250,19 +265,18 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <div class="step"><span class="n">②</span><div>Googleスライド（slides.google.com）で、新しいプレゼンテーションを作成します。</div></div>
 <div class="step"><span class="n">③</span><div>各スライドに、Geminiの出力内容を貼り付けて整えます。</div></div>
 <div class="step"><span class="n">④</span><div>完成したスライドを、班で見せ合います。</div></div>
-<div class="box" style="background:#F5F3FF;border-color:#8B5CF6"><div class="bt">⚡ 時短のヒント（有料プランの方）</div><div class="ln" style="">Google AI Proなどの有料プランをお使いの方とかCanvas機能を＋に追加すれば、Geminiに直接「Googleスライド形式で作成してください」と指示すると、コピー＆貼り付けなしでスライドができる場合があります。無料アカウントの方や、うまくいかない場合は、上の手順で進めてください。</div></div>
-<h2 id="sec4">S3　スキル作成実践（旧GEM・動画⑤の応用）　30分</h2>
+<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">⚡ 時短のヒント（有料プランやCanvas機能を使う場合）</div><div class="ln">Google AI Proなどの有料プランをお使いの方や、入力欄の「＋」（ツール）から「Canvas」機能を選択できる場合は、Geminiに直接「Canvasでスライドを作成してください」と指示すると、画面上でスライド形式を生成し、そのままGoogleスライドへ書き出せる場合があります。無料アカウントの方や、うまくいかない場合は、上の①〜④の手順で進めてください。</div></div>
+<h2 id="sec4">S3 スキル作成実践（旧GEM・動画⑤の応用） 30分</h2>
 <p class="red b">🔖 全て必須</p>
-<div class="box" style="background:#FEF2F2;border-color:#EF4444"><div class="bt">📢 GEMは「スキル」に移行しました</div><div class="ln" style="">・個人のGoogleアカウント（18歳以上）では、2026年11月17日にGEMがスキルへ移行し、GEMは読み取り専用（見るだけ）になりました。GEMは2026年12月17日に削除されます。</div><div class="ln" style="">・作ったGEMは、自動でスキルに変換されています。スキル画面に「内容を確認して保存してください」と表示された場合は、［確認］から保存します。</div><div class="ln" style="">・名前・説明・指示を登録して繰り返し使う、という考え方はGEMと同じです。この演習では、スキルを作って使います。</div><div class="ln" style="">・会社のGoogleアカウント（Google Workspace）では、GEMは2027年3月（教育機関は2027年6月）まで使えます。</div><div class="ln" style="">（出典：Gemini アプリ ヘルプ「Gem からスキルへの移行について」）</div></div>
-<div class="box" style="background:#F0FDF4;border-color:#16A34A"><div class="bt">👨‍🏫 スキルを使うメリット</div><div class="ln" style="">・一度作れば、次からは呼び出して入力するだけです（同じ指示を毎回打ち直す手間がなくなります）</div><div class="ln" style="">・チームで共有できます（ウェブ版の［スキルを共有］から）</div><div class="ln" style="">・毎回同じ形式で出力されやすくなります（ただし、AIの出力は毎回少しずつ変わるので、内容は必ず確認します）</div></div>
-<p class="">「毎回同じような文章を作っている業務」があれば、それがスキル化のチャンスです。</p>
-<h3>⭐必須　STEP1　作るスキルを1つ選ぶ　5分</h3>
-<p class="">講師が紹介した「業種別のスキル」から、自社に近いものを1つ選びます。それぞれに見本のカスタム指示と、入力例が3つあります。</p>
-<div class="tw"><table><thead><tr><th>スキル名</th><th>入力するもの</th><th>出力されるもの</th><th>向いている業種</th></tr></thead><tbody><tr><td class=first>現場日報作成</td><td>現場の走り書きメモ</td><td>日報・元請への報告文</td><td>建設</td></tr><tr><td class=first>KY活動作成</td><td>作業内容・場所・天候</td><td>危険と対策・朝礼の話</td><td>建設・製造</td></tr><tr><td class=first>お知らせ文作成</td><td>行事・連絡の要点</td><td>保護者向け文書＋LINE文</td><td>福祉・保育</td></tr><tr><td class=first>口コミ返信作成</td><td>お客様の口コミ</td><td>お礼・お詫びの返信文</td><td>観光・宿泊・飲食</td></tr><tr><td class=first>自社紹介文作成</td><td>AIの質問に答える</td><td>HP・求人・補助金に使える文章</td><td>全業種</td></tr><tr><td class=first>自社オリジナル</td><td>毎回入力している内容</td><td>毎回ほしい出力</td><td>自社に合わせる</td></tr></tbody></table></div>
-<p class="">スキルを試すときは、下の入力例を例1から順にコピーして使います。同じスキルに違う内容を3回入れて、同じ形式で出てくるかを確かめます。</p>
-<div class="box" id="sample3" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 各スキルの入力例（同じスキルに、例1→例2→例3の順に入力します）</div><div class="ln" style="font-weight:700;">【現場日報作成】用（同じ現場の、続きの日のメモです）</div><div class="ln" style="">例1：A邸外壁塗装2日目。下塗り完了、中塗り途中。職人3名。明日雨予報、午前は養生確認。足場一部ぐらつき→明朝足場業者へ連絡。</div><div class="ln" style="">例2：A邸外壁塗装3日目。雨で午前中止、午後から中塗り再開し7割完了。職人2名。施主様から色見本の追加依頼あり。</div><div class="ln" style="">例3：A邸外壁塗装4日目。中塗り完了、上塗り開始。職人3名。足場は業者が補修済み。色見本を施主様に渡し、来週月曜に回答予定。</div><div class="ln" style="font-weight:700;">【KY活動作成】用</div><div class="ln" style="">例1：作業内容：屋根の板金交換／場所：2階建て住宅の屋根の上／天候：晴れ、風がやや強い／作業人数：2名</div><div class="ln" style="">例2：作業内容：外壁の足場組立て／場所：3階建てアパートの道路側／天候：曇り／作業人数：4名／通行人あり</div><div class="ln" style="">例3：作業内容：電動丸のこでの木材切断／場所：作業場の屋内／天候：雨／作業人数：3名（うち1名は入社1か月）</div><div class="ln" style="font-weight:700;">【お知らせ文作成】用</div><div class="ln" style="">例1：12月20日（土）10時〜11時半 クリスマス会／持ち物：上履き・水筒／保護者の参加は2名まで／欠席は前日までに連絡</div><div class="ln" style="">例2：インフルエンザが流行しているため、12月中は送迎時に玄関で検温と手指消毒をお願いしたい／37.5度以上はお休み</div><div class="ln" style="">例3：年末年始の休み 12月29日〜1月3日／1月4日（月）から通常どおり／休み中の緊急連絡は園長の携帯へ</div><div class="ln" style="font-weight:700;">【口コミ返信作成】用</div><div class="ln" style="">例1：料理はとても美味しかったです。ただ、チェックインのときにかなり待たされたのが残念でした。（評価★3）</div><div class="ln" style="">例2：スタッフの皆さんがとても親切で、子どもにも優しくしてくれました。また家族で来たいです。（評価★5）</div><div class="ln" style="">例3：部屋のエアコンの音がうるさくて眠れませんでした。値段の割に満足できませんでした。（評価★2）</div><div class="ln" style="font-weight:700;">【自社紹介文作成】用（最初の入力は「始めてください」だけ。あとは質問に答えます）</div><div class="ln" style="">回答例：住宅の外壁塗装・屋根工事の会社です／創業30年、職人8名／強みは自社職人だけで施工し、10年保証を付けていること／お客様は地元の一般住宅が中心／今後は若手職人を採用し、工場・倉庫の塗装にも広げたい</div><div class="acts"><button class="cp" data-sample="2">📋 コピー</button><button class="dl" data-sample="2">⬇ テキストで保存</button></div></div>
-<h3>⭐必須　STEP2　カスタム指示を用意する（見本をコピー）　5分</h3>
-<p class="">選んだスキルの「見本のカスタム指示」をコピーします。最初はそのまま使って構いません。自社向けにするなら、＃前提条件の業種・場面だけを書き換えます。カスタム指示は8＋1の見出しで書き、「＃実行指示」は必須です。</p>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📢 GEMは「スキル」に移行しました</div><div class="ln">個人のGoogleアカウント（18歳以上）では、2026年11月17日にGEMがスキルへ移行し、GEMは読み取り専用（見るだけ）になりました。GEM本体は2026年12月17日に削除されます（なお、自動変換されなかったGEMの添付ファイルは、2026年12月24日までスキル画面からダウンロードできます）。</div><div class="ln">作ったGEMは、自動でスキルに変換されています。スキル画面に「内容を確認して保存してください」と表示された場合は、［確認］から保存します。</div><div class="ln">「名前・説明・指示を登録して繰り返し使う」という考え方はGEMと同じです。この演習では、新しくスキルを作って使います。</div><div class="ln">会社のGoogleアカウント（Google Workspace）では、GEMは2027年3月（教育機関は2027年6月）まで使えます。 （出典：Gemini アプリ ヘルプ「Gem からスキルへの移行について」）</div></div>
+<div class="box" style="background:#F5F3FF;border-color:#8B5CF6"><div class="bt">👨‍🏫 スキルを使うメリット</div><div class="ln">一度作れば、次からは呼び出してデータを入力するだけです（同じ指示を毎回打ち直す手間がなくなります）。</div><div class="ln">普段のチャット画面から直接呼び出せるほか、会話の内容に合わせてAIが自動でスキルを選んで使うこともできます。</div><div class="ln">チームで共有できます（ウェブ版の［スキルを共有］から）。</div><div class="ln">毎回同じ形式で出力されやすくなります（ただし、AIの出力は毎回少しずつ変わるため、内容は必ず人の目で確認します）。</div><div class="ln">「毎回同じような文章を作っている業務」があれば、それがスキル化のチャンスです。</div></div>
+<h3>⭐必須　STEP1 作るスキルを1つ選ぶ 5分</h3>
+<p>講師が紹介した「業種別のスキル」から、自社に近いものを1つ選びます。それぞれに見本のカスタム指示と、試すための入力例があります。</p>
+<div class="tw"><table><thead><tr><th>スキル名</th><th>入力するもの</th><th>出力されるもの</th><th>向いている業種</th></tr></thead><tbody><tr><td class=first>現場日報作成</td><td>現場の走り書きメモ</td><td>日報・元請への報告文</td><td>建設</td></tr><tr><td class=first>KY活動作成</td><td>作業内容・場所・天候</td><td>危険と対策・朝礼の話</td><td>建設・製造</td></tr><tr><td class=first>お知らせ文作成</td><td>行事・連絡の要点</td><td>保護者向け文書＋LINE文</td><td>福祉・保育</td></tr><tr><td class=first>口コミ返信作成</td><td>お客様の口コミ</td><td>お礼・お詫びの返信文</td><td>観光・宿泊・飲食</td></tr><tr><td class=first>自社紹介文作成</td><td>AIの質問に答える（対話型）</td><td>HP・求人・補助金に使える文章</td><td>全業種</td></tr><tr><td class=first>自社オリジナル</td><td>毎回入力している内容</td><td>毎回ほしい出力</td><td>自社に合わせる</td></tr></tbody></table></div>
+<p>スキルを試すときは、下の入力例をコピーして使います。同じスキルに違う内容を複数回入れて、同じ形式で出てくるかを確かめます（※「自社紹介文作成」のみ、AIからの質問に答えていく対話形式になります）。</p>
+<div class="box" id="sample3" style="background:#F0F9FF;border-color:#0EA5E9"><div class="bt">📄 各スキルの入力例</div><div class="ln" style=font-weight:700>【現場日報作成】用（同じ現場の、続きの日のメモです。例1→例2→例3の順に入力）</div><div class="ln">例1：A邸外壁塗装2日目。下塗り完了、中塗り途中。職人3名。明日雨予報、午前は養生確認。足場一部ぐらつき→明朝足場業者へ連絡。</div><div class="ln">例2：A邸外壁塗装3日目。雨で午前中止、午後から中塗り再開し7割完了。職人2名。施主様から色見本の追加依頼あり。</div><div class="ln">例3：A邸外壁塗装4日目。中塗り完了、上塗り開始。職人3名。足場は業者が補修済み。色見本を施主様に渡し、来週月曜に回答予定。</div><div class="ln" style=font-weight:700>【KY活動作成】用（例1→例2→例3の順に入力）</div><div class="ln">例1：作業内容：屋根の板金交換／場所：2階建て住宅の屋根の上／天候：晴れ、風がやや強い／作業人数：2名</div><div class="ln">例2：作業内容：外壁の足場組立て／場所：3階建てアパートの道路側／天候：曇り／作業人数：4名／通行人あり</div><div class="ln">例3：作業内容：電動丸のこでの木材切断／場所：作業場の屋内／天候：雨／作業人数：3名（うち1名は入社1か月）</div><div class="ln" style=font-weight:700>【お知らせ文作成】用（例1→例2→例3の順に入力）</div><div class="ln">例1：12月20日（土）10時〜11時半 クリスマス会／持ち物：上履き・水筒／保護者の参加は2名まで／欠席は前日までに連絡</div><div class="ln">例2：インフルエンザが流行しているため、12月中は送迎時に玄関で検温と手指消毒をお願いしたい／37.5度以上はお休み</div><div class="ln">例3：年末年始の休み 12月29日〜1月3日／1月4日（月）から通常どおり／休み中の緊急連絡は園長の携帯へ</div><div class="ln" style=font-weight:700>【口コミ返信作成】用（例1→例2→例3の順に入力）</div><div class="ln">例1：料理はとても美味しかったです。ただ、チェックインのときにかなり待たされたのが残念でした。（評価★3）</div><div class="ln">例2：スタッフの皆さんがとても親切で、子どもにも優しくしてくれました。また家族で来たいです。（評価★5）</div><div class="ln">例3：部屋のエアコンの音がうるさくて眠れませんでした。値段の割に満足できませんでした。（評価★2）</div><div class="ln" style=font-weight:700>【自社紹介文作成】用（対話型：最初は「始めてください」だけを入力し、AIからの5つの質問に1問ずつ答えます）</div><div class="ln">回答の参考例：住宅の外壁塗装・屋根工事の会社です／創業30年、職人8名／強みは自社職人だけで施工し、10年保証を付けていること／お客様は地元の一般住宅が中心／今後は若手職人を採用し、工場・倉庫の塗装にも広げたい</div><div class="acts"><button class="cp" data-sample="2">📋 コピー</button><button class="dl" data-sample="2">⬇ テキストで保存</button></div></div>
+<h3>⭐必須　STEP2 カスタム指示を用意する（見本をコピー） 5分</h3>
+<p>選んだスキルの「見本のカスタム指示」をコピーします。最初はそのまま使って構いません。自社向けにするなら、＃前提条件 の業種・場面だけを書き換えます。 ※カスタム指示の書き方に決まったシステム上のルールはありませんが、この講座で学んだ「8＋1の見出し」を使って整理すると、AIが指示を正確に理解しやすくなります（「＃実行指示」は必ず入れましょう）。</p>
 <div class="prompt"><div class="ph"><span>見本のカスタム指示（現場日報作成）</span><button class="cp2">📋 コピー</button></div><pre data-raw="＃前提条件
 建設現場で、その日の作業が終わったあとに日報と元請への報告文を作る場面です。このチャットには、現場の走り書きメモが入力されます。
 ＃役割定義
@@ -363,52 +377,60 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <span class="hd">＃禁止事項</span>
 回答にない実績・数字・受賞歴を付け足さないでください。
 </pre></div>
-<h3>⭐必須　STEP3　スキルを作成・呼び出して使う　20分</h3>
+<h3>⭐必須　STEP3 スキルを作成・呼び出して使う 20分</h3>
 <div class="step"><span class="n">①</span><div>左側のメニューの［その他］をクリックし、［カスタマイズ］を選びます。</div></div>
-<figure><img src="img/workshop/w1_3.jpg" style="width:auto;max-width:100%" alt="左メニューの［その他］→［カスタマイズ］をクリックします。" loading="lazy"><figcaption>【画像】左メニューの［その他］→［カスタマイズ］をクリックします。</figcaption></figure>
-<div class="step"><span class="n">②</span><div>上のタブで［スキル］を選び、右上の［作成］→［手動で作成］をクリックします。</div></div>
-<figure><img src="img/workshop/w1_4.jpg" style="width:auto;max-width:100%" alt="スキル画面。右上の［作成］→［手動で作成］を選びます。" loading="lazy"><figcaption>【画像】スキル画面。右上の［作成］→［手動で作成］を選びます。</figcaption></figure>
-<div class="step"><span class="n">③</span><div>スキルの作成画面で、次の内容を入力し、上部のボタンで保存します。</div></div>
-<figure><img src="img/workshop/w1_5.jpg" style="width:auto;max-width:100%" alt="スキルの作成画面。「名前」「説明」「カスタム指示」を入力して保存します。" loading="lazy"><figcaption>【画像】スキルの作成画面。「名前」「説明」「カスタム指示」を入力して保存します。</figcaption></figure>
-<div class="tw"><table><thead><tr><th>入力欄</th><th>入力する内容</th></tr></thead><tbody><tr><td class=first>名前</td><td>STEP1の表の「スキル名」（例：現場日報作成）</td></tr><tr><td class=first>説明</td><td>このスキルが何をするかを一言で（例：入力されたメモをもとに、社内用の作業日報と、元請への報告文を作成）</td></tr><tr><td class=first>カスタム指示</td><td>STEP2でコピーした見本のカスタム指示を貼り付けます</td></tr><tr><td class=first>ファイルを追加（任意）</td><td>マニュアルや料金表など、毎回参考にしてほしい資料があれば追加します（合計100MBまで）。演習では不要です</td></tr></tbody></table></div>
-<div class="step"><span class="n">④</span><div>新しいチャットを開き、作ったスキルを呼び出します。スキル画面で作ったスキルの［…］→［今すぐ利用］をクリックするか、チャットの入力欄に「/」（半角スラッシュ。画面によっては「@」）を入力して、候補から選びます。</div></div>
-<figure><img src="img/workshop/w1_6.jpg" style="width:auto;max-width:100%" alt="スキルの［…］のメニュー。［今すぐ利用］を選ぶと、チャットの入力欄にスキルが入ります。" loading="lazy"><figcaption>【画像】スキルの［…］のメニュー。［今すぐ利用］を選ぶと、チャットの入力欄にスキルが入ります。</figcaption></figure>
-<div class="step"><span class="n">⑤</span><div>入力欄にスキル名が表示されたら、続けて入力例の「例1」を貼り付けて送信します。</div></div>
-<figure><img src="img/workshop/w1_7.jpg" style="width:auto;max-width:100%" alt="入力欄の上にスキル名（現場日報作成）が表示され、その下に入力例を貼り付けた状態。" loading="lazy"><figcaption>【画像】入力欄の上にスキル名（現場日報作成）が表示され、その下に入力例を貼り付けた状態。</figcaption></figure>
+<figure><img src="img/workshop/w1_3.jpg" alt="左メニューの［その他］→［カスタマイズ］をクリックします。" loading="lazy" style="width:auto;max-width:100%"><figcaption>【画像】左メニューの［その他］→［カスタマイズ］をクリックします。</figcaption></figure>
+<div class="step"><span class="n">②</span><div>スキル画面で、右上の［作成］→［手動で作成］をクリックします（※AIと会話しながら作りたい場合は［Gemini で作成］も選べます）。</div></div>
+<figure><img src="img/workshop/w1_4.jpg" alt="スキル画面。右上の［作成］→［手動で作成］を選びます。" loading="lazy" style="width:auto;max-width:100%"><figcaption>【画像】スキル画面。右上の［作成］→［手動で作成］を選びます。</figcaption></figure>
+<div class="step"><span class="n">③</span><div>スキルの作成画面で、下の表の内容を入力して保存します（入力すると自動保存され、右上のボタンが「保存済み」に変わります）。</div></div>
+<figure><img src="img/workshop/w1_5.jpg" alt="スキルの作成画面。「名前」「説明」「カスタム指示」を入力して保存します。" loading="lazy" style="width:auto;max-width:100%"><figcaption>【画像】スキルの作成画面。「名前」「説明」「カスタム指示」を入力して保存します。</figcaption></figure>
+<div class="tw"><table><thead><tr><th>入力欄</th><th>入力する内容</th></tr></thead><tbody><tr><td class=first>名前</td><td>STEP1の表の「スキル名」（例：現場日報作成）</td></tr><tr><td class=first>説明</td><td>AIが「どんな時にこのスキルを使うか」を判断する重要な目印です。何をするスキルかを一言で書きます（例：入力されたメモをもとに、社内用の作業日報と、元請への報告文を作成）</td></tr><tr><td class=first>カスタム指示</td><td>STEP2でコピーした見本のカスタム指示を貼り付けます</td></tr><tr><td class=first>ファイルを追加（任意）</td><td>マニュアルや料金表など、毎回参考にしてほしい資料があれば右上の［ファイルを追加］から添付します（合計100MBまで）。この演習では不要です</td></tr></tbody></table></div>
+<div class="step"><span class="n">④</span><div>新しいチャットを開き、作ったスキルを呼び出します。 スキル画面で作ったスキルの［…］→［今すぐ利用］をクリックするか、チャットの入力欄に「/」（半角スラッシュ。画面によっては「@」）を入力して、候補から選びます（※スキルが有効になっていれば、呼び出し操作をしなくても会話の内容からAIが自動で判断して使うこともあります。演習では確実に動かすため「/」または［今すぐ利用］で呼び出しましょう）。</div></div>
+<figure><img src="img/workshop/w1_6.jpg" alt="スキルの［…］のメニュー。［今すぐ利用］を選ぶと、チャットの入力欄にスキルが入ります。" loading="lazy" style="width:auto;max-width:100%"><figcaption>【画像】スキルの［…］のメニュー。［今すぐ利用］を選ぶと、チャットの入力欄にスキルが入ります。</figcaption></figure>
+<div class="step"><span class="n">⑤</span><div>入力欄にスキル名が表示されたら、続けて入力例の「例1」（「自社紹介文作成」を選んだ人は「始めてください」）を入力して送信します。</div></div>
+<figure><img src="img/workshop/w1_7.jpg" alt="入力欄の上にスキル名（現場日報作成）が表示され、その下に入力例を貼り付けた状態。" loading="lazy" style="width:auto;max-width:100%"><figcaption>【画像】入力欄の上にスキル名（現場日報作成）が表示され、その下に入力例を貼り付けた状態。</figcaption></figure>
 <div class="step"><span class="n">⑥</span><div>出力を確認します。カスタム指示で決めた見出し・形式で出力されていれば成功です。</div></div>
-<figure><img src="img/workshop/w1_8.jpg" style="width:auto;max-width:100%" alt="出力例。①社内用の作業日報、②元請への報告文の2つが出力されます。" loading="lazy"><figcaption>【画像】出力例。①社内用の作業日報、②元請への報告文の2つが出力されます。</figcaption></figure>
-<div class="step"><span class="n">⑦</span><div>例2・例3も、同じように新しいチャットでスキルを呼び出して入力し、毎回同じ形式で出力されるか確かめます。</div></div>
-<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">💡 チャット欄に入れるのは「指示」ではなく「その日のデータ」です</div><div class="ln" style="">指示はスキル（カスタム指示）に登録してあります。使うときは、スキルを呼び出して、その日のメモや口コミを貼るだけです。</div></div>
+<figure><img src="img/workshop/w1_8.jpg" alt="出力例。①社内用の作業日報、②元請への報告文の2つが出力されます。" loading="lazy" style="width:auto;max-width:100%"><figcaption>【画像】出力例。①社内用の作業日報、②元請への報告文の2つが出力されます。</figcaption></figure>
+<div class="step"><span class="n">⑦</span><div>2回目・3回目のテストを行います。</div></div>
+<p>「現場日報・KY活動・お知らせ文・口コミ返信」を選んだ人：同じように新しいチャットを開いてスキルを呼び出し、「例2」「例3」を順に入力して、毎回同じ形式で出力されるか確かめます。</p>
+<p>「自社紹介文作成」を選んだ人：同じチャットの続きでAIからの質問に1問ずつ答え、5問すべて答えたあとに3種類の紹介文が出力されるか確かめます。</p>
+<div class="box" style="background:#FEFCE8;border-color:#EAB308"><div class="bt">💡 チャット欄に入れるのは「指示」ではなく「その日のデータ」です</div><div class="ln">指示はスキル（カスタム指示）に登録してあります。使うときは、スキルを呼び出して、その日のメモや口コミを貼るだけです。</div></div>
 <div class="step"><span class="n">⑧</span><div>出力を直したいときは、スキル画面で作ったスキルの［…］→［手動で編集］を選び、カスタム指示を書き直して保存します。毎回同じ修正を依頼しているなら、その内容をカスタム指示に書き足しておくと、次から最初の出力で反映されます。</div></div>
 <div class="step"><span class="n">⑨</span><div>（時間があれば）作ったスキルを共有します。スキルの［…］→［スキルを共有］を選び、共有相手のメールアドレスを入力します（共有はウェブ版のGeminiだけでできます）。</div></div>
-<div class="box" style="background:#FFFBEB;border-color:#F59E0B"><div class="bt">💡 画面に「スキル」が表示されない人は</div><div class="ln" style="">・会社のGoogleアカウント（Google Workspace）でGEMが表示される人：GEMを作成し、GEMのチャットに入力例を貼って試してください。カスタム指示は同じものが使えます。</div><div class="ln" style="">・スキルもGEMも表示されない人：新しいチャットの最初に見本のカスタム指示を貼り、その下に入力例の「例1」を貼って送信します。カスタム指示はGoogleドキュメントなどに保存しておき、毎回コピーして使います（演習1-4のテンプレートと同じ考え方です）。</div><div class="ln" style="">・どちらの場合も、困ったら講師または指導員に声をかけてください。</div></div>
-<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 完成の確認基準</div><div class="ln" style="">・例1〜例3のすべてで、同じ見出し・同じ形式の出力が得られましたか？</div><div class="ln" style="">・出力の内容は、入力したメモと食い違っていませんか？（AIの出力は必ず確認します）</div><div class="ln" style="">・カスタム指示を直したら、次の出力に反映されましたか？</div></div>
-<p class="">🚀 早く終わったら：STEP1の表から、まだ作っていない別のスキルをもう1つ作ってみましょう。</p>
-<h2 id="sec5">S4　Gemini Notebookで資料をAI化する（動画⑥の応用）　30分</h2>
-<p class="red b">🔖 必須：STEP1・STEP2　／　STEP3は時間があれば</p>
-<p class="">Gemini Notebook（旧NotebookLM）は、自分が読み込ませた資料だけを根拠にAIが答えてくれるツールです。就業規則や業務マニュアルを読み込ませて、質問に答えてもらいます。</p>
-<h3>⭐必須　STEP1　資料を読み込ませる　10分</h3>
-<p class="">共通サンプル資料2点（就業規則の抜粋・業務マニュアルの抜粋）を、全員が使います。「04集合研修用」フォルダの中の「演習問題及び演習用データ」フォルダに、「サンプル資料_就業規則抜粋」と「業務マニュアル抜粋（新入社員向け）」の2ファイルが入っています。→ <a href="https://drive.google.com/drive/folders/1ZYJ6UYVccyekG3GPglT8_BlbRZYX6-t7?hl=ja" target="_blank" rel="noopener">「04集合研修用」フォルダを開く</a></p>
+<div class="box" style="background:#FEFCE8;border-color:#EAB308"><div class="bt">💡 画面に「スキル」が表示されない人は</div><div class="ln">会社のGoogleアカウント（Google Workspace）でGEMが表示される人：GEMを作成し、GEMのチャットに入力例を貼って試してください。カスタム指示は同じものが使えます。</div><div class="ln">スキルもGEMも表示されない人：新しいチャットの最初に見本のカスタム指示を貼り、その下に入力例の「例1」を貼って送信します。カスタム指示はGoogleドキュメントなどに保存しておき、毎回コピーして使います（演習1-3のテンプレートと同じ考え方です）。</div><div class="ln">どちらの場合も、困ったら講師または指導員に声をかけてください。</div></div>
+<div class="box" style="background:#F0FDF4;border-color:#22C55E"><div class="bt">✅ 完成の確認基準</div><div class="ln">複数回の入力（または5問の対話）で、指定した見出し・形式通りの出力が得られましたか？</div><div class="ln">出力の内容は、入力したメモと食い違っていませんか？（AIの出力は必ず確認します）</div><div class="ln">カスタム指示を直したら、次の出力に反映されましたか？</div></div>
+<p>🚀 早く終わったら：STEP1の表から、まだ作っていない別のスキルをもう1つ作ってみましょう。</p>
+<h2 id="sec5">S4 Gemini Notebookで資料をAI化する（動画⑥の応用） 30分</h2>
+<p class="red b">🔖 必須：STEP1・STEP2 ／
+STEP3は時間があれば</p>
+<p>Gemini Notebook（旧NotebookLM）は、自分が読み込ませた資料だけを根拠にAIが答えてくれるツールです。就業規則や業務マニュアルを読み込ませて、質問に答えてもらいます。</p>
+<h3>⭐必須　STEP1 資料を読み込ませる 10分</h3>
+<p>共通サンプル資料2点（就業規則の抜粋・業務マニュアルの抜粋）を、全員が使います。「04集合研修用」フォルダの中の「演習問題及び演習用データ」フォルダに、「サンプル資料_就業規則抜粋」と「業務マニュアル抜粋（新入社員向け）」の2ファイルが入っています。→ 「04集合研修用」フォルダを開く</p>
 <div class="step"><span class="n">①</span><div>ブラウザの検索欄に「Gemini Notebook」と入力して検索し、「AI リサーチツール＆思考パートナー - Gemini Notebook」をクリックします（画像の①）。</div></div>
-<figure><img src="img/workshop/w1_9.jpg" alt="「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）" loading="lazy"><figcaption>【画像】「Gemini Notebook」で検索した画面。①をクリックします。（検索欄に notebook.google.com と直接入力しても開けます）</figcaption></figure>
-<div class="step"><span class="n">②</span><div>Gemini Notebookのホーム画面が開きます。右上の「＋ 新しいノートブック」をクリックします（画像の①）。</div></div>
+<figure><img src="img/workshop/w1_9.jpg" alt="「Gemini Notebook」で検索した画面。①をクリックします。（アドレスバーに notebook.google.com と直接入力しても開けます）" loading="lazy"><figcaption>【画像】「Gemini Notebook」で検索した画面。①をクリックします。（アドレスバーに notebook.google.com と直接入力しても開けます）</figcaption></figure>
+<div class="step"><span class="n">②</span><div>Gemini Notebookのホーム画面が開きます。右下の「＋ 新しいノートブック」をクリックします（画像の①）。</div></div>
 <figure><img src="img/workshop/w1_10.jpg" alt="Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。" loading="lazy"><figcaption>【画像】Gemini Notebookのホーム画面。①の「＋ 新しいノートブック」をクリックします。</figcaption></figure>
 <div class="step"><span class="n">③</span><div>「ソースを追加」をクリックし、「Googleドライブ」を選んで、「演習問題及び演習用データ」フォルダの2ファイルを両方選択して追加します（Gemini Notebookは複数の資料をまとめて読み込めます）。</div></div>
 <figure><img src="img/workshop/w1_11.jpg" alt="ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。" loading="lazy"><figcaption>【画像】ノートブックの画面。左が「ソース」（①ここから資料を追加）、中央が「チャット」（②質問を入力する場所）、右が「Studio」（③スライドなどを自動作成する場所）です。</figcaption></figure>
-<div class="box" id="sample4" style="background:#F8FAFC;border-color:#6B7280"><div class="bt">📄 サンプル資料（就業規則・業務マニュアル抜粋）</div><div class="ln" style="">Googleドライブから読み込めない場合は、「ソースを追加」から「コピーしたテキスト」を選び、下の資料本文をコピーして貼り付けてください。</div><div class="ln" style="font-weight:700;">【就業規則（抜粋）】</div><div class="ln" style="">第1条（勤務時間）　勤務時間は午前9時から午後6時までとする（休憩1時間を含む）。</div><div class="ln" style="">第2条（有給休暇）　入社6ヶ月経過後、年10日の有給休暇を付与する。取得を希望する場合は、原則として3営業日前までに上長へ申請すること。緊急の場合はこの限りではない。</div><div class="ln" style="">第3条（慶弔休暇）　本人結婚時5日、配偶者・実父母・子の死亡時5日、祖父母・兄弟姉妹の死亡時2日の休暇を付与する。</div><div class="ln" style="">第4条（経費精算）　交通費・接待費等の経費は、領収書を添付の上、利用月の翌月10日までに経理担当へ提出すること。1万円を超える経費は事前に上長の承認を得ること。</div><div class="ln" style="">第5条（服装・身だしなみ）　清潔感のある服装を心がけ、来客対応時はジャケット着用を基本とする。</div><div class="ln" style="">第6条（情報セキュリティ）　顧客情報・取引先情報を含む資料は社外へ持ち出し禁止とする。社外での作業が必要な場合は上長の承認を得ること。</div><div class="ln" style="font-weight:700;">【新入社員向け業務マニュアル（抜粋）】</div><div class="ln" style="">■電話対応　「お電話ありがとうございます、〇〇（会社名）でございます」と応答し、相手の会社名・氏名を復唱して確認する。</div><div class="ln" style="">■来客対応　来客があった際は速やかに立ち上がり、担当者に取り次ぐ。お茶出しは来客後5分以内を目安とする。</div><div class="ln" style="">■クレーム対応の初動　まずお客様の話を最後まで遮らずに聞く。その場での即答は避け、「担当者に確認の上、〇分以内に折り返します」と伝える。個人の判断で謝罪の範囲を確約しない。</div><div class="ln" style="">■社用車の利用　使用前後に運転日報へ記入し、給油は満タン返却を原則とする。事故発生時は速やかに上長へ報告する。</div><div class="acts"><button class="cp" data-sample="3">📋 コピー</button><button class="dl" data-sample="3">⬇ テキストで保存</button></div></div>
-<h3>⭐必須　STEP2　Q&amp;Aで使ってみる　15分</h3>
+<div class="box" id="sample4" style="background:#F0F9FF;border-color:#0EA5E9"><div class="bt">📄 サンプル資料（就業規則・業務マニュアル抜粋）</div><div class="ln">Googleドライブから読み込めない場合は、「ソースを追加」から「コピーしたテキスト」を選び、下の資料本文をコピーして貼り付けてください。</div><div class="ln" style=font-weight:700>【就業規則（抜粋）】</div><div class="ln">第1条（勤務時間） 勤務時間は午前9時から午後6時までとする（休憩1時間を含む）。</div><div class="ln">第2条（有給休暇） 入社6ヶ月経過後、年10日の有給休暇を付与する。取得を希望する場合は、原則として3営業日前までに上長へ申請すること。緊急の場合はこの限りではない。</div><div class="ln">第3条（慶弔休暇） 本人結婚時5日、配偶者・実父母・子の死亡時5日、祖父母・兄弟姉妹の死亡時2日の休暇を付与する。</div><div class="ln">第4条（経費精算） 交通費・接待費等の経費は、領収書を添付の上、利用月の翌月10日までに経理担当へ提出すること。1万円を超える経費は事前に上長の承認を得ること。</div><div class="ln">第5条（服装・身だしなみ） 清潔感のある服装を心がけ、来客対応時はジャケット着用を基本とする。</div><div class="ln">第6条（情報セキュリティ） 顧客情報・取引先情報を含む資料は社外へ持ち出し禁止とする。社外での作業が必要な場合は上長の承認を得ること。</div><div class="ln" style=font-weight:700>【新入社員向け業務マニュアル（抜粋）】</div><div class="ln">■電話対応 「お電話ありがとうございます、〇〇（会社名）でございます」と応答し、相手の会社名・氏名を復唱して確認する。</div><div class="ln">■来客対応 来客があった際は速やかに立ち上がり、担当者に取り次ぐ。お茶出しは来客後5分以内を目安とする。</div><div class="ln">■クレーム対応の初動 まずお客様の話を最後まで遮らずに聞く。その場での即答は避け、「担当者に確認の上、〇分以内に折り返します」と伝える。個人の判断で謝罪の範囲を確約しない。</div><div class="ln">■社用車の利用 使用前後に運転日報へ記入し、給油は満タン返却を原則とする。事故発生時は速やかに上長へ報告する。</div><div class="acts"><button class="cp" data-sample="3">📋 コピー</button><button class="dl" data-sample="3">⬇ テキストで保存</button></div></div>
+<h3>⭐必須　STEP2 Q&amp;Aで使ってみる 15分</h3>
 <div class="step"><span class="n">①</span><div>画面中央のチャット欄（画像の②）に、次の質問を順番に入力します（質問1と質問4は必須、質問2・3は時間があれば）。</div></div>
-<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📋 試してみる質問</div><div class="ln" style="">【質問1】この資料の内容を3つのポイントで要約してください。</div><div class="ln" style="">【質問2】新入社員が最初に覚えるべきことは何ですか？</div><div class="ln" style="">【質問3】よくある質問（FAQ）を10個作ってください。</div><div class="ln" style="">【質問4】サンプル資料の内容について、自分で考えた質問を入力してみましょう。</div><div class="ln" style="">　　例：「有給休暇の申請期限は？」「クレームが来たときの初動対応は？」「経費精算はいつまでに提出すればいい？」</div></div>
+<div class="box" style="background:#F0F9FF;border-color:#0EA5E9"><div class="bt">📋 試してみる質問</div><div class="ln" style=font-weight:700>【質問1】 この資料の内容を3つのポイントで要約してください。</div><div class="ln" style=font-weight:700>【質問2】 新入社員が最初に覚えるべきことは何ですか？</div><div class="ln" style=font-weight:700>【質問3】 よくある質問（FAQ）を10個作ってください。</div><div class="ln" style=font-weight:700>【質問4】 サンプル資料の内容について、自分で考えた質問を入力してみましょう。 例：「有給休暇の申請期限は？」「クレームが来たときの初動対応は？」「経費精算はいつまでに提出すればいい？」</div></div>
 <div class="step"><span class="n">②</span><div>回答の中に、番号付きの引用（資料のどの部分から答えたか）が付いているか確認します。番号をクリックすると、根拠となった資料の箇所が表示されます。</div></div>
-<div class="box" style="background:#ECFDF5;border-color:#10B981"><div class="bt">✅ 確認ポイント</div><div class="ln" style="">・読み込ませた資料の内容に基づいた回答が得られましたか？</div><div class="ln" style="">・回答の根拠となる資料の箇所が引用されていますか？</div></div>
-<h3>STEP3　班で活用アイデアを共有する　5分　（時間があれば）</h3>
-<div class="box" style="background:#F5F3FF;border-color:#8B5CF6"><div class="bt">💬 班で話し合うこと</div><div class="ln" style="">・自社のどの資料をGemini Notebookに入れると一番役立ちそうですか？</div><div class="ln" style="">・社内のどんな質問が減りそうですか？</div><div class="ln" style="">・新人研修にどう使えそうですか？</div></div>
-<p class="">🚀 早く終わったら：画面右側の「Studio」から、まだ試していない機能（音声解説・マインドマップ・インフォグラフィックなど）を作ってみましょう。就業規則・業務マニュアルが、それぞれどんな形に変わるか比べてみてください。</p>
-<h2 id="sec6">最後に　情報漏えい・サイバー攻撃対策についてのお話　約30分</h2>
-<p class="">第1回の最後に、講師から「情報漏えい・サイバー攻撃対策」について、「現状」「個人の対策」「中小企業の対策」「国の対策」の4つの視点でお話しします。演習はありません。</p>
-<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📝 お話の時間です</div><div class="ln" style="">筆記用具をご用意ください。お話を聞きながら、自社で当てはまることをメモしておくと、あとで見直すときに役立ちます。</div></div>
-<div class="wb"><label>✍️ メモ欄（自社で当てはまること・あとで確認したいこと）</label><textarea data-key="v3_7" style="min-height:160px" rows="6"></textarea></div>
+<div class="box" style="background:#F0FDF4;border-color:#22C55E"><div class="bt">✅ 確認ポイント</div><div class="ln">読み込ませた資料の内容に基づいた回答が得られましたか？</div><div class="ln">回答の根拠となる資料の箇所が引用されていますか？</div></div>
+<h3>STEP3 班で活用アイデアを共有する 5分 （時間があれば）</h3>
+<div class="box" style="background:#FDF2F8;border-color:#EC4899"><div class="bt">💬 班で話し合うこと</div><div class="ln">自社のどの資料をGemini Notebookに入れると一番役立ちそうですか？</div><div class="ln">社内のどんな質問が減りそうですか？</div><div class="ln">新人研修にどう使えそうですか？</div></div>
+<p>🚀 早く終わったら：画面右側の「Studio」から、まだ試していない機能（音声解説・マインドマップ・インフォグラフィックなど）を作ってみましょう。就業規則・業務マニュアルが、それぞれどんな形に変わるか比べてみてください。</p>
+<h2 id="sec6">最後に 情報漏えい・サイバー攻撃対策についてのお話 約30分</h2>
+<p>第1回の最後に、講師から「情報漏えい・サイバー攻撃対策」について、「現状」「個人の対策」「中小企業の対策」「国の対策」の4つの視点でお話しします。演習はありません。</p>
+<div class="box" style="background:#EFF6FF;border-color:#3B82F6"><div class="bt">📝 お話の時間です</div><div class="ln">筆記用具をご用意ください。お話を聞きながら、自社で当てはまることをメモしておくと、あとで見直すときに役立ちます。</div></div>
+<div class="wb"><label></label><textarea data-key="v4_memo" style="min-height:160px" rows="6"></textarea></div>
+<p>|</p>
+<p>|</p>
 </main>
+
+
+
 
 
 
@@ -416,49 +438,42 @@ a.drive{font-weight:700} .toc{display:grid;grid-template-columns:repeat(auto-fit
 <script>
 (function(){
   try{ if(sessionStorage.getItem('loggedIn')!=='1' && !localStorage.getItem('userEmail')) document.getElementById('gate').style.display='flex'; }catch(e){}
-  var SAMPLES = [{"title": "サンプル文章（全員この文章を使います）", "text": "10月より、下記の通り営業時間を変更いたします。
-平日は9時から18時まで、土日は10時から17時までとなります。
-祝日は休業とさせていただきます。
-ご不便をおかけしますが、よろしくお願いいたします。"}, {"title": "サンプル会議メモ（全員この会議メモを使います）", "text": "2026年7月10日（木）14:00〜15:00
-参加者：田中（店長）、山田（副店長）、佐藤・鈴木（スタッフ）
-■今月の売上について
-先月比で売上が8%減少。客数は変わっていないが客単価が下がっている。
-→原因として「ランチメニューが3年変わっていない」という意見が出た。
-→山田から「競合のB店が新メニューを週替わりで出している」という情報あり。
-■夏のイベントについて
-お盆期間（8/10〜8/16）に特別コースを出してはどうか（田中提案）。
-価格帯は3,500円〜5,000円を想定。地元食材を使ったコースが差別化になる。
-佐藤：「SNSで映える料理にしないと集客が難しい」と指摘。
-■次回会議：7月17日（木）14:00"}, {"title": "各スキルの入力例（同じスキルに、例1→例2→例3の順に入力します）", "text": "【現場日報作成】用（同じ現場の、続きの日のメモです）
+  var SAMPLES = [{"title": "サンプル文章（全員この文章を使います）", "text": "10月より、下記の通り営業時間を変更いたします
+平日は9時から18時まで、土日は10時から17時までとなります
+祝日は休業とさせていただきます
+ご不便をおかけしますが、よろしくお願いいたします。"}, {"title": "サンプル会議メモ（全員この会議メモを使います）", "text": "2026年7月10日（金）14:00〜15:00 参加者：田中（店長）、山田（副店長）、佐藤・鈴木（スタッフ）
+■今月の売上について 先月比で売上が8%減少。客数は変わっていないが客単価が下がっている。 →原因として「ランチメニューが3年変わっていない」という意見が出た。 →山田から「競合のB店が新メニューを週替わりで出している」という情報あり。
+■夏のイベントについて お盆期間（8/10〜8/16）に特別コースを出してはどうか（田中提案）。 価格帯は3,500円〜5,000円を想定。地元食材を使ったコースが差別化になる。 佐藤：「SNSで映える料理にしないと集客が難しい」と指摘。
+■次回会議：7月17日（金）14:00"}, {"title": "各スキルの入力例", "text": "【現場日報作成】用（同じ現場の、続きの日のメモです。例1→例2→例3の順に入力）
 例1：A邸外壁塗装2日目。下塗り完了、中塗り途中。職人3名。明日雨予報、午前は養生確認。足場一部ぐらつき→明朝足場業者へ連絡。
 例2：A邸外壁塗装3日目。雨で午前中止、午後から中塗り再開し7割完了。職人2名。施主様から色見本の追加依頼あり。
 例3：A邸外壁塗装4日目。中塗り完了、上塗り開始。職人3名。足場は業者が補修済み。色見本を施主様に渡し、来週月曜に回答予定。
-【KY活動作成】用
+【KY活動作成】用（例1→例2→例3の順に入力）
 例1：作業内容：屋根の板金交換／場所：2階建て住宅の屋根の上／天候：晴れ、風がやや強い／作業人数：2名
 例2：作業内容：外壁の足場組立て／場所：3階建てアパートの道路側／天候：曇り／作業人数：4名／通行人あり
 例3：作業内容：電動丸のこでの木材切断／場所：作業場の屋内／天候：雨／作業人数：3名（うち1名は入社1か月）
-【お知らせ文作成】用
+【お知らせ文作成】用（例1→例2→例3の順に入力）
 例1：12月20日（土）10時〜11時半 クリスマス会／持ち物：上履き・水筒／保護者の参加は2名まで／欠席は前日までに連絡
 例2：インフルエンザが流行しているため、12月中は送迎時に玄関で検温と手指消毒をお願いしたい／37.5度以上はお休み
 例3：年末年始の休み 12月29日〜1月3日／1月4日（月）から通常どおり／休み中の緊急連絡は園長の携帯へ
-【口コミ返信作成】用
+【口コミ返信作成】用（例1→例2→例3の順に入力）
 例1：料理はとても美味しかったです。ただ、チェックインのときにかなり待たされたのが残念でした。（評価★3）
 例2：スタッフの皆さんがとても親切で、子どもにも優しくしてくれました。また家族で来たいです。（評価★5）
 例3：部屋のエアコンの音がうるさくて眠れませんでした。値段の割に満足できませんでした。（評価★2）
-【自社紹介文作成】用（最初の入力は「始めてください」だけ。あとは質問に答えます）
-回答例：住宅の外壁塗装・屋根工事の会社です／創業30年、職人8名／強みは自社職人だけで施工し、10年保証を付けていること／お客様は地元の一般住宅が中心／今後は若手職人を採用し、工場・倉庫の塗装にも広げたい"}, {"title": "サンプル資料（就業規則・業務マニュアル抜粋）", "text": "Googleドライブから読み込めない場合は、「ソースを追加」から「コピーしたテキスト」を選び、下の資料本文をコピーして貼り付けてください。
+【自社紹介文作成】用（対話型：最初は「始めてください」だけを入力し、AIからの5つの質問に1問ずつ答えます）
+回答の参考例：住宅の外壁塗装・屋根工事の会社です／創業30年、職人8名／強みは自社職人だけで施工し、10年保証を付けていること／お客様は地元の一般住宅が中心／今後は若手職人を採用し、工場・倉庫の塗装にも広げたい"}, {"title": "サンプル資料（就業規則・業務マニュアル抜粋）", "text": "Googleドライブから読み込めない場合は、「ソースを追加」から「コピーしたテキスト」を選び、下の資料本文をコピーして貼り付けてください。
 【就業規則（抜粋）】
-第1条（勤務時間）　勤務時間は午前9時から午後6時までとする（休憩1時間を含む）。
-第2条（有給休暇）　入社6ヶ月経過後、年10日の有給休暇を付与する。取得を希望する場合は、原則として3営業日前までに上長へ申請すること。緊急の場合はこの限りではない。
-第3条（慶弔休暇）　本人結婚時5日、配偶者・実父母・子の死亡時5日、祖父母・兄弟姉妹の死亡時2日の休暇を付与する。
-第4条（経費精算）　交通費・接待費等の経費は、領収書を添付の上、利用月の翌月10日までに経理担当へ提出すること。1万円を超える経費は事前に上長の承認を得ること。
-第5条（服装・身だしなみ）　清潔感のある服装を心がけ、来客対応時はジャケット着用を基本とする。
-第6条（情報セキュリティ）　顧客情報・取引先情報を含む資料は社外へ持ち出し禁止とする。社外での作業が必要な場合は上長の承認を得ること。
+第1条（勤務時間） 勤務時間は午前9時から午後6時までとする（休憩1時間を含む）。
+第2条（有給休暇） 入社6ヶ月経過後、年10日の有給休暇を付与する。取得を希望する場合は、原則として3営業日前までに上長へ申請すること。緊急の場合はこの限りではない。
+第3条（慶弔休暇） 本人結婚時5日、配偶者・実父母・子の死亡時5日、祖父母・兄弟姉妹の死亡時2日の休暇を付与する。
+第4条（経費精算） 交通費・接待費等の経費は、領収書を添付の上、利用月の翌月10日までに経理担当へ提出すること。1万円を超える経費は事前に上長の承認を得ること。
+第5条（服装・身だしなみ） 清潔感のある服装を心がけ、来客対応時はジャケット着用を基本とする。
+第6条（情報セキュリティ） 顧客情報・取引先情報を含む資料は社外へ持ち出し禁止とする。社外での作業が必要な場合は上長の承認を得ること。
 【新入社員向け業務マニュアル（抜粋）】
-■電話対応　「お電話ありがとうございます、〇〇（会社名）でございます」と応答し、相手の会社名・氏名を復唱して確認する。
-■来客対応　来客があった際は速やかに立ち上がり、担当者に取り次ぐ。お茶出しは来客後5分以内を目安とする。
-■クレーム対応の初動　まずお客様の話を最後まで遮らずに聞く。その場での即答は避け、「担当者に確認の上、〇分以内に折り返します」と伝える。個人の判断で謝罪の範囲を確約しない。
-■社用車の利用　使用前後に運転日報へ記入し、給油は満タン返却を原則とする。事故発生時は速やかに上長へ報告する。"}];
+■電話対応 「お電話ありがとうございます、〇〇（会社名）でございます」と応答し、相手の会社名・氏名を復唱して確認する。
+■来客対応 来客があった際は速やかに立ち上がり、担当者に取り次ぐ。お茶出しは来客後5分以内を目安とする。
+■クレーム対応の初動 まずお客様の話を最後まで遮らずに聞く。その場での即答は避け、「担当者に確認の上、〇分以内に折り返します」と伝える。個人の判断で謝罪の範囲を確約しない。
+■社用車の利用 使用前後に運転日報へ記入し、給油は満タン返却を原則とする。事故発生時は速やかに上長へ報告する。"}];
   function copy(text, btn){
     function ok(){ if(!btn) return; var o=btn.textContent; btn.classList.add('done'); btn.textContent='✔ コピーしました'; setTimeout(function(){btn.textContent=o;btn.classList.remove('done');},1600); }
     if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(ok,function(){fb()}); } else fb();
